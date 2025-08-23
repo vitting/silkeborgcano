@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatefulWidget {
   final String? initialValue;
   final TextEditingController? controller;
-  const CustomTextFormField({super.key, this.initialValue, this.controller});
+  final void Function(String)? onFieldSubmitted;
+  final void Function()? onEditingComplete;
+  const CustomTextFormField({
+    super.key,
+    this.initialValue,
+    this.controller,
+    this.onFieldSubmitted,
+    this.onEditingComplete,
+  });
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -18,7 +26,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
     if (widget.controller != null) {
       controller = widget.controller!;
-      controller.text = widget.initialValue ?? '';
+
+      if (widget.initialValue != null) {
+        controller.text = widget.initialValue!;
+      }
+
       return;
     }
 
@@ -26,10 +38,21 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   }
 
   @override
+  void dispose() {
+    if (widget.controller == null) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       autofocus: true,
       controller: controller,
+      onEditingComplete: widget.onEditingComplete,
+      onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
 

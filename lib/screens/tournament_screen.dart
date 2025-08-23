@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:silkeborgcano/cubits/tournament_screen_cubit/tournament_screen_cubit.dart';
-import 'package:silkeborgcano/dialogs/player_name_dialog.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
-import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
+import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:uuid/uuid.dart';
 
 class TournamentScreen extends StatelessWidget {
@@ -16,108 +14,101 @@ class TournamentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TournamentScreenCubit(
-        Tournament(players: [], pointPerMatch: 21, rounds: []),
+        Tournament(
+          id: Uuid().v4(),
+          name: '',
+          players: [],
+          pointPerMatch: 21,
+          rounds: [],
+        ),
       ),
       child: Builder(
         builder: (context) {
           return Scaffold(
             body: SafeArea(
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      final result = await PlayerNameDialog.show(context);
-                      debugPrint('************Chosen $result');
-                      if (context.mounted && result != null) {
-                        context.read<TournamentScreenCubit>().addPlayer(
-                          Player(id: Uuid().v4(), name: result, points: 0),
-                        );
-                      }
-                    },
-                    child: Text('Tilføj spiller'),
-                  ),
-                  BlocBuilder<TournamentScreenCubit, Tournament>(
-                    builder: (context, state) {
-                      return SlidableAutoCloseBehavior(
-                        child: Expanded(
-                          child: ListView.builder(
-                            itemCount: state.players.length,
-                            itemBuilder: (context, index) {
-                              final item = state.players.elementAt(index);
-                              return Slidable(
-                                groupTag: '1',
-                                endActionPane: ActionPane(
-                                  // extentRatio: 0.2,
-                                  motion: ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      autoClose: true,
-                                      flex: 4,
-                                      onPressed: (context) {
-                                        context
-                                            .read<TournamentScreenCubit>()
-                                            .removePlayer(item);
-                                      },
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                    ),
-                                    SlidableAction(
-                                      autoClose: true,
-                                      flex: 4,
-                                      onPressed: (context) {
-                                        context
-                                            .read<TournamentScreenCubit>()
-                                            .removePlayer(item);
-                                      },
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                    ),
-                                    SlidableAction(
-                                      autoClose: true,
-                                      flex: 4,
-                                      onPressed: (context) {
-                                        context
-                                            .read<TournamentScreenCubit>()
-                                            .removePlayer(item);
-                                      },
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                    ),
-                                  ],
-                                ),
-
-                                child: ListTile(
-                                  title: CustomTextFormField(
-                                    initialValue: item.name,
-                                  ),
-                                  // title: Center(
-                                  //   child: Text(item.name, style: TextStyle()),
-                                  // ),
-                                  onTap: () async {
-                                    // // final result = await PlayerNameDialog.show(
-                                    // //   context,
-                                    // //   initialValue: item.name,
-                                    // // );
-                                    // debugPrint('************Chosen $result');
-
-                                    // if (context.mounted && result != null) {
-                                    //   context
-                                    //       .read<TournamentScreenCubit>()
-                                    //       .updatePlayer(item, result);
-                                    // }
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+              child: BlocBuilder<TournamentScreenCubit, Tournament>(
+                builder: (context, state) {
+                  return ListView(
+                    children: [
+                      Text('Turnerings navn'),
+                      EditableListTile(
+                        initialValue: '',
+                        isEditing: state.name.isEmpty,
+                        showDelete: false,
+                        onChanged: (value) {
+                          context
+                              .read<TournamentScreenCubit>()
+                              .updateTournamentName(value);
+                        },
+                      ),
+                      Text('Point per kamp'),
+                      RadioGroup<int>(
+                        groupValue: state.pointPerMatch,
+                        onChanged: (value) {
+                          if (value == null) return;
+                          context
+                              .read<TournamentScreenCubit>()
+                              .updatePointPerMatch(value);
+                        },
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: RadioListTile(
+                                value: 11,
+                                title: Text('11'),
+                                dense: true,
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile(
+                                value: 15,
+                                title: Text('15'),
+                                dense: true,
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile(
+                                value: 21,
+                                title: Text('21'),
+                                dense: true,
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                ],
+                      ),
+                      Text('Spillere (${state.players.length})'),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.players.length,
+                        itemBuilder: (context, index) {
+                          final item = state.players.elementAt(index);
+                          return EditableListTile(
+                            initialValue: item.name,
+                            isEditing: item.name.isEmpty,
+                            onChanged: (value) {
+                              context
+                                  .read<TournamentScreenCubit>()
+                                  .updatePlayer(item, value);
+                            },
+                            onDelete: () {
+                              context
+                                  .read<TournamentScreenCubit>()
+                                  .removePlayer(item);
+                            },
+                          );
+                        },
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          context.read<TournamentScreenCubit>().addPlayer(
+                            Player(id: Uuid().v4(), name: '', points: 0),
+                          );
+                        },
+                        child: Text('Tilføj spiller'),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           );

@@ -21,7 +21,14 @@ class PlayerNameDialog extends StatefulWidget {
 }
 
 class _PlayerNameDialogState extends State<PlayerNameDialog> {
-  final TextEditingController controller = TextEditingController();
+  late final TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController(text: widget.initialValue);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +40,7 @@ class _PlayerNameDialogState extends State<PlayerNameDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomTextFormField(
-              initialValue: widget.initialValue,
-              controller: controller,
-            ),
+            CustomTextFormField(controller: controller),
             Gap(16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

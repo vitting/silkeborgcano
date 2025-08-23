@@ -27,4 +27,12 @@ class TournamentScreenCubit extends Cubit<Tournament> {
 
     emit(state.copyWith(players: [...tournament.players]));
   }
+
+  void updateTournamentName(String name) {
+    emit(state.copyWith(name: name));
+  }
+
+  void updatePointPerMatch(int pointPerMatch) {
+    emit(state.copyWith(pointPerMatch: pointPerMatch));
+  }
 }
