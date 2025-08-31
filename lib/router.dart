@@ -4,8 +4,8 @@ import 'package:silkeborgcano/screens/tournament_screen.dart';
 
 // GoRouter configuration
 final router = GoRouter(
-  initialLocation: TournamentScreen.routerPath,
-  // initialLocation: HomeScreen.routerPath,
+  // initialLocation: TournamentScreen.routerPath,
+  initialLocation: HomeScreen.routerPath,
   routes: [
     GoRoute(
       path: HomeScreen.routerPath,

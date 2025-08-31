@@ -7,6 +7,7 @@ class EditableListTile extends StatefulWidget {
   final VoidCallback? onDelete;
   final VoidCallback? onLongPress;
   final VoidCallback? onTap;
+  final ValueChanged<String>? onTapOutside;
   final bool showDelete;
   final bool showEdit;
   final bool isEditing;
@@ -17,6 +18,7 @@ class EditableListTile extends StatefulWidget {
     this.onDelete,
     this.onLongPress,
     this.onTap,
+    this.onTapOutside,
     this.showDelete = true,
     this.showEdit = true,
     this.isEditing = false,
@@ -67,6 +69,7 @@ class _EditableListTileState extends State<EditableListTile> {
           ? CustomTextFormField(
               controller: _controller,
               onEditingComplete: _save,
+              onTapOutside: widget.onTapOutside,
             )
           : Text(_controller.text),
       trailing: Row(
