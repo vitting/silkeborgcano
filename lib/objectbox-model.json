@@ -1,0 +1,157 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1572745648176918131",
+      "lastPropertyId": "5:5103843990581513960",
+      "name": "Match",
+      "properties": [
+        {
+          "id": "1:7750803975086610585",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1961568627713416482",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "3:8230517020959680362",
+          "name": "matchRoundId",
+          "indexId": "1:6562123823263290604",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "MatchRound"
+        },
+        {
+          "id": "4:6952383737151679696",
+          "name": "team1Score",
+          "type": 6
+        },
+        {
+          "id": "5:5103843990581513960",
+          "name": "team2Score",
+          "type": 6
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:6853198371567800634",
+          "name": "team1",
+          "targetId": "3:8296772384592528099"
+        },
+        {
+          "id": "2:2745925058522224604",
+          "name": "team2",
+          "targetId": "3:8296772384592528099"
+        }
+      ]
+    },
+    {
+      "id": "2:4285982042824457336",
+      "lastPropertyId": "3:1120414197257234821",
+      "name": "MatchRound",
+      "properties": [
+        {
+          "id": "1:7296436690690422169",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7093550582988408798",
+          "name": "roundIndex",
+          "type": 6
+        },
+        {
+          "id": "3:1120414197257234821",
+          "name": "tournamentId",
+          "indexId": "2:4575272826415533129",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Tournament"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8296772384592528099",
+      "lastPropertyId": "4:9041997301162730289",
+      "name": "Player",
+      "properties": [
+        {
+          "id": "1:7716340757713379615",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6453986488739060193",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "3:3486178520328339207",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:9041997301162730289",
+          "name": "points",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:689409871988813927",
+      "lastPropertyId": "4:7959767323344071364",
+      "name": "Tournament",
+      "properties": [
+        {
+          "id": "1:2998323389914615224",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8935831150682355523",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "3:2426599791600365274",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:7959767323344071364",
+          "name": "pointPerMatch",
+          "type": 6
+        }
+      ],
+      "relations": [
+        {
+          "id": "3:3541512027940101649",
+          "name": "players",
+          "targetId": "3:8296772384592528099"
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "4:689409871988813927",
+  "lastIndexId": "2:4575272826415533129",
+  "lastRelationId": "3:3541512027940101649",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

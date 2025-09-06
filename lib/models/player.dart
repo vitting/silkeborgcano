@@ -1,15 +1,12 @@
+import 'package:objectbox/objectbox.dart';
+
+@Entity()
 class Player {
-  final String id;
-  final String name;
-  final int points;
+  @Id()
+  int oid; // ObjectBox ID
+  String id;
+  String name;
+  int points;
 
-  Player({required this.id, required this.name, required this.points});
-
-  Player copyWith({String? name, int? points}) {
-    return Player(
-      id: id,
-      name: name ?? this.name,
-      points: points ?? this.points,
-    );
-  }
+  Player({this.oid = 0, this.id = '', this.name = '', this.points = 0});
 }

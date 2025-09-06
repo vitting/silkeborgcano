@@ -1,33 +1,22 @@
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
+import 'package:objectbox/objectbox.dart';
 
+@Entity()
 class Tournament {
-  final String id;
-  final String name;
-  final List<Player> players;
-  final List<MatchRound> rounds;
-  final int pointPerMatch;
+  @Id()
+  int oid; // ObjectBox ID
+  String id;
+  String name;
+  final players = ToMany<Player>();
+  @Backlink('tournament')
+  final rounds = ToMany<MatchRound>();
+  int pointPerMatch;
 
   Tournament({
-    required this.id,
-    required this.name,
-    required this.players,
-    required this.rounds,
-    required this.pointPerMatch,
+    this.oid = 0,
+    this.id = '',
+    this.name = '',
+    this.pointPerMatch = 0,
   });
-
-  Tournament copyWith({
-    List<Player>? players,
-    List<MatchRound>? rounds,
-    int? pointPerMatch,
-    String? name,
-  }) {
-    return Tournament(
-      id: id,
-      name: name ?? this.name,
-      players: players ?? this.players,
-      rounds: rounds ?? this.rounds,
-      pointPerMatch: pointPerMatch ?? this.pointPerMatch,
-    );
-  }
 }
