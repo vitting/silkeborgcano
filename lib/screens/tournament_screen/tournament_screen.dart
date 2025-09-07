@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:silkeborgcano/cubits/tournament_screen_cubit/tournament_screen_cubit.dart';
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
+import 'package:silkeborgcano/objectbox.g.dart';
 import 'package:silkeborgcano/screens/home_screen.dart';
+import 'package:silkeborgcano/screens/tournament_screen/chose_player_dialog.dart';
+import 'package:silkeborgcano/screens/tournament_screen/delete_tournament_dialog.dart';
+import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,32 +22,21 @@ class TournamentScreen extends StatefulWidget {
 
 class _TournamentScreenState extends State<TournamentScreen> {
   Tournament? tournament;
-  @override
-  void initState() {
-    super.initState();
-
-    // if (tournamentId != null) {
-    //   tournament = objectbox.store.box<Tournament>().get(tournamentId);
-    // }
-  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (tournament != null) return;
-    // React to changes in dependencies
     final int? tournamentId = GoRouterState.of(context).extra as int?;
 
     if (tournamentId != null) {
       tournament = objectbox.store.box<Tournament>().get(tournamentId);
+      debugPrint('********** didChangeDependencies tournamentId: $tournament');
     } else {
       tournament = Tournament(id: Uuid().v4(), name: '', pointPerMatch: 21);
 
       _saveObjectBox(tournament!);
     }
-
-    debugPrint('********** didUpdateWidget tournamentId: $tournamentId');
   }
 
   void _saveObjectBox(Tournament tournament) {
@@ -79,29 +70,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
             IconButton(
               tooltip: 'Slet turnering',
               onPressed: () async {
-                final result = await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Text('Vil du slette turneringen?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Fortryd'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // Delete action
-                            Navigator.of(context).pop(true);
-                          },
-                          child: Text('Slet'),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                final result = await DeleteTournamentDialog.show(context);
 
                 debugPrint('****************Dialog result: $result');
               },
@@ -112,11 +81,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
       body: Column(
         // physics: NeverScrollableScrollPhysics(),
         children: [
-          Text(
-            'Navn på turnering',
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
+          SectionHeader(title: 'Navn på turnering'),
           EditableListTile(
             initialValue: tournament?.name,
             isEditing: tournament?.name.isEmpty ?? true,
@@ -129,11 +94,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
               });
             },
           ),
-          Text(
-            'Point per kamp',
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
+          SectionHeader(title: 'Point per kamp'),
           RadioGroup<int>(
             groupValue: tournament?.pointPerMatch,
             onChanged: (value) {
@@ -174,61 +135,54 @@ class _TournamentScreenState extends State<TournamentScreen> {
             children: [
               const Gap(72),
               Expanded(
-                child: Text(
-                  'Spillere (${tournament?.players.length})',
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
+                child: SectionHeader(
+                  title: 'Spillere (${tournament?.players.length})',
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      // objectbox.store.box<Player>().removeAll();
-                      final players = objectbox.store.box<Player>().getAll();
-                      return Dialog.fullscreen(
-                        child: Scaffold(
-                          appBar: AppBar(title: Text('Tilføj spiller')),
-                          body: ListView.builder(
-                            itemCount: players.length,
-                            itemBuilder: (context, index) {
-                              final item = players[index];
-                              return ListTile(
-                                title: Text(item.name),
-                                onTap: () {
-                                  // Check if player already exists in tournament
-                                  if (tournament?.players.any(
-                                        (element) => element.id == item.id,
-                                      ) ??
-                                      false) {
-                                    // Show snackbar
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Spilleren findes allerede i turneringen',
-                                        ),
-                                      ),
-                                    );
-                                    Navigator.of(context).pop();
-                                    return;
-                                  }
-
-                                  // If not exists, add player to tournament
-
-                                  setState(() {
-                                    tournament?.players.add(item);
-                                    _saveObjectBox(tournament!);
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            },
-                          ),
-                        ),
+                onPressed: () async {
+                  final players = objectbox.store
+                      .box<Player>()
+                      .query()
+                      .order(Player_.name)
+                      .build()
+                      .find();
+                  final List<Player>? chosenPlayers =
+                      await ChosePlayerDialog.show(
+                        context,
+                        players,
+                        tournament?.players.toList() ?? [],
                       );
-                    },
-                  );
+
+                  if (chosenPlayers != null) {
+                    setState(() {
+                      tournament!.players.clear();
+                      tournament!.players.addAll(chosenPlayers);
+                      _saveObjectBox(tournament!);
+                    });
+                  }
+                  // if (tournament?.players.any(
+                  //       (element) => element.id == item.id,
+                  //     ) ??
+                  //     false) {
+                  //   // Show snackbar
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(
+                  //       content: Text(
+                  //         'Spilleren findes allerede i turneringen',
+                  //       ),
+                  //     ),
+                  //   );
+                  //   Navigator.of(context).pop();
+                  //   return;
+                  // }
+
+                  // // If not exists, add player to tournament
+
+                  // setState(() {
+                  //   tournament?.players.add(item);
+                  //   _saveObjectBox(tournament!);
+                  // });
                 },
                 icon: Icon(Icons.favorite),
               ),
@@ -240,9 +194,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
                       name: '',
                       points: 0,
                     );
-                    // _saveObjectBoxPlayer(newPlayer);
                     tournament?.players.add(newPlayer);
-                    // _saveObjectBox(tournament!);
                   });
                 },
                 icon: Icon(Icons.add),
@@ -259,6 +211,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
               itemBuilder: (context, index) {
                 final item = tournament?.players.elementAt(index);
                 return EditableListTile(
+                  key: ValueKey(item?.id),
                   initialValue: item?.name,
                   isEditing: item?.name.isEmpty ?? true,
                   onTapOutside: (value) {
@@ -272,6 +225,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
                   onChanged: (value) {
                     item!.name = value;
                     _saveObjectBoxPlayer(item);
+                    _saveObjectBox(tournament!);
                   },
                   onDelete: () {
                     setState(() {

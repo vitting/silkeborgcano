@@ -1,6 +1,7 @@
+import 'package:objectbox/objectbox.dart';
+
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
-import 'package:objectbox/objectbox.dart';
 
 @Entity()
 class Tournament {
@@ -19,4 +20,9 @@ class Tournament {
     this.name = '',
     this.pointPerMatch = 0,
   });
+
+  @override
+  String toString() {
+    return 'Tournament(oid: $oid, id: $id, name: $name, pointPerMatch: $pointPerMatch)';
+  }
 }
