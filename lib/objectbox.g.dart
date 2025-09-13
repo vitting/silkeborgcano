@@ -114,7 +114,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(3, 8296772384592528099),
     name: 'Player',
-    lastPropertyId: const obx_int.IdUid(5, 2744049701637512134),
+    lastPropertyId: const obx_int.IdUid(6, 4469192148008349224),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -145,6 +145,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(5, 2744049701637512134),
         name: 'sex',
         type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 4469192148008349224),
+        name: 'isDeleted',
+        type: 1,
         flags: 0,
       ),
     ],
@@ -392,12 +398,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final idOffset = fbb.writeString(object.id);
         final nameOffset = fbb.writeString(object.name);
         final sexOffset = fbb.writeString(object.sex);
-        fbb.startTable(6);
+        fbb.startTable(7);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, idOffset);
         fbb.addOffset(2, nameOffset);
         fbb.addInt64(3, object.points);
         fbb.addOffset(4, sexOffset);
+        fbb.addBool(5, object.isDeleted);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -425,12 +432,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final sexParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 12, '');
+        final isDeletedParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          false,
+        );
         final object = Player(
           oid: oidParam,
           id: idParam,
           name: nameParam,
           points: pointsParam,
           sex: sexParam,
+          isDeleted: isDeletedParam,
         );
 
         return object;
@@ -593,6 +607,11 @@ class Player_ {
   /// See [Player.sex].
   static final sex = obx.QueryStringProperty<Player>(
     _entities[2].properties[4],
+  );
+
+  /// See [Player.isDeleted].
+  static final isDeleted = obx.QueryBooleanProperty<Player>(
+    _entities[2].properties[5],
   );
 }
 

@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:silkeborgcano/screens/home_screen.dart';
+import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 
 // GoRouter configuration

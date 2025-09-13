@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/tournament.dart';
+import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,6 +12,19 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Silkeborg Cano'),
+        centerTitle: true,
+        forceMaterialTransparency: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.groups),
+            onPressed: () {
+              AdministratePlayersDialog.show(context);
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [

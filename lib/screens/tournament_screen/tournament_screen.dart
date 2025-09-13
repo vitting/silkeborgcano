@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
-import 'package:silkeborgcano/objectbox.g.dart';
-import 'package:silkeborgcano/screens/home_screen.dart';
+import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/chose_player_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/delete_tournament_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
+import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,17 +34,8 @@ class _TournamentScreenState extends State<TournamentScreen> {
       debugPrint('********** didChangeDependencies tournamentId: $tournament');
     } else {
       tournament = Tournament(id: Uuid().v4(), name: '', pointPerMatch: 21);
-
-      _saveObjectBox(tournament!);
+      tournament!.save();
     }
-  }
-
-  void _saveObjectBox(Tournament tournament) {
-    objectbox.store.box<Tournament>().put(tournament);
-  }
-
-  void _saveObjectBoxPlayer(Player player) {
-    objectbox.store.box<Player>().put(player);
   }
 
   @override
@@ -72,14 +63,20 @@ class _TournamentScreenState extends State<TournamentScreen> {
               onPressed: () async {
                 final result = await DeleteTournamentDialog.show(context);
 
-                debugPrint('****************Dialog result: $result');
+                if (result == true) {
+                  if (tournament != null) {
+                    objectbox.store.box<Tournament>().remove(tournament!.oid);
+                  }
+                  if (mounted) {
+                    context.goNamed(HomeScreen.routerPath);
+                  }
+                }
               },
               icon: Icon(Icons.delete_forever_rounded),
             ),
         ],
       ),
       body: Column(
-        // physics: NeverScrollableScrollPhysics(),
         children: [
           SectionHeader(title: 'Navn på turnering'),
           EditableListTile(
@@ -88,9 +85,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
             showDelete: false,
             onChanged: (value) {
               setState(() {
-                tournament?.name = value;
-
-                _saveObjectBox(tournament!);
+                tournament?.save(name: value);
               });
             },
           ),
@@ -100,8 +95,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
             onChanged: (value) {
               if (value == null) return;
               setState(() {
-                tournament?.pointPerMatch = value;
-                _saveObjectBox(tournament!);
+                tournament?.save(pointPerMatch: value);
               });
             },
             child: Row(
@@ -133,7 +127,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Gap(72),
+              const Gap(82),
               Expanded(
                 child: SectionHeader(
                   title: 'Spillere (${tournament?.players.length})',
@@ -141,50 +135,21 @@ class _TournamentScreenState extends State<TournamentScreen> {
               ),
               IconButton(
                 onPressed: () async {
-                  final players = objectbox.store
-                      .box<Player>()
-                      .query()
-                      .order(Player_.name)
-                      .build()
-                      .find();
                   final List<Player>? chosenPlayers =
                       await ChosePlayerDialog.show(
                         context,
-                        players,
                         tournament?.players.toList() ?? [],
                       );
 
                   if (chosenPlayers != null) {
                     setState(() {
-                      tournament!.players.clear();
-                      tournament!.players.addAll(chosenPlayers);
-                      _saveObjectBox(tournament!);
+                      tournament?.save(players: chosenPlayers);
                     });
                   }
-                  // if (tournament?.players.any(
-                  //       (element) => element.id == item.id,
-                  //     ) ??
-                  //     false) {
-                  //   // Show snackbar
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(
-                  //       content: Text(
-                  //         'Spilleren findes allerede i turneringen',
-                  //       ),
-                  //     ),
-                  //   );
-                  //   Navigator.of(context).pop();
-                  //   return;
-                  // }
-
-                  // // If not exists, add player to tournament
-
-                  // setState(() {
-                  //   tournament?.players.add(item);
-                  //   _saveObjectBox(tournament!);
-                  // });
                 },
-                icon: Icon(Icons.favorite),
+                color: Colors.blue,
+                iconSize: 28,
+                icon: Icon(Icons.group_add),
               ),
               IconButton(
                 onPressed: () {
@@ -205,35 +170,21 @@ class _TournamentScreenState extends State<TournamentScreen> {
             ],
           ),
           Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: tournament?.players.length,
-              itemBuilder: (context, index) {
-                final item = tournament?.players.elementAt(index);
-                return EditableListTile(
-                  key: ValueKey(item?.id),
-                  initialValue: item?.name,
-                  isEditing: item?.name.isEmpty ?? true,
-                  onTapOutside: (value) {
-                    if (value.isEmpty) {
-                      setState(() {
-                        tournament?.players.removeAt(index);
-                        _saveObjectBox(tournament!);
-                      });
-                    }
-                  },
-                  onChanged: (value) {
-                    item!.name = value;
-                    _saveObjectBoxPlayer(item);
-                    _saveObjectBox(tournament!);
-                  },
-                  onDelete: () {
-                    setState(() {
-                      tournament?.players.removeAt(index);
-                      _saveObjectBox(tournament!);
-                    });
-                  },
-                );
+            child: SelectedPlayers(
+              players: tournament?.getPlayersSortedByName() ?? [],
+              onChanged: (player, name) {
+                player.save(name: name);
+                tournament?.save();
+              },
+              onTapOutsideWithEmptyValue: (player) {
+                setState(() {
+                  tournament?.deletePlayer(player);
+                });
+              },
+              onDelete: (player) {
+                setState(() {
+                  tournament?.deletePlayer(player);
+                });
               },
             ),
           ),
