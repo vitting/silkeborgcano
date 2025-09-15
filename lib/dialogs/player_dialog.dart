@@ -68,7 +68,11 @@ class _PlayerDialogState extends State<PlayerDialog> {
               },
               child: Column(
                 children: [
-                  RadioListTile(value: 'u', title: Text('Ukendt'), dense: true),
+                  RadioListTile(
+                    value: 'u',
+                    title: Text('Ikke opgivet'),
+                    dense: true,
+                  ),
                   RadioListTile(value: 'f', title: Text('Kvinde'), dense: true),
                   RadioListTile(value: 'm', title: Text('Mand'), dense: true),
                 ],

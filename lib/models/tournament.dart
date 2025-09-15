@@ -3,6 +3,7 @@ import 'package:silkeborgcano/main.dart';
 
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
+import 'package:silkeborgcano/models/player_tournament_points.dart';
 
 @Entity()
 class Tournament {
@@ -11,16 +12,22 @@ class Tournament {
   String id;
   String name;
   final players = ToMany<Player>();
-  @Backlink('tournament')
   final rounds = ToMany<MatchRound>();
   int pointPerMatch;
+  final playerTournamentPoints = ToMany<PlayerTournamentPoints>();
+  int tournamentStart;
+  int tournamentEnd;
 
   Tournament({
     this.oid = 0,
     this.id = '',
     this.name = '',
     this.pointPerMatch = 0,
-  });
+    int? tournamentStart,
+    int? tournamentEnd,
+  }) : tournamentStart =
+           tournamentStart ?? DateTime.now().microsecondsSinceEpoch,
+       tournamentEnd = tournamentEnd ?? DateTime.now().microsecondsSinceEpoch;
 
   @override
   String toString() {

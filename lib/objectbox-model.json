@@ -53,7 +53,7 @@
     },
     {
       "id": "2:4285982042824457336",
-      "lastPropertyId": "3:1120414197257234821",
+      "lastPropertyId": "4:3088684982168167446",
       "name": "MatchRound",
       "properties": [
         {
@@ -70,13 +70,26 @@
         {
           "id": "3:1120414197257234821",
           "name": "tournamentId",
-          "indexId": "2:4575272826415533129",
-          "type": 11,
-          "flags": 520,
-          "relationTarget": "Tournament"
+          "type": 9
+        },
+        {
+          "id": "4:3088684982168167446",
+          "name": "id",
+          "type": 9
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "4:2751569605124290884",
+          "name": "players",
+          "targetId": "3:8296772384592528099"
+        },
+        {
+          "id": "5:2399894646209402714",
+          "name": "playerMatchPoints",
+          "targetId": "5:2624052262967590644"
+        }
+      ]
     },
     {
       "id": "3:8296772384592528099",
@@ -115,7 +128,13 @@
           "type": 1
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "7:1816435644254693833",
+          "name": "players",
+          "targetId": "3:8296772384592528099"
+        }
+      ]
     },
     {
       "id": "4:689409871988813927",
@@ -149,18 +168,83 @@
           "id": "3:3541512027940101649",
           "name": "players",
           "targetId": "3:8296772384592528099"
+        },
+        {
+          "id": "6:3230888488136088208",
+          "name": "playerTournamentPoints",
+          "targetId": "6:1222990246352220030"
+        },
+        {
+          "id": "8:4581666233497107557",
+          "name": "rounds",
+          "targetId": "2:4285982042824457336"
         }
       ]
+    },
+    {
+      "id": "5:2624052262967590644",
+      "lastPropertyId": "4:7372454683831204579",
+      "name": "PlayerMatchPoints",
+      "properties": [
+        {
+          "id": "1:4850481673888937309",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6728942110986964324",
+          "name": "playerId",
+          "type": 9
+        },
+        {
+          "id": "3:3258306974513552263",
+          "name": "points",
+          "type": 6
+        },
+        {
+          "id": "4:7372454683831204579",
+          "name": "sittingOver",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:1222990246352220030",
+      "lastPropertyId": "3:2215129217249584063",
+      "name": "PlayerTournamentPoints",
+      "properties": [
+        {
+          "id": "1:5114372720486474084",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4201432929568633001",
+          "name": "playerId",
+          "type": 9
+        },
+        {
+          "id": "3:2215129217249584063",
+          "name": "points",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:689409871988813927",
+  "lastEntityId": "6:1222990246352220030",
   "lastIndexId": "2:4575272826415533129",
-  "lastRelationId": "3:3541512027940101649",
+  "lastRelationId": "8:4581666233497107557",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    4575272826415533129
+  ],
   "retiredPropertyUids": [],
   "retiredRelationUids": [],
   "version": 1

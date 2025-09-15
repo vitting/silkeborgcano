@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/main.dart';
+import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
@@ -31,6 +32,7 @@ class HomeScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 objectbox.store.box<Tournament>().removeAll();
+                objectbox.store.box<Player>().removeAll();
               },
               child: Text('Delete all data'),
             ),
@@ -67,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                         onTap: () {
                           context.goNamed(
                             TournamentScreen.routerPath,
-                            extra: tournament.oid,
+                            extra: tournament,
                           );
                         },
                       );

@@ -17,6 +17,8 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 import 'models/match.dart';
 import 'models/match_round.dart';
 import 'models/player.dart';
+import 'models/player_match_points.dart';
+import 'models/player_tournament_points.dart';
 import 'models/tournament.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -78,7 +80,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 4285982042824457336),
     name: 'MatchRound',
-    lastPropertyId: const obx_int.IdUid(3, 1120414197257234821),
+    lastPropertyId: const obx_int.IdUid(4, 3088684982168167446),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -96,13 +98,28 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(3, 1120414197257234821),
         name: 'tournamentId',
-        type: 11,
-        flags: 520,
-        indexId: const obx_int.IdUid(2, 4575272826415533129),
-        relationTarget: 'Tournament',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 3088684982168167446),
+        name: 'id',
+        type: 9,
+        flags: 0,
       ),
     ],
-    relations: <obx_int.ModelRelation>[],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(4, 2751569605124290884),
+        name: 'players',
+        targetId: const obx_int.IdUid(3, 8296772384592528099),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(5, 2399894646209402714),
+        name: 'playerMatchPoints',
+        targetId: const obx_int.IdUid(5, 2624052262967590644),
+      ),
+    ],
     backlinks: <obx_int.ModelBacklink>[
       obx_int.ModelBacklink(
         name: 'matches',
@@ -154,7 +171,13 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
     ],
-    relations: <obx_int.ModelRelation>[],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(7, 1816435644254693833),
+        name: 'players',
+        targetId: const obx_int.IdUid(3, 8296772384592528099),
+      ),
+    ],
     backlinks: <obx_int.ModelBacklink>[],
   ),
   obx_int.ModelEntity(
@@ -194,14 +217,80 @@ final _entities = <obx_int.ModelEntity>[
         name: 'players',
         targetId: const obx_int.IdUid(3, 8296772384592528099),
       ),
-    ],
-    backlinks: <obx_int.ModelBacklink>[
-      obx_int.ModelBacklink(
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(6, 3230888488136088208),
+        name: 'playerTournamentPoints',
+        targetId: const obx_int.IdUid(6, 1222990246352220030),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(8, 4581666233497107557),
         name: 'rounds',
-        srcEntity: 'MatchRound',
-        srcField: 'tournament',
+        targetId: const obx_int.IdUid(2, 4285982042824457336),
       ),
     ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(5, 2624052262967590644),
+    name: 'PlayerMatchPoints',
+    lastPropertyId: const obx_int.IdUid(4, 7372454683831204579),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 4850481673888937309),
+        name: 'oid',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 6728942110986964324),
+        name: 'playerId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3258306974513552263),
+        name: 'points',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 7372454683831204579),
+        name: 'sittingOver',
+        type: 1,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(6, 1222990246352220030),
+    name: 'PlayerTournamentPoints',
+    lastPropertyId: const obx_int.IdUid(3, 2215129217249584063),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5114372720486474084),
+        name: 'oid',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 4201432929568633001),
+        name: 'playerId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 2215129217249584063),
+        name: 'points',
+        type: 6,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
   ),
 ];
 
@@ -243,12 +332,12 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(4, 689409871988813927),
+    lastEntityId: const obx_int.IdUid(6, 1222990246352220030),
     lastIndexId: const obx_int.IdUid(2, 4575272826415533129),
-    lastRelationId: const obx_int.IdUid(3, 3541512027940101649),
+    lastRelationId: const obx_int.IdUid(8, 4581666233497107557),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
-    retiredIndexUids: const [],
+    retiredIndexUids: const [4575272826415533129],
     retiredPropertyUids: const [],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -331,8 +420,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
     ),
     MatchRound: obx_int.EntityDefinition<MatchRound>(
       model: _entities[1],
-      toOneRelations: (MatchRound object) => [object.tournament],
+      toOneRelations: (MatchRound object) => [],
       toManyRelations: (MatchRound object) => {
+        obx_int.RelInfo<MatchRound>.toMany(4, object.oid): object.players,
+        obx_int.RelInfo<MatchRound>.toMany(5, object.oid):
+            object.playerMatchPoints,
         obx_int.RelInfo<Match>.toOneBacklink(
           3,
           object.oid,
@@ -344,10 +436,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.oid = id;
       },
       objectToFB: (MatchRound object, fb.Builder fbb) {
-        fbb.startTable(4);
+        final tournamentIdOffset = object.tournamentId == null
+            ? null
+            : fbb.writeString(object.tournamentId!);
+        final idOffset = object.id == null ? null : fbb.writeString(object.id!);
+        fbb.startTable(5);
         fbb.addInt64(0, object.oid);
         fbb.addInt64(1, object.roundIndex);
-        fbb.addInt64(2, object.tournament.targetId);
+        fbb.addOffset(2, tournamentIdOffset);
+        fbb.addOffset(3, idOffset);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -366,14 +463,23 @@ obx_int.ModelDefinition getObjectBoxModel() {
           6,
           0,
         );
-        final object = MatchRound(oid: oidParam, roundIndex: roundIndexParam);
-        object.tournament.targetId = const fb.Int64Reader().vTableGet(
-          buffer,
-          rootOffset,
-          8,
-          0,
+        final object = MatchRound(oid: oidParam, roundIndex: roundIndexParam)
+          ..tournamentId = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGetNullable(buffer, rootOffset, 8)
+          ..id = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGetNullable(buffer, rootOffset, 10);
+        obx_int.InternalToManyAccess.setRelInfo<MatchRound>(
+          object.players,
+          store,
+          obx_int.RelInfo<MatchRound>.toMany(4, object.oid),
         );
-        object.tournament.attach(store);
+        obx_int.InternalToManyAccess.setRelInfo<MatchRound>(
+          object.playerMatchPoints,
+          store,
+          obx_int.RelInfo<MatchRound>.toMany(5, object.oid),
+        );
         obx_int.InternalToManyAccess.setRelInfo<MatchRound>(
           object.matches,
           store,
@@ -389,7 +495,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     Player: obx_int.EntityDefinition<Player>(
       model: _entities[2],
       toOneRelations: (Player object) => [],
-      toManyRelations: (Player object) => {},
+      toManyRelations: (Player object) => {
+        obx_int.RelInfo<Player>.toMany(7, object.oid): object.players,
+      },
       getId: (Player object) => object.oid,
       setId: (Player object, int id) {
         object.oid = id;
@@ -446,7 +554,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
           sex: sexParam,
           isDeleted: isDeletedParam,
         );
-
+        obx_int.InternalToManyAccess.setRelInfo<Player>(
+          object.players,
+          store,
+          obx_int.RelInfo<Player>.toMany(7, object.oid),
+        );
         return object;
       },
     ),
@@ -455,11 +567,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       toOneRelations: (Tournament object) => [],
       toManyRelations: (Tournament object) => {
         obx_int.RelInfo<Tournament>.toMany(3, object.oid): object.players,
-        obx_int.RelInfo<MatchRound>.toOneBacklink(
-          3,
-          object.oid,
-          (MatchRound srcObject) => srcObject.tournament,
-        ): object.rounds,
+        obx_int.RelInfo<Tournament>.toMany(6, object.oid):
+            object.playerTournamentPoints,
+        obx_int.RelInfo<Tournament>.toMany(8, object.oid): object.rounds,
       },
       getId: (Tournament object) => object.oid,
       setId: (Tournament object, int id) {
@@ -509,14 +619,111 @@ obx_int.ModelDefinition getObjectBoxModel() {
           obx_int.RelInfo<Tournament>.toMany(3, object.oid),
         );
         obx_int.InternalToManyAccess.setRelInfo<Tournament>(
+          object.playerTournamentPoints,
+          store,
+          obx_int.RelInfo<Tournament>.toMany(6, object.oid),
+        );
+        obx_int.InternalToManyAccess.setRelInfo<Tournament>(
           object.rounds,
           store,
-          obx_int.RelInfo<MatchRound>.toOneBacklink(
-            3,
-            object.oid,
-            (MatchRound srcObject) => srcObject.tournament,
-          ),
+          obx_int.RelInfo<Tournament>.toMany(8, object.oid),
         );
+        return object;
+      },
+    ),
+    PlayerMatchPoints: obx_int.EntityDefinition<PlayerMatchPoints>(
+      model: _entities[4],
+      toOneRelations: (PlayerMatchPoints object) => [],
+      toManyRelations: (PlayerMatchPoints object) => {},
+      getId: (PlayerMatchPoints object) => object.oid,
+      setId: (PlayerMatchPoints object, int id) {
+        object.oid = id;
+      },
+      objectToFB: (PlayerMatchPoints object, fb.Builder fbb) {
+        final playerIdOffset = fbb.writeString(object.playerId);
+        fbb.startTable(5);
+        fbb.addInt64(0, object.oid);
+        fbb.addOffset(1, playerIdOffset);
+        fbb.addInt64(2, object.points);
+        fbb.addBool(3, object.sittingOver);
+        fbb.finish(fbb.endTable());
+        return object.oid;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final oidParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final pointsParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        final playerIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final sittingOverParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          false,
+        );
+        final object = PlayerMatchPoints(
+          oid: oidParam,
+          points: pointsParam,
+          playerId: playerIdParam,
+          sittingOver: sittingOverParam,
+        );
+
+        return object;
+      },
+    ),
+    PlayerTournamentPoints: obx_int.EntityDefinition<PlayerTournamentPoints>(
+      model: _entities[5],
+      toOneRelations: (PlayerTournamentPoints object) => [],
+      toManyRelations: (PlayerTournamentPoints object) => {},
+      getId: (PlayerTournamentPoints object) => object.oid,
+      setId: (PlayerTournamentPoints object, int id) {
+        object.oid = id;
+      },
+      objectToFB: (PlayerTournamentPoints object, fb.Builder fbb) {
+        final playerIdOffset = fbb.writeString(object.playerId);
+        fbb.startTable(4);
+        fbb.addInt64(0, object.oid);
+        fbb.addOffset(1, playerIdOffset);
+        fbb.addInt64(2, object.points);
+        fbb.finish(fbb.endTable());
+        return object.oid;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final oidParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final pointsParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        final playerIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final object = PlayerTournamentPoints(
+          oid: oidParam,
+          points: pointsParam,
+          playerId: playerIdParam,
+        );
+
         return object;
       },
     ),
@@ -573,10 +780,26 @@ class MatchRound_ {
     _entities[1].properties[1],
   );
 
-  /// See [MatchRound.tournament].
-  static final tournament = obx.QueryRelationToOne<MatchRound, Tournament>(
+  /// See [MatchRound.tournamentId].
+  static final tournamentId = obx.QueryStringProperty<MatchRound>(
     _entities[1].properties[2],
   );
+
+  /// See [MatchRound.id].
+  static final id = obx.QueryStringProperty<MatchRound>(
+    _entities[1].properties[3],
+  );
+
+  /// see [MatchRound.players]
+  static final players = obx.QueryRelationToMany<MatchRound, Player>(
+    _entities[1].relations[0],
+  );
+
+  /// see [MatchRound.playerMatchPoints]
+  static final playerMatchPoints =
+      obx.QueryRelationToMany<MatchRound, PlayerMatchPoints>(
+        _entities[1].relations[1],
+      );
 
   /// see [MatchRound.matches]
   static final matches = obx.QueryBacklinkToMany<Match, MatchRound>(
@@ -613,6 +836,11 @@ class Player_ {
   static final isDeleted = obx.QueryBooleanProperty<Player>(
     _entities[2].properties[5],
   );
+
+  /// see [Player.players]
+  static final players = obx.QueryRelationToMany<Player, Player>(
+    _entities[2].relations[0],
+  );
 }
 
 /// [Tournament] entity fields to define ObjectBox queries.
@@ -642,8 +870,55 @@ class Tournament_ {
     _entities[3].relations[0],
   );
 
+  /// see [Tournament.playerTournamentPoints]
+  static final playerTournamentPoints =
+      obx.QueryRelationToMany<Tournament, PlayerTournamentPoints>(
+        _entities[3].relations[1],
+      );
+
   /// see [Tournament.rounds]
-  static final rounds = obx.QueryBacklinkToMany<MatchRound, Tournament>(
-    MatchRound_.tournament,
+  static final rounds = obx.QueryRelationToMany<Tournament, MatchRound>(
+    _entities[3].relations[2],
+  );
+}
+
+/// [PlayerMatchPoints] entity fields to define ObjectBox queries.
+class PlayerMatchPoints_ {
+  /// See [PlayerMatchPoints.oid].
+  static final oid = obx.QueryIntegerProperty<PlayerMatchPoints>(
+    _entities[4].properties[0],
+  );
+
+  /// See [PlayerMatchPoints.playerId].
+  static final playerId = obx.QueryStringProperty<PlayerMatchPoints>(
+    _entities[4].properties[1],
+  );
+
+  /// See [PlayerMatchPoints.points].
+  static final points = obx.QueryIntegerProperty<PlayerMatchPoints>(
+    _entities[4].properties[2],
+  );
+
+  /// See [PlayerMatchPoints.sittingOver].
+  static final sittingOver = obx.QueryBooleanProperty<PlayerMatchPoints>(
+    _entities[4].properties[3],
+  );
+}
+
+/// [PlayerTournamentPoints] entity fields to define ObjectBox queries.
+class PlayerTournamentPoints_ {
+  /// See [PlayerTournamentPoints.oid].
+  static final oid = obx.QueryIntegerProperty<PlayerTournamentPoints>(
+    _entities[5].properties[0],
+  );
+
+  /// See [PlayerTournamentPoints.playerId].
+  static final playerId = obx.QueryStringProperty<PlayerTournamentPoints>(
+    _entities[5].properties[1],
+  );
+
+  /// See [PlayerTournamentPoints.points].
+  static final points = obx.QueryIntegerProperty<PlayerTournamentPoints>(
+    _entities[5].properties[2],
   );
 }

@@ -11,6 +11,7 @@ class Player {
   int points;
   String sex; // 'm' for male and 'f' for female, 'u' for unknown
   bool isDeleted;
+  final players = ToMany<Player>();
 
   Player({
     this.oid = 0,
