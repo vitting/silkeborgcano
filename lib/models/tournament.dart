@@ -44,6 +44,10 @@ class Tournament {
     return objectbox.store.box<Tournament>().put(this);
   }
 
+  bool delete() {
+    return objectbox.store.box<Tournament>().remove(oid);
+  }
+
   void deletePlayer(Player player) {
     players.removeWhere((p) => p.id == player.id);
     objectbox.store.box<Tournament>().put(this);

@@ -6,6 +6,8 @@ late ObjectBox objectbox;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   objectbox = await ObjectBox.create();
+
   runApp(const AppEntry());
 }

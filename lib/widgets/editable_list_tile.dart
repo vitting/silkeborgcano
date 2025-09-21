@@ -42,7 +42,7 @@ class _EditableListTileState extends State<EditableListTile> {
 
     _controller.addListener(() {
       setState(() {
-        _valid = _controller.text.isNotEmpty;
+        _valid = _controller.text.trim().isNotEmpty;
       });
     });
   }
