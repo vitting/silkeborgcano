@@ -1,4 +1,4 @@
-import 'package:objectbox/objectbox.dart' show Backlink, Entity, Id, ToMany;
+import 'package:objectbox/objectbox.dart' show Entity, Id, ToMany;
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/player.dart';
@@ -7,7 +7,6 @@ import 'package:silkeborgcano/models/player_match_points.dart';
 @Entity()
 class MatchRound {
   String id;
-  @Backlink('matchRound')
   final matches = ToMany<Match>();
 
   @Id()
@@ -18,12 +17,7 @@ class MatchRound {
   int roundIndex;
   String tournamentId;
 
-  MatchRound({
-    this.oid = 0,
-    this.roundIndex = 0,
-    this.tournamentId = '',
-    this.id = '',
-  });
+  MatchRound({this.oid = 0, this.roundIndex = 0, this.tournamentId = '', this.id = ''});
 
   int save({List<Player>? players}) {
     if (players != null) {
@@ -45,11 +39,7 @@ class MatchRound {
 
     for (var player in newPlayers) {
       players.add(player);
-      final pmp = PlayerMatchPoints(
-        playerId: player.id,
-        points: 0,
-        matchRoundId: id,
-      );
+      final pmp = PlayerMatchPoints(playerId: player.id, points: 0, matchRoundId: id);
       pmp.save();
       playerMatchPoints.add(pmp);
     }
@@ -65,8 +55,6 @@ class MatchRound {
 
   List<Player> getPlayersSortedByPoints() {
     final playersWithPoints = PlayerMatchPoints.getSortedByPoints(id);
-    return playersWithPoints
-        .map((pmp) => players.firstWhere((p) => p.id == pmp.playerId))
-        .toList();
+    return playersWithPoints.map((pmp) => players.firstWhere((p) => p.id == pmp.playerId)).toList();
   }
 }
