@@ -30,8 +30,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      final Tournament? tournament =
-          GoRouterState.of(context).extra as Tournament?;
+      final Tournament? tournament = GoRouterState.of(context).extra as Tournament?;
 
       debugPrint('**************Tournament can\'t be null');
 
@@ -40,18 +39,12 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
 
         if (_tournament!.rounds.isNotEmpty) {
           _matchRound = _tournament!.rounds.last;
-          debugPrint(
-            '********** didChangeDependencies tournamentId: $_tournament, matchRoundId: ${_matchRound?.id}',
-          );
+          debugPrint('********** didChangeDependencies tournamentId: $_tournament, matchRoundId: ${_matchRound?.id}');
           return;
         }
 
         int currentNumberOfMatches = _tournament!.rounds.length;
-        _matchRound = MatchRound(
-          id: Uuid().v4(),
-          tournamentId: _tournament!.id,
-          roundIndex: ++currentNumberOfMatches,
-        );
+        _matchRound = MatchRound(id: Uuid().v4(), tournamentId: _tournament!.id, roundIndex: ++currentNumberOfMatches);
 
         _matchRound!.save();
 
@@ -59,9 +52,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
 
         _tournament!.addMatchRound(_matchRound!);
 
-        debugPrint(
-          '********** didChangeDependencies tournamentId: $_tournament',
-        );
+        debugPrint('********** didChangeDependencies tournamentId: $_tournament');
       }
     }
   }
@@ -95,10 +86,11 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
               final players = _matchRound!.getPlayersSortedByPoints();
               debugPrint('********Players sorted by points: ${players.length}');
 
+              // Randomize players for first round
               final random = Random();
-              final shuffledPlayers = List<Player>.from(players)
-                ..shuffle(random);
+              final shuffledPlayers = List<Player>.from(players)..shuffle(random);
 
+              // Determine players sitting over this round
               final numberOfPeopleSittingOver = shuffledPlayers.length % 4;
               final List<Player> playersSittingOver = [];
               for (var i = 0; i < numberOfPeopleSittingOver; i++) {
@@ -114,13 +106,11 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
                 debugPrint('Sitting over players: $element');
               }
 
+              // Split players into courts of 4
               List<List<Player>> courts = [];
               for (int i = 0; i < shuffledPlayers.length; i += 4) {
                 // Use findBestPairing even for first round (defaults to balanced since no history)
-                List<Player> group = shuffledPlayers.sublist(
-                  i,
-                  i + 4,
-                ); // Sort group for consistency
+                List<Player> group = shuffledPlayers.sublist(i, i + 4); // Sort group for consistency
                 courts.add(group);
               }
 
@@ -128,6 +118,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
                 debugPrint('Court: $court');
               }
 
+              // Create matches from courts
               List<List<List<Player>>> matches = [];
               for (final court in courts) {
                 List<List<Player>> match = [];
@@ -147,10 +138,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
             child: Text('Calculate matches'),
           ),
 
-          ElevatedButton(
-            onPressed: () {},
-            child: Text('Start Runde ${_matchRound?.roundIndex}'),
-          ),
+          ElevatedButton(onPressed: () {}, child: Text('Start Runde ${_matchRound?.roundIndex}')),
           Expanded(
             child: ListView(
               shrinkWrap: true,
