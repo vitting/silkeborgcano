@@ -1,10 +1,13 @@
-import 'package:objectbox/objectbox.dart';
+import 'package:objectbox/objectbox.dart' show Entity, Id;
+import 'package:silkeborgcano/main.dart';
+import 'package:silkeborgcano/objectbox.g.dart' hide Entity, Id;
 
 @Entity()
 class PlayerMatchPoints {
   @Id()
   int oid; // ObjectBox ID
   String playerId;
+  String matchRoundId;
   int points;
   bool sittingOver;
 
@@ -12,6 +15,39 @@ class PlayerMatchPoints {
     this.oid = 0,
     this.points = 0,
     this.playerId = '',
+    this.matchRoundId = '',
     this.sittingOver = false,
   });
+
+  static void deleteByMatchRoundId(String matchRoundId) {
+    objectbox.store
+        .box<PlayerMatchPoints>()
+        .query(PlayerMatchPoints_.matchRoundId.equals(matchRoundId))
+        .build()
+        .remove();
+  }
+
+  static List<PlayerMatchPoints> getSortedByPoints(
+    String matchRoundId, {
+    bool descending = true,
+  }) {
+    return objectbox.store
+        .box<PlayerMatchPoints>()
+        .query(PlayerMatchPoints_.matchRoundId.equals(matchRoundId))
+        .order(
+          PlayerMatchPoints_.points,
+          flags: descending ? Order.descending : 0,
+        )
+        .build()
+        .find();
+  }
+
+  int save() {
+    return objectbox.store.box<PlayerMatchPoints>().put(this);
+  }
+
+  @override
+  String toString() {
+    return 'PlayerMatchPoints(oid: $oid, playerId: $playerId, matchRoundId: $matchRoundId, points: $points, sittingOver: $sittingOver)';
+  }
 }

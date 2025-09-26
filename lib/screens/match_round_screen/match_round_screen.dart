@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/models/match_round.dart';
+import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
 import 'package:silkeborgcano/screens/match_round_screen/administrate_match_round_players_dialog.dart';
@@ -35,12 +38,26 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
       if (tournament != null) {
         _tournament = tournament;
 
+        if (_tournament!.rounds.isNotEmpty) {
+          _matchRound = _tournament!.rounds.last;
+          debugPrint(
+            '********** didChangeDependencies tournamentId: $_tournament, matchRoundId: ${_matchRound?.id}',
+          );
+          return;
+        }
+
         int currentNumberOfMatches = _tournament!.rounds.length;
         _matchRound = MatchRound(
           id: Uuid().v4(),
           tournamentId: _tournament!.id,
           roundIndex: ++currentNumberOfMatches,
         );
+
+        _matchRound!.save();
+
+        _matchRound!.setPlayers(_tournament!.players.toList());
+
+        _tournament!.addMatchRound(_matchRound!);
 
         debugPrint(
           '********** didChangeDependencies tournamentId: $_tournament',
@@ -74,6 +91,63 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
       body: Column(
         children: [
           ElevatedButton(
+            onPressed: () {
+              final players = _matchRound!.getPlayersSortedByPoints();
+              debugPrint('********Players sorted by points: ${players.length}');
+
+              final random = Random();
+              final shuffledPlayers = List<Player>.from(players)
+                ..shuffle(random);
+
+              final numberOfPeopleSittingOver = shuffledPlayers.length % 4;
+              final List<Player> playersSittingOver = [];
+              for (var i = 0; i < numberOfPeopleSittingOver; i++) {
+                final p = shuffledPlayers.removeLast();
+                playersSittingOver.add(p);
+              }
+
+              for (var element in shuffledPlayers) {
+                debugPrint('Shuffled players: $element');
+              }
+
+              for (var element in playersSittingOver) {
+                debugPrint('Sitting over players: $element');
+              }
+
+              List<List<Player>> courts = [];
+              for (int i = 0; i < shuffledPlayers.length; i += 4) {
+                // Use findBestPairing even for first round (defaults to balanced since no history)
+                List<Player> group = shuffledPlayers.sublist(
+                  i,
+                  i + 4,
+                ); // Sort group for consistency
+                courts.add(group);
+              }
+
+              for (var court in courts) {
+                debugPrint('Court: $court');
+              }
+
+              List<List<List<Player>>> matches = [];
+              for (final court in courts) {
+                List<List<Player>> match = [];
+                final team1 = [court[0], court[2]];
+                final team2 = [court[1], court[3]];
+                match.add(team1);
+                match.add(team2);
+                matches.add(match);
+              }
+
+              for (var match in matches) {
+                for (var team in match) {
+                  debugPrint('Team: $team');
+                }
+              }
+            },
+            child: Text('Calculate matches'),
+          ),
+
+          ElevatedButton(
             onPressed: () {},
             child: Text('Start Runde ${_matchRound?.roundIndex}'),
           ),
@@ -82,11 +156,11 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
               shrinkWrap: true,
               padding: EdgeInsets.all(16),
               children: [
-                BenchedPlayers(players: []),
-                MatchListTile(court: 1, team1: [], team2: []),
-                MatchListTile(court: 2, team1: [], team2: []),
-                MatchListTile(court: 3, team1: [], team2: []),
-                MatchListTile(court: 4, team1: [], team2: []),
+                // BenchedPlayers(players: []),
+                // MatchListTile(court: 1, team1: [], team2: []),
+                // MatchListTile(court: 2, team1: [], team2: []),
+                // MatchListTile(court: 3, team1: [], team2: []),
+                // MatchListTile(court: 4, team1: [], team2: []),
               ],
             ),
           ),

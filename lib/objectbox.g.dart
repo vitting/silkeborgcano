@@ -183,7 +183,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(4, 6445019999584143467),
     name: 'PlayerMatchPoints',
-    lastPropertyId: const obx_int.IdUid(4, 7602224695151640704),
+    lastPropertyId: const obx_int.IdUid(5, 8334972070414656936),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -210,6 +210,12 @@ final _entities = <obx_int.ModelEntity>[
         type: 1,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8334972070414656936),
+        name: 'matchRoundId',
+        type: 9,
+        flags: 0,
+      ),
     ],
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
@@ -217,7 +223,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(5, 2702153521453821823),
     name: 'PlayerTournamentPoints',
-    lastPropertyId: const obx_int.IdUid(3, 7823688490938768097),
+    lastPropertyId: const obx_int.IdUid(4, 1761001462288373992),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -236,6 +242,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(3, 7823688490938768097),
         name: 'points',
         type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 1761001462288373992),
+        name: 'tournamentId',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -587,11 +599,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (PlayerMatchPoints object, fb.Builder fbb) {
         final playerIdOffset = fbb.writeString(object.playerId);
-        fbb.startTable(5);
+        final matchRoundIdOffset = fbb.writeString(object.matchRoundId);
+        fbb.startTable(6);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, playerIdOffset);
         fbb.addInt64(2, object.points);
         fbb.addBool(3, object.sittingOver);
+        fbb.addOffset(4, matchRoundIdOffset);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -613,6 +627,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final playerIdParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
+        final matchRoundIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
         final sittingOverParam = const fb.BoolReader().vTableGet(
           buffer,
           rootOffset,
@@ -623,6 +640,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           oid: oidParam,
           points: pointsParam,
           playerId: playerIdParam,
+          matchRoundId: matchRoundIdParam,
           sittingOver: sittingOverParam,
         );
 
@@ -639,10 +657,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (PlayerTournamentPoints object, fb.Builder fbb) {
         final playerIdOffset = fbb.writeString(object.playerId);
-        fbb.startTable(4);
+        final tournamentIdOffset = fbb.writeString(object.tournamentId);
+        fbb.startTable(5);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, playerIdOffset);
         fbb.addInt64(2, object.points);
+        fbb.addOffset(3, tournamentIdOffset);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -664,10 +684,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final playerIdParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
+        final tournamentIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
         final object = PlayerTournamentPoints(
           oid: oidParam,
           points: pointsParam,
           playerId: playerIdParam,
+          tournamentId: tournamentIdParam,
         );
 
         return object;
@@ -895,6 +919,11 @@ class PlayerMatchPoints_ {
   static final sittingOver = obx.QueryBooleanProperty<PlayerMatchPoints>(
     _entities[3].properties[3],
   );
+
+  /// See [PlayerMatchPoints.matchRoundId].
+  static final matchRoundId = obx.QueryStringProperty<PlayerMatchPoints>(
+    _entities[3].properties[4],
+  );
 }
 
 /// [PlayerTournamentPoints] entity fields to define ObjectBox queries.
@@ -912,6 +941,11 @@ class PlayerTournamentPoints_ {
   /// See [PlayerTournamentPoints.points].
   static final points = obx.QueryIntegerProperty<PlayerTournamentPoints>(
     _entities[4].properties[2],
+  );
+
+  /// See [PlayerTournamentPoints.tournamentId].
+  static final tournamentId = obx.QueryStringProperty<PlayerTournamentPoints>(
+    _entities[4].properties[3],
   );
 }
 

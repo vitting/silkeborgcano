@@ -1,6 +1,7 @@
 import 'package:objectbox/objectbox.dart';
-import 'package:silkeborgcano/main.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:silkeborgcano/main.dart';
 
 @Entity()
 class Player {
@@ -42,5 +43,10 @@ class Player {
     if (sex != null) this.sex = sex;
     if (isDeleted != null) this.isDeleted = isDeleted;
     return objectbox.store.box<Player>().put(this);
+  }
+
+  @override
+  String toString() {
+    return 'Player(oid: $oid, id: $id, name: $name, points: $points, sex: $sex, isDeleted: $isDeleted)';
   }
 }

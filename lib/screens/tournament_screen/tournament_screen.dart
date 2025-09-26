@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
@@ -189,7 +188,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
 
                     if (chosenPlayers != null) {
                       setState(() {
-                        _tournament?.save(players: chosenPlayers);
+                        _tournament?.setPlayers(chosenPlayers);
                       });
                     }
                   },
