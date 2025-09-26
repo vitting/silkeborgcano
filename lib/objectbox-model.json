@@ -32,7 +32,7 @@
         {
           "id": "5:689537460272944787",
           "name": "matchRoundId",
-          "indexId": "1:595333096936084368",
+          "indexId": "2:4137678572081549196",
           "type": 11,
           "flags": 520,
           "relationTarget": "MatchRound"
@@ -256,13 +256,15 @@
     }
   ],
   "lastEntityId": "6:1315279517998681009",
-  "lastIndexId": "1:595333096936084368",
+  "lastIndexId": "2:4137678572081549196",
   "lastRelationId": "8:7909714095864845156",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    595333096936084368
+  ],
   "retiredPropertyUids": [],
   "retiredRelationUids": [],
   "version": 1

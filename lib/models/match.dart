@@ -7,11 +7,12 @@ class Match {
   @Id()
   int oid; // ObjectBox ID
   String id;
+  String matchRoundId;
   final team1 = ToMany<Player>();
   final team2 = ToMany<Player>();
   int team1Score;
   int team2Score;
   final matchRound = ToOne<MatchRound>();
 
-  Match({this.oid = 0, this.id = '', this.team1Score = 0, this.team2Score = 0});
+  Match({this.oid = 0, this.id = '', this.team1Score = 0, this.team2Score = 0, this.matchRoundId = ''});
 }
