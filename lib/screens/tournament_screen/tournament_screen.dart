@@ -29,17 +29,14 @@ class _TournamentScreenState extends State<TournamentScreen> {
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      final Tournament? tournament =
-          GoRouterState.of(context).extra as Tournament?;
+      final Tournament? tournament = GoRouterState.of(context).extra as Tournament?;
 
       if (tournament != null) {
         _tournament = tournament;
-        debugPrint(
-          '********** didChangeDependencies tournamentId: $_tournament',
-        );
+        debugPrint('********** didChangeDependencies tournamentId: $_tournament');
       } else {
-        _tournament = Tournament(id: Uuid().v4(), name: '', pointPerMatch: 21);
-        _tournament?.save();
+        _tournament = Tournament.newTournament();
+        _tournament!.save();
       }
     }
   }
@@ -81,8 +78,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
     if (mounted && numberOfPlayersValid == false) {
       final deleteTournament = await YesNoDialog.show(
         context,
-        title:
-            'Turneringen skal have mindst 4 spillere. Vil du slette turneringen?',
+        title: 'Turneringen skal have mindst 4 spillere. Vil du slette turneringen?',
         noButtonText: 'Fortryd',
         yesButtonText: 'Slet',
       );
@@ -173,18 +169,13 @@ class _TournamentScreenState extends State<TournamentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Gap(82),
-                Expanded(
-                  child: SectionHeader(
-                    title: 'Spillere (${_tournament?.players.length})',
-                  ),
-                ),
+                Expanded(child: SectionHeader(title: 'Spillere (${_tournament?.players.length})')),
                 IconButton(
                   onPressed: () async {
-                    final List<Player>? chosenPlayers =
-                        await ChosePlayerDialog.show(
-                          context,
-                          _tournament?.players.toList() ?? [],
-                        );
+                    final List<Player>? chosenPlayers = await ChosePlayerDialog.show(
+                      context,
+                      _tournament?.players.toList() ?? [],
+                    );
 
                     if (chosenPlayers != null) {
                       setState(() {
@@ -199,11 +190,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
                 IconButton(
                   onPressed: () {
                     setState(() {
-                      final newPlayer = Player(
-                        id: Uuid().v4(),
-                        name: '',
-                        points: 0,
-                      );
+                      final newPlayer = Player(id: Uuid().v4(), name: '', points: 0);
                       _tournament?.players.add(newPlayer);
                     });
                   },

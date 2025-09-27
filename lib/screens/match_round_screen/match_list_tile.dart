@@ -6,12 +6,7 @@ class MatchListTile extends StatelessWidget {
   final int court;
   final List<Player> team1;
   final List<Player> team2;
-  const MatchListTile({
-    super.key,
-    required this.court,
-    required this.team1,
-    required this.team2,
-  });
+  const MatchListTile({super.key, required this.court, required this.team1, required this.team2});
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +17,7 @@ class MatchListTile extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.red,
-              style: BorderStyle.solid,
-              width: 1,
-            ),
+            border: Border.all(color: Colors.red, style: BorderStyle.solid, width: 1),
           ),
           child: Row(
             children: [
@@ -35,18 +26,11 @@ class MatchListTile extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.amber,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      topLeft: Radius.circular(8),
-                    ),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), topLeft: Radius.circular(8)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Christian Vitting Nicolaisen'),
-                      const Gap(8),
-                      Text('Christian Vitting Nicolaisen'),
-                    ],
+                    children: [Text(team1[0].name), const Gap(8), Text(team1[1].name)],
                   ),
                 ),
               ),
@@ -56,18 +40,11 @@ class MatchListTile extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.blue,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
+                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(8), topRight: Radius.circular(8)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Christian Vitting Nicolaisen'),
-                      const Gap(8),
-                      Text('Christian Vitting Nicolaisen'),
-                    ],
+                    children: [Text(team2[0].name), const Gap(8), Text(team2[1].name)],
                   ),
                 ),
               ),

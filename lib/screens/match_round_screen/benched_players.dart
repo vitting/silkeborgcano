@@ -16,23 +16,15 @@ class BenchedPlayers extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.blueGrey,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.red,
-              style: BorderStyle.solid,
-              width: 1,
-            ),
+            border: Border.all(color: Colors.red, style: BorderStyle.solid, width: 1),
           ),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Christian Vitting Nicolaisen'),
-                  Text('Christian Vitting Nicolaisen'),
-                  Text('Christian Vitting Nicolaisen'),
-                ],
-              ),
-            ],
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: players.length,
+            itemBuilder: (context, index) {
+              final player = players[index];
+              return Text(player.name);
+            },
           ),
         ),
       ],

@@ -5,34 +5,37 @@ import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_tournament_points.dart';
 import 'package:silkeborgcano/objectbox.g.dart';
+import 'package:uuid/uuid.dart';
 
 @Entity()
 class Tournament {
-  @Id()
-  int oid; // ObjectBox ID
   String id;
   String name;
-  final players = ToMany<Player>();
-  final rounds = ToMany<MatchRound>();
-  int pointPerMatch;
-  final playerTournamentPoints = ToMany<PlayerTournamentPoints>();
-  int tournamentStart;
-  int tournamentEnd;
+  @Id()
+  int oid; // ObjectBox ID
 
-  Tournament({
-    this.oid = 0,
-    this.id = '',
-    this.name = '',
-    this.pointPerMatch = 0,
-    int? tournamentStart,
-    int? tournamentEnd,
-  }) : tournamentStart =
-           tournamentStart ?? DateTime.now().microsecondsSinceEpoch,
-       tournamentEnd = tournamentEnd ?? DateTime.now().microsecondsSinceEpoch;
+  final playerTournamentPoints = ToMany<PlayerTournamentPoints>();
+  final players = ToMany<Player>();
+  int pointPerMatch;
+  final rounds = ToMany<MatchRound>();
+  int tournamentEnd;
+  int tournamentStart;
+
+  Tournament({this.oid = 0, this.id = '', this.name = '', this.pointPerMatch = 0, int? tournamentStart, int? tournamentEnd})
+    : tournamentStart = tournamentStart ?? DateTime.now().millisecondsSinceEpoch,
+      tournamentEnd = tournamentEnd ?? DateTime.now().millisecondsSinceEpoch;
 
   @override
   String toString() {
     return 'Tournament(oid: $oid, id: $id, name: $name, pointPerMatch: $pointPerMatch)';
+  }
+
+  factory Tournament.newTournament({String name = '', int pointPerMatch = 21}) {
+    return Tournament(id: Uuid().v4(), name: name, pointPerMatch: pointPerMatch);
+  }
+
+  static Stream<List<Tournament>> get listOfAllTournamentsAsStream {
+    return objectbox.store.box<Tournament>().query().watch(triggerImmediately: true).map((query) => query.find());
   }
 
   int save({String? name, int? pointPerMatch}) {
@@ -49,11 +52,7 @@ class Tournament {
     for (var player in players) {
       this.players.add(player);
 
-      final ptp = PlayerTournamentPoints(
-        playerId: player.id,
-        points: 0,
-        tournamentId: id,
-      );
+      final ptp = PlayerTournamentPoints(playerId: player.id, points: 0, tournamentId: id);
       ptp.save();
       playerTournamentPoints.add(ptp);
     }
@@ -91,5 +90,17 @@ class Tournament {
       rounds[index] = matchRound;
       objectbox.store.box<Tournament>().put(this);
     }
+  }
+
+  MatchRound? getActiveMatchRound() {
+    try {
+      return rounds.firstWhere((r) => r.active);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  int getLastRoundIndex() {
+    return rounds.length;
   }
 }

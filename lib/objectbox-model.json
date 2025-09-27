@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:7853952313064716528",
-      "lastPropertyId": "5:689537460272944787",
+      "lastPropertyId": "6:281430262882697651",
       "name": "Match",
       "properties": [
         {
@@ -33,6 +33,11 @@
           "id": "5:689537460272944787",
           "name": "matchRoundId",
           "type": 9
+        },
+        {
+          "id": "6:281430262882697651",
+          "name": "courtNumber",
+          "type": 6
         }
       ],
       "relations": [
@@ -50,7 +55,7 @@
     },
     {
       "id": "2:510023494987061776",
-      "lastPropertyId": "4:4534686335902098829",
+      "lastPropertyId": "5:8907167406373332995",
       "name": "MatchRound",
       "properties": [
         {
@@ -73,6 +78,11 @@
           "id": "4:4534686335902098829",
           "name": "roundIndex",
           "type": 6
+        },
+        {
+          "id": "5:8907167406373332995",
+          "name": "active",
+          "type": 1
         }
       ],
       "relations": [
@@ -90,6 +100,11 @@
           "id": "9:2379637432522516840",
           "name": "matches",
           "targetId": "1:7853952313064716528"
+        },
+        {
+          "id": "10:2850712363210080507",
+          "name": "sittingOver",
+          "targetId": "3:7144689319236241690"
         }
       ]
     },
@@ -130,13 +145,7 @@
           "type": 1
         }
       ],
-      "relations": [
-        {
-          "id": "5:3541800960085984618",
-          "name": "players",
-          "targetId": "3:7144689319236241690"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "4:6445019999584143467",
@@ -259,7 +268,7 @@
   ],
   "lastEntityId": "6:1315279517998681009",
   "lastIndexId": "2:4137678572081549196",
-  "lastRelationId": "9:2379637432522516840",
+  "lastRelationId": "10:2850712363210080507",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
@@ -269,6 +278,8 @@
     4137678572081549196
   ],
   "retiredPropertyUids": [],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    3541800960085984618
+  ],
   "version": 1
 }

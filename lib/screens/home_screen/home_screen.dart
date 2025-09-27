@@ -43,11 +43,7 @@ class HomeScreen extends StatelessWidget {
               child: Text('Tilføj tournering'),
             ),
             StreamBuilder(
-              stream: objectbox.store
-                  .box<Tournament>()
-                  .query()
-                  .watch(triggerImmediately: true)
-                  .map((query) => query.find()),
+              stream: Tournament.listOfAllTournamentsAsStream,
               builder: (context, asyncSnapshot) {
                 if (!asyncSnapshot.hasData) {
                   return CircularProgressIndicator();
@@ -67,10 +63,7 @@ class HomeScreen extends StatelessWidget {
                         title: Text(tournament.name),
 
                         onTap: () {
-                          context.goNamed(
-                            TournamentScreen.routerPath,
-                            extra: tournament,
-                          );
+                          context.goNamed(TournamentScreen.routerPath, extra: tournament);
                         },
                       );
                     },

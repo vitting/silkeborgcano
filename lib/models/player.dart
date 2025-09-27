@@ -12,24 +12,11 @@ class Player {
   int points;
   String sex; // 'm' for male and 'f' for female, 'u' for unknown
   bool isDeleted;
-  final players = ToMany<Player>();
 
-  Player({
-    this.oid = 0,
-    this.id = '',
-    this.name = '',
-    this.points = 0,
-    this.sex = 'u',
-    this.isDeleted = false,
-  });
+  Player({this.oid = 0, this.id = '', this.name = '', this.points = 0, this.sex = 'u', this.isDeleted = false});
 
   factory Player.newPlayer({String? name, String? sex}) {
-    return Player(
-      id: Uuid().v4(),
-      name: name ?? '',
-      points: 0,
-      sex: sex ?? 'u',
-    );
+    return Player(id: Uuid().v4(), name: name ?? '', points: 0, sex: sex ?? 'u');
   }
 
   void markAsDeleted() {

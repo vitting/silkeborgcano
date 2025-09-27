@@ -27,7 +27,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 7853952313064716528),
     name: 'Match',
-    lastPropertyId: const obx_int.IdUid(5, 689537460272944787),
+    lastPropertyId: const obx_int.IdUid(6, 281430262882697651),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -60,6 +60,12 @@ final _entities = <obx_int.ModelEntity>[
         type: 9,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 281430262882697651),
+        name: 'courtNumber',
+        type: 6,
+        flags: 0,
+      ),
     ],
     relations: <obx_int.ModelRelation>[
       obx_int.ModelRelation(
@@ -78,7 +84,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 510023494987061776),
     name: 'MatchRound',
-    lastPropertyId: const obx_int.IdUid(4, 4534686335902098829),
+    lastPropertyId: const obx_int.IdUid(5, 8907167406373332995),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -105,6 +111,12 @@ final _entities = <obx_int.ModelEntity>[
         type: 6,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8907167406373332995),
+        name: 'active',
+        type: 1,
+        flags: 0,
+      ),
     ],
     relations: <obx_int.ModelRelation>[
       obx_int.ModelRelation(
@@ -121,6 +133,11 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(9, 2379637432522516840),
         name: 'matches',
         targetId: const obx_int.IdUid(1, 7853952313064716528),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(10, 2850712363210080507),
+        name: 'sittingOver',
+        targetId: const obx_int.IdUid(3, 7144689319236241690),
       ),
     ],
     backlinks: <obx_int.ModelBacklink>[],
@@ -168,13 +185,7 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
     ],
-    relations: <obx_int.ModelRelation>[
-      obx_int.ModelRelation(
-        id: const obx_int.IdUid(5, 3541800960085984618),
-        name: 'players',
-        targetId: const obx_int.IdUid(3, 7144689319236241690),
-      ),
-    ],
+    relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
   obx_int.ModelEntity(
@@ -355,12 +366,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
     entities: _entities,
     lastEntityId: const obx_int.IdUid(6, 1315279517998681009),
     lastIndexId: const obx_int.IdUid(2, 4137678572081549196),
-    lastRelationId: const obx_int.IdUid(9, 2379637432522516840),
+    lastRelationId: const obx_int.IdUid(10, 2850712363210080507),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [595333096936084368, 4137678572081549196],
     retiredPropertyUids: const [],
-    retiredRelationUids: const [],
+    retiredRelationUids: const [3541800960085984618],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
     version: 1,
@@ -381,12 +392,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectToFB: (Match object, fb.Builder fbb) {
         final idOffset = fbb.writeString(object.id);
         final matchRoundIdOffset = fbb.writeString(object.matchRoundId);
-        fbb.startTable(6);
+        fbb.startTable(7);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, idOffset);
         fbb.addInt64(2, object.team1Score);
         fbb.addInt64(3, object.team2Score);
         fbb.addOffset(4, matchRoundIdOffset);
+        fbb.addInt64(5, object.courtNumber);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -417,12 +429,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final matchRoundIdParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 12, '');
+        final courtNumberParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          0,
+        );
         final object = Match(
           oid: oidParam,
           id: idParam,
           team1Score: team1ScoreParam,
           team2Score: team2ScoreParam,
           matchRoundId: matchRoundIdParam,
+          courtNumber: courtNumberParam,
         );
         obx_int.InternalToManyAccess.setRelInfo<Match>(
           object.team1,
@@ -445,6 +464,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         obx_int.RelInfo<MatchRound>.toMany(4, object.oid):
             object.playerMatchPoints,
         obx_int.RelInfo<MatchRound>.toMany(9, object.oid): object.matches,
+        obx_int.RelInfo<MatchRound>.toMany(10, object.oid): object.sittingOver,
       },
       getId: (MatchRound object) => object.oid,
       setId: (MatchRound object, int id) {
@@ -453,11 +473,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectToFB: (MatchRound object, fb.Builder fbb) {
         final idOffset = fbb.writeString(object.id);
         final tournamentIdOffset = fbb.writeString(object.tournamentId);
-        fbb.startTable(5);
+        fbb.startTable(6);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, idOffset);
         fbb.addOffset(2, tournamentIdOffset);
         fbb.addInt64(3, object.roundIndex);
+        fbb.addBool(4, object.active);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -482,11 +503,18 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final idParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
+        final activeParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          false,
+        );
         final object = MatchRound(
           oid: oidParam,
           roundIndex: roundIndexParam,
           tournamentId: tournamentIdParam,
           id: idParam,
+          active: activeParam,
         );
         obx_int.InternalToManyAccess.setRelInfo<MatchRound>(
           object.players,
@@ -503,15 +531,18 @@ obx_int.ModelDefinition getObjectBoxModel() {
           store,
           obx_int.RelInfo<MatchRound>.toMany(9, object.oid),
         );
+        obx_int.InternalToManyAccess.setRelInfo<MatchRound>(
+          object.sittingOver,
+          store,
+          obx_int.RelInfo<MatchRound>.toMany(10, object.oid),
+        );
         return object;
       },
     ),
     Player: obx_int.EntityDefinition<Player>(
       model: _entities[2],
       toOneRelations: (Player object) => [],
-      toManyRelations: (Player object) => {
-        obx_int.RelInfo<Player>.toMany(5, object.oid): object.players,
-      },
+      toManyRelations: (Player object) => {},
       getId: (Player object) => object.oid,
       setId: (Player object, int id) {
         object.oid = id;
@@ -568,11 +599,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           sex: sexParam,
           isDeleted: isDeletedParam,
         );
-        obx_int.InternalToManyAccess.setRelInfo<Player>(
-          object.players,
-          store,
-          obx_int.RelInfo<Player>.toMany(5, object.oid),
-        );
+
         return object;
       },
     ),
@@ -799,6 +826,11 @@ class Match_ {
     _entities[0].properties[4],
   );
 
+  /// See [Match.courtNumber].
+  static final courtNumber = obx.QueryIntegerProperty<Match>(
+    _entities[0].properties[5],
+  );
+
   /// see [Match.team1]
   static final team1 = obx.QueryRelationToMany<Match, Player>(
     _entities[0].relations[0],
@@ -832,6 +864,11 @@ class MatchRound_ {
     _entities[1].properties[3],
   );
 
+  /// See [MatchRound.active].
+  static final active = obx.QueryBooleanProperty<MatchRound>(
+    _entities[1].properties[4],
+  );
+
   /// see [MatchRound.players]
   static final players = obx.QueryRelationToMany<MatchRound, Player>(
     _entities[1].relations[0],
@@ -846,6 +883,11 @@ class MatchRound_ {
   /// see [MatchRound.matches]
   static final matches = obx.QueryRelationToMany<MatchRound, Match>(
     _entities[1].relations[2],
+  );
+
+  /// see [MatchRound.sittingOver]
+  static final sittingOver = obx.QueryRelationToMany<MatchRound, Player>(
+    _entities[1].relations[3],
   );
 }
 
@@ -877,11 +919,6 @@ class Player_ {
   /// See [Player.isDeleted].
   static final isDeleted = obx.QueryBooleanProperty<Player>(
     _entities[2].properties[5],
-  );
-
-  /// see [Player.players]
-  static final players = obx.QueryRelationToMany<Player, Player>(
-    _entities[2].relations[0],
   );
 }
 
