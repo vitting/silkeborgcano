@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/dialogs/register_points_dialog.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/match.dart';
+import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 
@@ -18,6 +19,7 @@ class MatchesScreen extends StatefulWidget {
 class _MatchesScreenState extends State<MatchesScreen> {
   MatchRound? _matchRound;
   List<Match> _matches = [];
+  int _pointPerMatch = 21;
 
   @override
   void didChangeDependencies() {
@@ -30,9 +32,28 @@ class _MatchesScreenState extends State<MatchesScreen> {
         return;
       }
 
+      final Tournament tournament = matchRound.getTournament();
+      _pointPerMatch = tournament.pointPerMatch;
+
       _matchRound = matchRound;
       _matches = matchRound.matches;
     }
+  }
+
+  ({int team1, int team2}) _calculatePointsForMatch(int team1Points, int team2Points) {
+    int team1Score = 0;
+    int team2Score = 0;
+    if (team1Points != 0) {
+      team1Score = team1Points;
+      team2Score = _pointPerMatch - team1Points;
+    }
+
+    if (team2Points != 0) {
+      team2Score = team2Points;
+      team1Score = _pointPerMatch - team2Points;
+    }
+
+    return (team1: team1Score, team2: team2Score);
   }
 
   @override
@@ -49,22 +70,60 @@ class _MatchesScreenState extends State<MatchesScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.separated(
-          itemBuilder: (context, index) {
-            final m = _matches[index];
-            return MatchListTile(
-              court: m.courtNumber,
-              team1: m.team1,
-              team2: m.team2,
-              onTapTeam1: () {
-                RegisterPointsDialog.show(context);
-              },
-              onTapTeam2: () {},
-              showPoints: true,
-            );
-          },
-          separatorBuilder: (context, index) => Gap(8),
-          itemCount: _matches.length,
+        child: Column(
+          children: [
+            ElevatedButton(onPressed: () {}, child: Text('Afslut runde')),
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  final m = _matches[index];
+                  return MatchListTile(
+                    court: m.courtNumber,
+                    team1: m.team1,
+                    team2: m.team2,
+                    pointsTeam1: m.team1Score,
+                    pointsTeam2: m.team2Score,
+                    onTapTeam1: () async {
+                      final result = await RegisterPointsDialog.show(
+                        context,
+                        team: RegisterPointsDialogTeamEnum.team1,
+                        initialValue: m.team1Score,
+                        maxPoints: _pointPerMatch,
+                        player1Name: m.team1[0].name,
+                        player2Name: m.team1[1].name,
+                      );
+
+                      if (result != null) {
+                        final score = _calculatePointsForMatch(result, 0);
+                        setState(() {
+                          m.addScore(score.team1, score.team2);
+                        });
+                      }
+                    },
+                    onTapTeam2: () async {
+                      final result = await RegisterPointsDialog.show(
+                        context,
+                        team: RegisterPointsDialogTeamEnum.team2,
+                        initialValue: m.team2Score,
+                        maxPoints: _pointPerMatch,
+                        player1Name: m.team2[0].name,
+                        player2Name: m.team2[1].name,
+                      );
+
+                      if (result != null) {
+                        setState(() {
+                          m.addTeam2Score(result);
+                        });
+                      }
+                    },
+                    showPoints: true,
+                  );
+                },
+                separatorBuilder: (context, index) => Gap(8),
+                itemCount: _matches.length,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -3,6 +3,8 @@ import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_match_points.dart';
+import 'package:silkeborgcano/models/tournament.dart';
+import 'package:silkeborgcano/objectbox.g.dart' hide Entity, Id;
 import 'package:silkeborgcano/screens/match_round_screen/match_calculation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -91,5 +93,9 @@ class MatchRound {
   void setActive(bool isActive) {
     active = isActive;
     objectbox.store.box<MatchRound>().put(this);
+  }
+
+  Tournament getTournament() {
+    return objectbox.store.box<Tournament>().query(Tournament_.id.equals(tournamentId)).build().findFirst()!;
   }
 }

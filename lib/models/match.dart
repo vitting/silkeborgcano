@@ -47,6 +47,12 @@ class Match {
     objectbox.store.box<Match>().put(this);
   }
 
+  void addScore(int team1Score, int team2Score) {
+    this.team1Score = team1Score;
+    this.team2Score = team2Score;
+    objectbox.store.box<Match>().put(this);
+  }
+
   void addTeam1Score(int score) {
     team1Score = score;
     objectbox.store.box<Match>().put(this);

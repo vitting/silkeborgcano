@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:silkeborgcano/dialogs/default_dialog.dart';
 import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
 
 class PlayerDialogResult {
@@ -15,10 +16,7 @@ class PlayerDialog extends StatefulWidget {
   final String initialSex;
   const PlayerDialog({super.key, this.initialValue, this.initialSex = 'u'});
 
-  static Future<PlayerDialogResult?> show(
-    BuildContext context, {
-    String? initialValue,
-  }) {
+  static Future<PlayerDialogResult?> show(BuildContext context, {String? initialValue}) {
     return showDialog<PlayerDialogResult?>(
       context: context,
       builder: (context) {
@@ -44,66 +42,48 @@ class _PlayerDialogState extends State<PlayerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.all(4),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+    return DefaultDialog(
+      children: [
+        Text('Navn'),
+        Gap(16),
+        CustomTextFormField(controller: controller),
+        Gap(16),
+        Text('Køn'),
+        RadioGroup<String>(
+          groupValue: _sex,
+          onChanged: (value) {
+            if (value == null) return;
+            setState(() {
+              _sex = value;
+            });
+          },
+          child: Column(
+            children: [
+              RadioListTile(value: 'u', title: Text('Ikke opgivet'), dense: true),
+              RadioListTile(value: 'f', title: Text('Kvinde'), dense: true),
+              RadioListTile(value: 'm', title: Text('Mand'), dense: true),
+            ],
+          ),
+        ),
+        Gap(16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Navn'),
-            Gap(16),
-            CustomTextFormField(controller: controller),
-            Gap(16),
-            Text('Køn'),
-            RadioGroup<String>(
-              groupValue: _sex,
-              onChanged: (value) {
-                if (value == null) return;
-                setState(() {
-                  _sex = value;
-                });
+            ElevatedButton(
+              onPressed: () {
+                context.pop();
               },
-              child: Column(
-                children: [
-                  RadioListTile(
-                    value: 'u',
-                    title: Text('Ikke opgivet'),
-                    dense: true,
-                  ),
-                  RadioListTile(value: 'f', title: Text('Kvinde'), dense: true),
-                  RadioListTile(value: 'm', title: Text('Mand'), dense: true),
-                ],
-              ),
+              child: Text('Fortryd'),
             ),
-            Gap(16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  child: Text('Fortryd'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.pop<PlayerDialogResult>(
-                      PlayerDialogResult(
-                        name: controller.text.trim(),
-                        sex: _sex,
-                      ),
-                    );
-                  },
-                  child: Text('Gem'),
-                ),
-              ],
+            ElevatedButton(
+              onPressed: () {
+                context.pop<PlayerDialogResult>(PlayerDialogResult(name: controller.text.trim(), sex: _sex));
+              },
+              child: Text('Gem'),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }
