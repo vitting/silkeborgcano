@@ -9,14 +9,29 @@ class BenchedPlayers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Sidder over'),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                ),
+                child: Text(
+                  'Sidder over',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
         Container(
-          margin: EdgeInsets.symmetric(vertical: 4),
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.blueGrey,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.red, style: BorderStyle.solid, width: 1),
+            color: Colors.green.shade100,
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
           ),
           child: ListView.builder(
             shrinkWrap: true,

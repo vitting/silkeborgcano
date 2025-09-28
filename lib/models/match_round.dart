@@ -79,7 +79,7 @@ class MatchRound {
     Match.deleteAllByMatchRoundId(id);
 
     for (var match in matches) {
-      final Match m = Match(id: Uuid().v4(), matchRoundId: id, courtNumber: match.courtNumber);
+      final Match m = Match(id: Uuid().v4(), matchRoundId: id, courtNumber: match.courtNumber, tournamentId: tournamentId);
       m.addTeam1Players(match.team1.players);
       m.addTeam2Players(match.team2.players);
       this.matches.add(m);

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+enum CustomTextFormFieldBehavior { normal, number }
 
 class CustomTextFormField extends StatefulWidget {
   final String? initialValue;
@@ -6,6 +9,8 @@ class CustomTextFormField extends StatefulWidget {
   final void Function(String)? onFieldSubmitted;
   final void Function()? onEditingComplete;
   final ValueChanged<String>? onTapOutside;
+  final CustomTextFormFieldBehavior behavior;
+
   const CustomTextFormField({
     super.key,
     this.initialValue,
@@ -13,6 +18,7 @@ class CustomTextFormField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onEditingComplete,
     this.onTapOutside,
+    this.behavior = CustomTextFormFieldBehavior.normal,
   });
 
   @override
@@ -51,6 +57,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: [if (widget.behavior == CustomTextFormFieldBehavior.number) FilteringTextInputFormatter.digitsOnly],
+      keyboardType: widget.behavior == CustomTextFormFieldBehavior.number ? TextInputType.number : null,
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
         widget.onTapOutside?.call(controller.text);

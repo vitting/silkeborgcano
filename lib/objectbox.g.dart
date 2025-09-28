@@ -27,7 +27,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 7853952313064716528),
     name: 'Match',
-    lastPropertyId: const obx_int.IdUid(6, 281430262882697651),
+    lastPropertyId: const obx_int.IdUid(7, 7922384935021969671),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -64,6 +64,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(6, 281430262882697651),
         name: 'courtNumber',
         type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 7922384935021969671),
+        name: 'tournamentId',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -392,13 +398,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectToFB: (Match object, fb.Builder fbb) {
         final idOffset = fbb.writeString(object.id);
         final matchRoundIdOffset = fbb.writeString(object.matchRoundId);
-        fbb.startTable(7);
+        final tournamentIdOffset = fbb.writeString(object.tournamentId);
+        fbb.startTable(8);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, idOffset);
         fbb.addInt64(2, object.team1Score);
         fbb.addInt64(3, object.team2Score);
         fbb.addOffset(4, matchRoundIdOffset);
         fbb.addInt64(5, object.courtNumber);
+        fbb.addOffset(6, tournamentIdOffset);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -435,6 +443,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           14,
           0,
         );
+        final tournamentIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
         final object = Match(
           oid: oidParam,
           id: idParam,
@@ -442,6 +453,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           team2Score: team2ScoreParam,
           matchRoundId: matchRoundIdParam,
           courtNumber: courtNumberParam,
+          tournamentId: tournamentIdParam,
         );
         obx_int.InternalToManyAccess.setRelInfo<Match>(
           object.team1,
@@ -829,6 +841,11 @@ class Match_ {
   /// See [Match.courtNumber].
   static final courtNumber = obx.QueryIntegerProperty<Match>(
     _entities[0].properties[5],
+  );
+
+  /// See [Match.tournamentId].
+  static final tournamentId = obx.QueryStringProperty<Match>(
+    _entities[0].properties[6],
   );
 
   /// see [Match.team1]

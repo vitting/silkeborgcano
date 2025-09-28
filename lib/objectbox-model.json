@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:7853952313064716528",
-      "lastPropertyId": "6:281430262882697651",
+      "lastPropertyId": "7:7922384935021969671",
       "name": "Match",
       "properties": [
         {
@@ -38,6 +38,11 @@
           "id": "6:281430262882697651",
           "name": "courtNumber",
           "type": 6
+        },
+        {
+          "id": "7:7922384935021969671",
+          "name": "tournamentId",
+          "type": 9
         }
       ],
       "relations": [

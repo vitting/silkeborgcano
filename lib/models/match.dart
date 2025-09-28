@@ -10,13 +10,22 @@ class Match {
   int oid; // ObjectBox ID
   String id;
   String matchRoundId;
+  String tournamentId;
   int courtNumber;
   final team1 = ToMany<Player>();
   final team2 = ToMany<Player>();
   int team1Score;
   int team2Score;
 
-  Match({this.oid = 0, this.id = '', this.team1Score = 0, this.team2Score = 0, this.matchRoundId = '', this.courtNumber = 0});
+  Match({
+    this.oid = 0,
+    this.id = '',
+    this.team1Score = 0,
+    this.team2Score = 0,
+    this.matchRoundId = '',
+    this.courtNumber = 0,
+    this.tournamentId = '',
+  });
 
   static void deleteAllByMatchRoundId(String matchRoundId) {
     objectbox.store.box<Match>().query(Match_.matchRoundId.equals(matchRoundId)).build().remove();
