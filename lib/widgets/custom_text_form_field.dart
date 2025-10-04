@@ -68,8 +68,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         FocusScope.of(context).unfocus();
         widget.onTapOutside?.call(controller.text);
       },
-      maxLength: 2,
-      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      maxLength: widget.behavior == CustomTextFormFieldBehavior.number ? 2 : null,
+      maxLengthEnforcement: widget.behavior == CustomTextFormFieldBehavior.number ? MaxLengthEnforcement.enforced : null,
       autofocus: true,
       controller: controller,
       onChanged: widget.onChanged,
@@ -77,6 +77,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
         errorText: widget.errorText,
+
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         counterText: widget.behavior == CustomTextFormFieldBehavior.number ? '' : null,
         floatingLabelBehavior: FloatingLabelBehavior.never,

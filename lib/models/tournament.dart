@@ -9,21 +9,18 @@ import 'package:uuid/uuid.dart';
 
 @Entity()
 class Tournament {
-  String id;
-  String name;
   @Id()
   int oid; // ObjectBox ID
-
+  String id;
+  String name;
   final playerTournamentPoints = ToMany<PlayerTournamentPoints>();
   final players = ToMany<Player>();
   int pointPerMatch;
   final rounds = ToMany<MatchRound>();
-  int tournamentEnd;
-  int tournamentStart;
+  int? tournamentEnd;
+  int? tournamentStart;
 
-  Tournament({this.oid = 0, this.id = '', this.name = '', this.pointPerMatch = 0, int? tournamentStart, int? tournamentEnd})
-    : tournamentStart = tournamentStart ?? DateTime.now().millisecondsSinceEpoch,
-      tournamentEnd = tournamentEnd ?? DateTime.now().millisecondsSinceEpoch;
+  Tournament({this.oid = 0, this.id = '', this.name = '', this.pointPerMatch = 0, this.tournamentStart, this.tournamentEnd});
 
   @override
   String toString() {
@@ -47,16 +44,34 @@ class Tournament {
   void setPlayers(List<Player> players) {
     this.players.clear();
     playerTournamentPoints.clear();
+    objectbox.store.box<Tournament>().put(this);
+
     PlayerTournamentPoints.deleteAllByTournamentId(id);
 
     for (var player in players) {
       this.players.add(player);
 
-      final ptp = PlayerTournamentPoints(playerId: player.id, points: 0, tournamentId: id);
+      final ptp = PlayerTournamentPoints.createPlayerTournamentPoints(playerId: player.id, tournamentId: id);
       ptp.save();
       playerTournamentPoints.add(ptp);
     }
     objectbox.store.box<Tournament>().put(this);
+  }
+
+  void addNewPlayer(Player player) {
+    players.add(player);
+    final ptp = PlayerTournamentPoints.createPlayerTournamentPoints(playerId: player.id, tournamentId: id);
+    ptp.save();
+    playerTournamentPoints.add(ptp);
+    objectbox.store.box<Tournament>().put(this);
+  }
+
+  void removePlayer(Player player) {
+    players.removeWhere((p) => p.id == player.id);
+    playerTournamentPoints.removeWhere((ptp) => ptp.playerId == player.id);
+    objectbox.store.box<Tournament>().put(this);
+
+    PlayerTournamentPoints.deleteByPlayerId(player.id);
   }
 
   bool delete() {
@@ -64,10 +79,18 @@ class Tournament {
     return objectbox.store.box<Tournament>().remove(oid);
   }
 
-  void deletePlayer(Player player) {
+  void deletePlayerWithEmptyName(Player player) {
+    if (player.name.isNotEmpty) {
+      throw Exception('Player name is not empty');
+    }
+
     players.removeWhere((p) => p.id == player.id);
-    PlayerTournamentPoints.deleteByPlayerId(player.id);
+    playerTournamentPoints.removeWhere((ptp) => ptp.playerId == player.id);
     objectbox.store.box<Tournament>().put(this);
+
+    PlayerTournamentPoints.deleteByPlayerId(player.id);
+
+    player.delete();
   }
 
   List<Player> getPlayersSortedByName() {
@@ -102,5 +125,10 @@ class Tournament {
 
   int getLastRoundIndex() {
     return rounds.length;
+  }
+
+  List<Player> getPlayersSortedByPoints() {
+    final playersWithPoints = PlayerTournamentPoints.getSortedByPointsDesc(id);
+    return playersWithPoints.map((ptp) => players.firstWhere((p) => p.id == ptp.playerId)).toList();
   }
 }

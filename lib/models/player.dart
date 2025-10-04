@@ -15,7 +15,7 @@ class Player {
 
   Player({this.oid = 0, this.id = '', this.name = '', this.points = 0, this.sex = 'u', this.isDeleted = false});
 
-  factory Player.newPlayer({String? name, String? sex}) {
+  factory Player.createNewPlayer({String? name, String? sex}) {
     return Player(id: Uuid().v4(), name: name ?? '', points: 0, sex: sex ?? 'u');
   }
 
@@ -30,6 +30,10 @@ class Player {
     if (sex != null) this.sex = sex;
     if (isDeleted != null) this.isDeleted = isDeleted;
     return objectbox.store.box<Player>().put(this);
+  }
+
+  void delete() {
+    objectbox.store.box<Player>().remove(oid);
   }
 
   @override

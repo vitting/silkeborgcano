@@ -90,7 +90,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 510023494987061776),
     name: 'MatchRound',
-    lastPropertyId: const obx_int.IdUid(5, 8907167406373332995),
+    lastPropertyId: const obx_int.IdUid(9, 9091173303530526860),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -121,6 +121,18 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(5, 8907167406373332995),
         name: 'active',
         type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 8016762749463171675),
+        name: 'roundEnd',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 9091173303530526860),
+        name: 'roundStart',
+        type: 6,
         flags: 0,
       ),
     ],
@@ -376,7 +388,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [595333096936084368, 4137678572081549196],
-    retiredPropertyUids: const [],
+    retiredPropertyUids: const [4676927477872476144, 497268761306925784],
     retiredRelationUids: const [3541800960085984618],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
@@ -485,12 +497,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectToFB: (MatchRound object, fb.Builder fbb) {
         final idOffset = fbb.writeString(object.id);
         final tournamentIdOffset = fbb.writeString(object.tournamentId);
-        fbb.startTable(6);
+        fbb.startTable(10);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, idOffset);
         fbb.addOffset(2, tournamentIdOffset);
         fbb.addInt64(3, object.roundIndex);
         fbb.addBool(4, object.active);
+        fbb.addInt64(7, object.roundEnd);
+        fbb.addInt64(8, object.roundStart);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -521,12 +535,24 @@ obx_int.ModelDefinition getObjectBoxModel() {
           12,
           false,
         );
+        final roundStartParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          20,
+        );
+        final roundEndParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          18,
+        );
         final object = MatchRound(
           oid: oidParam,
           roundIndex: roundIndexParam,
           tournamentId: tournamentIdParam,
           id: idParam,
           active: activeParam,
+          roundStart: roundStartParam,
+          roundEnd: roundEndParam,
         );
         obx_int.InternalToManyAccess.setRelInfo<MatchRound>(
           object.players,
@@ -770,17 +796,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           10,
           0,
         );
-        final tournamentStartParam = const fb.Int64Reader().vTableGet(
+        final tournamentStartParam = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
           12,
-          0,
         );
-        final tournamentEndParam = const fb.Int64Reader().vTableGet(
+        final tournamentEndParam = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
           14,
-          0,
         );
         final object = Tournament(
           oid: oidParam,
@@ -884,6 +908,16 @@ class MatchRound_ {
   /// See [MatchRound.active].
   static final active = obx.QueryBooleanProperty<MatchRound>(
     _entities[1].properties[4],
+  );
+
+  /// See [MatchRound.roundEnd].
+  static final roundEnd = obx.QueryIntegerProperty<MatchRound>(
+    _entities[1].properties[5],
+  );
+
+  /// See [MatchRound.roundStart].
+  static final roundStart = obx.QueryIntegerProperty<MatchRound>(
+    _entities[1].properties[6],
   );
 
   /// see [MatchRound.players]

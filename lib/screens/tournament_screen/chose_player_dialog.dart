@@ -8,10 +8,7 @@ class ChosePlayerDialog extends StatefulWidget {
   final List<Player> selectedPlayers;
   const ChosePlayerDialog({super.key, this.selectedPlayers = const []});
 
-  static Future<List<Player>?> show(
-    BuildContext context,
-    List<Player> selectedPlayers,
-  ) {
+  static Future<List<Player>?> show(BuildContext context, List<Player> selectedPlayers) {
     return showDialog<List<Player>?>(
       context: context,
       builder: (context) => ChosePlayerDialog(selectedPlayers: selectedPlayers),
@@ -55,7 +52,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
                 final result = await PlayerDialog.show(context);
 
                 if (result != null && result.name.trim().isNotEmpty) {
-                  final newPlayer = Player.newPlayer(name: result.name);
+                  final newPlayer = Player.createNewPlayer(name: result.name);
                   newPlayer.save();
                   _selectedPlayers[newPlayer.id] = newPlayer;
                 }
@@ -92,10 +89,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
                 final item = allPlayers[index];
                 return GestureDetector(
                   onLongPress: () async {
-                    final result = await PlayerDialog.show(
-                      context,
-                      initialValue: item.name,
-                    );
+                    final result = await PlayerDialog.show(context, initialValue: item.name);
                     if (result != null && result.name.trim().isNotEmpty) {
                       item.save(name: result.name, sex: result.sex);
                       if (_selectedPlayers.containsKey(item.id)) {

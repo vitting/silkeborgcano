@@ -9,15 +9,11 @@ class AdministratePlayersDialog extends StatefulWidget {
   const AdministratePlayersDialog({super.key});
 
   static Future<List<Player>?> show(BuildContext context) {
-    return showDialog<List<Player>?>(
-      context: context,
-      builder: (context) => AdministratePlayersDialog(),
-    );
+    return showDialog<List<Player>?>(context: context, builder: (context) => AdministratePlayersDialog());
   }
 
   @override
-  State<AdministratePlayersDialog> createState() =>
-      _AdministratePlayersDialogState();
+  State<AdministratePlayersDialog> createState() => _AdministratePlayersDialogState();
 }
 
 class _AdministratePlayersDialogState extends State<AdministratePlayersDialog> {
@@ -60,15 +56,10 @@ class _AdministratePlayersDialogState extends State<AdministratePlayersDialog> {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () async {
-                final PlayerDialogResult? result = await PlayerDialog.show(
-                  context,
-                );
+                final PlayerDialogResult? result = await PlayerDialog.show(context);
 
                 if (result != null && result.name.trim().isNotEmpty) {
-                  final newPlayer = Player.newPlayer(
-                    name: result.name,
-                    sex: result.sex,
-                  );
+                  final newPlayer = Player.createNewPlayer(name: result.name, sex: result.sex);
                   newPlayer.save();
                 }
               },

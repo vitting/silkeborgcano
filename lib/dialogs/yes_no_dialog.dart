@@ -2,28 +2,14 @@ import 'package:flutter/material.dart';
 
 class YesNoDialog extends StatelessWidget {
   final String title;
-  final String noButtonText;
+  final String? noButtonText;
   final String yesButtonText;
-  const YesNoDialog({
-    super.key,
-    required this.title,
-    required this.yesButtonText,
-    required this.noButtonText,
-  });
+  const YesNoDialog({super.key, required this.title, required this.yesButtonText, this.noButtonText});
 
-  static Future<bool?> show(
-    BuildContext context, {
-    required String title,
-    required String noButtonText,
-    required String yesButtonText,
-  }) {
+  static Future<bool?> show(BuildContext context, {required String title, String? noButtonText, required String yesButtonText}) {
     return showDialog<bool?>(
       context: context,
-      builder: (context) => YesNoDialog(
-        title: title,
-        noButtonText: noButtonText,
-        yesButtonText: yesButtonText,
-      ),
+      builder: (context) => YesNoDialog(title: title, noButtonText: noButtonText, yesButtonText: yesButtonText),
     );
   }
 
@@ -32,12 +18,13 @@ class YesNoDialog extends StatelessWidget {
     return AlertDialog(
       content: Text(title),
       actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(noButtonText),
-        ),
+        if (noButtonText != null)
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(noButtonText!),
+          ),
         TextButton(
           onPressed: () {
             // Delete action

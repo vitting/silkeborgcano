@@ -3,6 +3,7 @@ import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_match_points.dart';
+import 'package:silkeborgcano/models/player_tournament_points.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/objectbox.g.dart' hide Entity, Id;
 import 'package:silkeborgcano/screens/match_round_screen/match_calculation.dart';
@@ -20,8 +21,18 @@ class MatchRound {
   final players = ToMany<Player>();
   final sittingOver = ToMany<Player>();
   final playerMatchPoints = ToMany<PlayerMatchPoints>();
+  int? roundEnd;
+  int? roundStart;
 
-  MatchRound({this.oid = 0, this.roundIndex = 0, this.tournamentId = '', this.id = '', this.active = false});
+  MatchRound({
+    this.oid = 0,
+    this.roundIndex = 0,
+    this.tournamentId = '',
+    this.id = '',
+    this.active = false,
+    this.roundStart,
+    this.roundEnd,
+  });
 
   factory MatchRound.createMatchRound({required String tournamentId, required int roundIndex, required List<Player> players}) {
     final m = MatchRound(id: Uuid().v4(), tournamentId: tournamentId, roundIndex: roundIndex, active: false);
@@ -30,11 +41,7 @@ class MatchRound {
     return m;
   }
 
-  int save({List<Player>? players}) {
-    if (players != null) {
-      this.players.clear();
-      this.players.addAll(players);
-    }
+  int save() {
     return objectbox.store.box<MatchRound>().put(this);
   }
 
@@ -50,7 +57,7 @@ class MatchRound {
 
     for (var player in newPlayers) {
       players.add(player);
-      final pmp = PlayerMatchPoints(playerId: player.id, points: 0, matchRoundId: id);
+      final pmp = PlayerMatchPoints.createPlayerMatchPoints(playerId: player.id, matchRoundId: id);
       pmp.save();
       playerMatchPoints.add(pmp);
     }
@@ -90,12 +97,35 @@ class MatchRound {
     objectbox.store.box<MatchRound>().put(this);
   }
 
-  void setActive(bool isActive) {
-    active = isActive;
+  Tournament getTournament() {
+    return objectbox.store.box<Tournament>().query(Tournament_.id.equals(tournamentId)).build().findFirst()!;
+  }
+
+  void startRound() {
+    active = true;
+    roundStart = DateTime.now().millisecondsSinceEpoch;
     objectbox.store.box<MatchRound>().put(this);
   }
 
-  Tournament getTournament() {
-    return objectbox.store.box<Tournament>().query(Tournament_.id.equals(tournamentId)).build().findFirst()!;
+  void endRound() {
+    active = false;
+    roundEnd = DateTime.now().millisecondsSinceEpoch;
+
+    for (var match in matches) {
+      final team1Points = match.team1Score;
+      final team2Points = match.team2Score;
+
+      for (var player in match.team1) {
+        final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, tournamentId);
+        ptp.updatePoints(ptp.points + team1Points);
+      }
+
+      for (var player in match.team2) {
+        final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, tournamentId);
+        ptp.updatePoints(ptp.points + team2Points);
+      }
+    }
+
+    objectbox.store.box<MatchRound>().put(this);
   }
 }

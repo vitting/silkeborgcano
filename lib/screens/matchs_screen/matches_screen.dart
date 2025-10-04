@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/dialogs/register_points_dialog.dart';
+import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
+import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
 
 class MatchesScreen extends StatefulWidget {
   static const String routerPath = "/matches";
@@ -56,11 +58,21 @@ class _MatchesScreenState extends State<MatchesScreen> {
     return (team1: team1Score, team2: team2Score);
   }
 
+  bool _validateThatAllMatchesHaveScore() {
+    for (final m in _matches) {
+      if (!m.hasScore) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Matches Screen'),
+        title: Text('Runde ${_matchRound?.roundIndex ?? ''}'),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -72,7 +84,24 @@ class _MatchesScreenState extends State<MatchesScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            ElevatedButton(onPressed: () {}, child: Text('Afslut runde')),
+            ElevatedButton(
+              onPressed: () async {
+                if (!_validateThatAllMatchesHaveScore()) {
+                  await YesNoDialog.show(
+                    context,
+                    title: 'Før du kan afslutte en runde skal alle kampe have indtastet en score',
+                    yesButtonText: 'Ok',
+                  );
+                  return;
+                }
+                _matchRound?.endRound();
+
+                if (mounted) {
+                  context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound);
+                }
+              },
+              child: Text('Afslut runde'),
+            ),
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) {
@@ -111,8 +140,9 @@ class _MatchesScreenState extends State<MatchesScreen> {
                       );
 
                       if (result != null) {
+                        final score = _calculatePointsForMatch(0, result);
                         setState(() {
-                          m.addTeam2Score(result);
+                          m.addScore(score.team1, score.team2);
                         });
                       }
                     },

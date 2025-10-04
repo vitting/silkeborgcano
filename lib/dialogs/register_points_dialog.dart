@@ -31,6 +31,7 @@ class RegisterPointsDialog extends StatefulWidget {
   }) {
     return showDialog<int?>(
       context: context,
+      barrierDismissible: false,
       builder: (context) => RegisterPointsDialog(
         initialValue: initialValue,
         team: team,
@@ -62,7 +63,9 @@ class _RegisterPointsDialogState extends State<RegisterPointsDialog> {
         errorText = 'Maksimum point er ${widget.maxPoints}';
       });
     } else {
-      context.pop<int>(int.tryParse(controller.text) ?? 0);
+      setState(() {
+        errorText = null;
+      });
     }
   }
 
@@ -87,10 +90,12 @@ class _RegisterPointsDialogState extends State<RegisterPointsDialog> {
                 controller: controller,
                 behavior: CustomTextFormFieldBehavior.number,
                 onFieldSubmitted: (_) {
-                  _validateInput(controller.text);
+                  if (errorText == null) {
+                    context.pop<int>(int.tryParse(controller.text) ?? 0);
+                  }
                 },
                 onChanged: (value) {
-                  debugPrint('value: $value');
+                  _validateInput(controller.text);
                 },
               ),
             ),
@@ -111,9 +116,13 @@ class _RegisterPointsDialogState extends State<RegisterPointsDialog> {
               child: Text('Fortryd'),
             ),
             ElevatedButton(
-              onPressed: () {
-                _validateInput(controller.text);
-              },
+              onPressed: errorText == null
+                  ? () {
+                      if (errorText == null) {
+                        context.pop<int>(int.tryParse(controller.text) ?? 0);
+                      }
+                    }
+                  : null,
               child: Text('Gem'),
             ),
           ],

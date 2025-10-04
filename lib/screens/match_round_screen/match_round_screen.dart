@@ -120,6 +120,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
 
           ElevatedButton(
             onPressed: () {
+              _matchRound?.startRound();
               context.goNamed(MatchesScreen.routerPath, extra: _matchRound);
             },
             child: Text('Start Runde ${_matchRound?.roundIndex}'),

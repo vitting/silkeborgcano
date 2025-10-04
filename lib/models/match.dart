@@ -2,6 +2,7 @@ import 'package:objectbox/objectbox.dart' show Entity, Id, ToMany;
 import 'package:silkeborgcano/main.dart';
 
 import 'package:silkeborgcano/models/player.dart';
+import 'package:silkeborgcano/models/player_match_points.dart';
 import 'package:silkeborgcano/objectbox.g.dart' hide Entity, Id;
 
 @Entity()
@@ -50,21 +51,25 @@ class Match {
   void addScore(int team1Score, int team2Score) {
     this.team1Score = team1Score;
     this.team2Score = team2Score;
-    objectbox.store.box<Match>().put(this);
-  }
 
-  void addTeam1Score(int score) {
-    team1Score = score;
-    objectbox.store.box<Match>().put(this);
-  }
+    for (var player in team1) {
+      final pmp = PlayerMatchPoints.getByPlayerIdAndMatchRoundId(player.id, matchRoundId);
+      pmp.updatePoints(team1Score);
+    }
 
-  void addTeam2Score(int score) {
-    team2Score = score;
+    for (var player in team2) {
+      final pmp = PlayerMatchPoints.getByPlayerIdAndMatchRoundId(player.id, matchRoundId);
+      pmp.updatePoints(team1Score);
+    }
     objectbox.store.box<Match>().put(this);
   }
 
   void delete() {
     objectbox.store.box<Match>().remove(oid);
+  }
+
+  bool get hasScore {
+    return team1Score != 0 || team2Score != 0;
   }
 
   @override

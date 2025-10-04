@@ -10,12 +10,19 @@ class PlayerTournamentPoints {
   String tournamentId;
   int points;
 
-  PlayerTournamentPoints({
-    this.oid = 0,
-    this.points = 0,
-    this.playerId = '',
-    this.tournamentId = '',
-  });
+  PlayerTournamentPoints({this.oid = 0, this.points = 0, this.playerId = '', this.tournamentId = ''});
+
+  factory PlayerTournamentPoints.createPlayerTournamentPoints({required String playerId, required String tournamentId}) {
+    return PlayerTournamentPoints(playerId: playerId, tournamentId: tournamentId, points: 0);
+  }
+
+  static PlayerTournamentPoints getByPlayerIdAndTournamentId(String playerId, String tournamentId) {
+    return objectbox.store
+        .box<PlayerTournamentPoints>()
+        .query(PlayerTournamentPoints_.playerId.equals(playerId) & PlayerTournamentPoints_.tournamentId.equals(tournamentId))
+        .build()
+        .findFirst()!;
+  }
 
   static void deleteAllByTournamentId(String tournamentId) {
     objectbox.store
@@ -26,18 +33,27 @@ class PlayerTournamentPoints {
   }
 
   static void deleteByPlayerId(String playerId) {
-    objectbox.store
+    objectbox.store.box<PlayerTournamentPoints>().query(PlayerTournamentPoints_.playerId.equals(playerId)).build().remove();
+  }
+
+  static List<PlayerTournamentPoints> getSortedByPointsDesc(String tournamentId) {
+    return objectbox.store
         .box<PlayerTournamentPoints>()
-        .query(PlayerTournamentPoints_.playerId.equals(playerId))
+        .query(PlayerTournamentPoints_.tournamentId.equals(tournamentId))
+        .order(PlayerTournamentPoints_.points, flags: Order.descending)
         .build()
-        .remove();
+        .find();
   }
 
   int save() {
     return objectbox.store.box<PlayerTournamentPoints>().put(this);
   }
 
+  void updatePoints(int points) {
+    this.points = points;
+    objectbox.store.box<PlayerTournamentPoints>().put(this);
+  }
+
   @override
-  String toString() =>
-      'PlayerTournamentPoints(oid: $oid, playerId: $playerId, points: $points)';
+  String toString() => 'PlayerTournamentPoints(oid: $oid, playerId: $playerId, points: $points)';
 }

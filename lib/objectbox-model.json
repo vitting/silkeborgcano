@@ -60,7 +60,7 @@
     },
     {
       "id": "2:510023494987061776",
-      "lastPropertyId": "5:8907167406373332995",
+      "lastPropertyId": "9:9091173303530526860",
       "name": "MatchRound",
       "properties": [
         {
@@ -88,6 +88,16 @@
           "id": "5:8907167406373332995",
           "name": "active",
           "type": 1
+        },
+        {
+          "id": "8:8016762749463171675",
+          "name": "roundEnd",
+          "type": 6
+        },
+        {
+          "id": "9:9091173303530526860",
+          "name": "roundStart",
+          "type": 6
         }
       ],
       "relations": [
@@ -282,7 +292,10 @@
     595333096936084368,
     4137678572081549196
   ],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    4676927477872476144,
+    497268761306925784
+  ],
   "retiredRelationUids": [
     3541800960085984618
   ],
