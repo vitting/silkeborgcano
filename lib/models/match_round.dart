@@ -41,6 +41,26 @@ class MatchRound {
     return m;
   }
 
+  static MatchRound? getById(String id) {
+    return objectbox.store.box<MatchRound>().query(MatchRound_.id.equals(id)).build().findFirst();
+  }
+
+  DateTime? get roundStartUtc {
+    if (roundStart != null) {
+      return DateTime.fromMillisecondsSinceEpoch(roundStart!);
+    }
+
+    return null;
+  }
+
+  DateTime? get roundEndUtc {
+    if (roundEnd != null) {
+      return DateTime.fromMillisecondsSinceEpoch(roundEnd!);
+    }
+
+    return null;
+  }
+
   int save() {
     return objectbox.store.box<MatchRound>().put(this);
   }
@@ -107,6 +127,16 @@ class MatchRound {
     objectbox.store.box<MatchRound>().put(this);
   }
 
+  void _updatePlayerMatchPoints(int points, List<Player> players) {
+    for (var player in players) {
+      final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, tournamentId);
+      ptp.updatePoints(ptp.points + points);
+
+      final pmp = PlayerMatchPoints.getByPlayerIdAndMatchRoundId(player.id, id);
+      pmp.updatePoints(points);
+    }
+  }
+
   void endRound() {
     active = false;
     roundEnd = DateTime.now().millisecondsSinceEpoch;
@@ -115,15 +145,13 @@ class MatchRound {
       final team1Points = match.team1Score;
       final team2Points = match.team2Score;
 
-      for (var player in match.team1) {
-        final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, tournamentId);
-        ptp.updatePoints(ptp.points + team1Points);
-      }
+      _updatePlayerMatchPoints(team1Points, match.team1);
+      _updatePlayerMatchPoints(team2Points, match.team2);
+    }
 
-      for (var player in match.team2) {
-        final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, tournamentId);
-        ptp.updatePoints(ptp.points + team2Points);
-      }
+    if (sittingOver.isNotEmpty) {
+      final sittingOverPoints = Tournament.getPointsPerMatchForPlayersSittingOver(tournamentId);
+      _updatePlayerMatchPoints(sittingOverPoints, sittingOver);
     }
 
     objectbox.store.box<MatchRound>().put(this);

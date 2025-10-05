@@ -69,9 +69,9 @@ class HomeScreen extends StatelessWidget {
                           debugPrint('ACtive mach round: $matchRound');
 
                           if (matchRound != null) {
-                            context.goNamed(MatchesScreen.routerPath, extra: matchRound);
+                            context.goNamed(MatchesScreen.routerPath, extra: matchRound.id);
                           } else {
-                            context.goNamed(TournamentScreen.routerPath, extra: tournament);
+                            context.goNamed(TournamentScreen.routerPath, extra: tournament.id);
                           }
                         },
                       );

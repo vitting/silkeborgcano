@@ -28,17 +28,22 @@ class _MatchesScreenState extends State<MatchesScreen> {
     super.didChangeDependencies();
 
     if (_matchRound == null) {
-      final MatchRound? matchRound = GoRouterState.of(context).extra as MatchRound?;
-      if (matchRound == null) {
+      final String? matchRoundId = GoRouterState.of(context).extra as String?;
+      if (matchRoundId == null) {
+        debugPrint('**************MatchRoundId can\'t be null');
+        return;
+      }
+
+      _matchRound = MatchRound.getById(matchRoundId);
+
+      if (_matchRound == null) {
         debugPrint('**************MatchRound can\'t be null');
         return;
       }
 
-      final Tournament tournament = matchRound.getTournament();
+      final Tournament tournament = _matchRound!.getTournament();
       _pointPerMatch = tournament.pointPerMatch;
-
-      _matchRound = matchRound;
-      _matches = matchRound.matches;
+      _matches = _matchRound!.matches;
     }
   }
 
@@ -97,7 +102,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                 _matchRound?.endRound();
 
                 if (mounted) {
-                  context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound);
+                  context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
                 }
               },
               child: Text('Afslut runde'),

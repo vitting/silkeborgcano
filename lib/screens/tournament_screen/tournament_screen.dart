@@ -28,10 +28,10 @@ class _TournamentScreenState extends State<TournamentScreen> {
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      final Tournament? tournament = GoRouterState.of(context).extra as Tournament?;
+      final String? tournamentId = GoRouterState.of(context).extra as String?;
 
-      if (tournament != null) {
-        _tournament = tournament;
+      if (tournamentId != null) {
+        _tournament = Tournament.getById(tournamentId);
       } else {
         _tournament = Tournament.newTournament();
         _tournament!.save();
@@ -110,7 +110,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
           ),
           title: ElevatedButton.icon(
             onPressed: () {
-              context.goNamed(MatchRoundScreen.routerPath, extra: _tournament);
+              context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
             },
             iconAlignment: IconAlignment.end,
             label: Text('Start turnering'),

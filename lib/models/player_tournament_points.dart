@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart' show Entity, Id;
+
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/objectbox.g.dart' hide Entity, Id;
 
@@ -55,5 +56,7 @@ class PlayerTournamentPoints {
   }
 
   @override
-  String toString() => 'PlayerTournamentPoints(oid: $oid, playerId: $playerId, points: $points)';
+  String toString() {
+    return 'PlayerTournamentPoints(oid: $oid, playerId: $playerId, tournamentId: $tournamentId, points: $points)';
+  }
 }

@@ -1,11 +1,10 @@
-import 'package:objectbox/objectbox.dart';
-import 'package:silkeborgcano/main.dart';
+import 'package:uuid/uuid.dart';
 
+import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_tournament_points.dart';
 import 'package:silkeborgcano/objectbox.g.dart';
-import 'package:uuid/uuid.dart';
 
 @Entity()
 class Tournament {
@@ -24,15 +23,53 @@ class Tournament {
 
   @override
   String toString() {
-    return 'Tournament(oid: $oid, id: $id, name: $name, pointPerMatch: $pointPerMatch)';
+    return 'Tournament(oid: $oid, id: $id, name: $name, pointPerMatch: $pointPerMatch, tournamentEnd: $tournamentEnd, tournamentStart: $tournamentStart)';
   }
 
   factory Tournament.newTournament({String name = '', int pointPerMatch = 21}) {
     return Tournament(id: Uuid().v4(), name: name, pointPerMatch: pointPerMatch);
   }
 
+  static Tournament? getById(String id) {
+    return objectbox.store.box<Tournament>().query(Tournament_.id.equals(id)).build().findFirst();
+  }
+
   static Stream<List<Tournament>> get listOfAllTournamentsAsStream {
     return objectbox.store.box<Tournament>().query().watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+  static int getPointsPerMatch(String tournamentId) {
+    final tournament = objectbox.store.box<Tournament>().query(Tournament_.id.equals(tournamentId)).build().findFirst();
+    if (tournament == null) {
+      throw Exception('Tournament with id $tournamentId not found');
+    }
+    return tournament.pointPerMatch;
+  }
+
+  static int getPointsPerMatchForPlayersSittingOver(String tournamentId) {
+    final tournament = objectbox.store.box<Tournament>().query(Tournament_.id.equals(tournamentId)).build().findFirst();
+    if (tournament == null) {
+      throw Exception('Tournament with id $tournamentId not found');
+    }
+    final points = tournament.pointPerMatch;
+    final sittingOverPoints = (points / 2).floor();
+    return sittingOverPoints;
+  }
+
+  DateTime? get tournamentStartUtc {
+    if (tournamentStart != null) {
+      return DateTime.fromMillisecondsSinceEpoch(tournamentStart!);
+    }
+
+    return null;
+  }
+
+  DateTime? get tournamentEndUtc {
+    if (tournamentEnd != null) {
+      return DateTime.fromMillisecondsSinceEpoch(tournamentEnd!);
+    }
+
+    return null;
   }
 
   int save({String? name, int? pointPerMatch}) {
@@ -127,8 +164,25 @@ class Tournament {
     return rounds.length;
   }
 
-  List<Player> getPlayersSortedByPoints() {
+  List<Player> getPlayersSortedByTournamentPoints() {
     final playersWithPoints = PlayerTournamentPoints.getSortedByPointsDesc(id);
     return playersWithPoints.map((ptp) => players.firstWhere((p) => p.id == ptp.playerId)).toList();
+  }
+
+  Map<String, int> getPlayersSittingOverStats() {
+    final Map<String, int> playersSittingOver = {};
+    for (var round in rounds) {
+      final sittingOver = round.sittingOver.toList();
+      for (var player in sittingOver) {
+        if (playersSittingOver.containsKey(player.id)) {
+          playersSittingOver[player.id] = playersSittingOver[player.id]! + 1;
+          continue;
+        }
+
+        playersSittingOver[player.id] = 1;
+      }
+    }
+
+    return playersSittingOver;
   }
 }

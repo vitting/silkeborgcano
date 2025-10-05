@@ -27,14 +27,19 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      final Tournament? tournament = GoRouterState.of(context).extra as Tournament?;
+      final String? tournamentId = GoRouterState.of(context).extra as String?;
 
-      debugPrint('**************Tournament can\'t be null');
+      debugPrint('**************tournamentId can\'t be null');
 
-      if (tournament != null) {
-        _tournament = tournament;
+      if (tournamentId != null) {
+        _tournament = Tournament.getById(tournamentId);
 
-        _initMatchRound(tournament);
+        if (_tournament == null) {
+          debugPrint('**************Tournament can\'t be null');
+          return;
+        }
+
+        _initMatchRound(_tournament!);
       }
     }
   }
@@ -45,6 +50,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
       final m = MatchRound.createMatchRound(tournamentId: tournament.id, roundIndex: 1, players: tournament.players);
       _tournament!.addMatchRound(m);
       _matchRound = m;
+      _calculateMatches(true);
       return;
     }
 
@@ -57,8 +63,23 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
       final m = MatchRound.createMatchRound(tournamentId: tournament.id, roundIndex: nextRoundIndex, players: tournament.players);
       _tournament!.addMatchRound(m);
       _matchRound = m;
+      _calculateMatches(false);
       return;
     }
+  }
+
+  // TODO: HOW DO WE CALCULATE WHICH PLAYERS SIT OVER
+  void _calculateMatches(bool isFirstRound) {
+    // TODO: HVORFOR BRUGER VI PLAYERS FRA TOURNAMENT OG IKKE FRA MATCHROUND?
+    // TODO: SKAL VI SLETTE PLAYERS FRA MATCHROUND?
+    final players = _tournament!.getPlayersSortedByTournamentPoints();
+    debugPrint('********Players sorted by points: ${players.length}');
+
+    // final AvailablePlayersResult availablePlayersResult = MatchCalculation.getAvailablePlayersForFirstRound(players);
+    final AvailablePlayersResult availablePlayersResult = MatchCalculation.getAvailablePlayersForRound(players, _tournament!.id);
+    final result = MatchCalculation.getMatches(availablePlayersResult.players);
+    _matchRound!.setSittingOverPlayers(availablePlayersResult.benchedPlayers);
+    _matchRound!.setMatches(result);
   }
 
   Widget _matches() {
@@ -106,22 +127,8 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
         children: [
           ElevatedButton(
             onPressed: () {
-              final players = _matchRound!.getPlayersSortedByPoints();
-              debugPrint('********Players sorted by points: ${players.length}');
-
-              final AvailablePlayersResult availablePlayersResult = MatchCalculation.getAvailablePlayersForFirstRound(players);
-              final result = MatchCalculation.getMatches(availablePlayersResult.players);
-              _matchRound!.setSittingOverPlayers(availablePlayersResult.benchedPlayers);
-              _matchRound!.setMatches(result);
-              setState(() {});
-            },
-            child: Text('Calculate matches'),
-          ),
-
-          ElevatedButton(
-            onPressed: () {
               _matchRound?.startRound();
-              context.goNamed(MatchesScreen.routerPath, extra: _matchRound);
+              context.goNamed(MatchesScreen.routerPath, extra: _matchRound!.id);
             },
             child: Text('Start Runde ${_matchRound?.roundIndex}'),
           ),
