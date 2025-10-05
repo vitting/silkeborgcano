@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile_area.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile_points.dart';
@@ -33,8 +34,21 @@ class MatchListTile extends StatelessWidget {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
           child: Column(
             children: [
-              MatchListTileTitle(court: court),
-              if (showPoints) MatchListTilePoints(pointsTeam1: pointsTeam1, pointsTeam2: pointsTeam2),
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.limeAccent,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                ),
+                child: Column(
+                  children: [
+                    MatchListTileTitle(court: court),
+                    if (showPoints) const Gap(4),
+                    if (showPoints) MatchListTilePoints(pointsTeam1: pointsTeam1, pointsTeam2: pointsTeam2),
+                  ],
+                ),
+              ),
+
               MatchListTileArea(
                 team1Name1: team1[0].name,
                 team1Name2: team1[1].name,

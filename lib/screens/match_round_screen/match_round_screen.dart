@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/match_round_screen/administrate_match_round_players_dialog.dart';
@@ -19,7 +21,7 @@ class MatchRoundScreen extends StatefulWidget {
   State<MatchRoundScreen> createState() => _MatchRoundScreenState();
 }
 
-class _MatchRoundScreenState extends State<MatchRoundScreen> {
+class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
   MatchRound? _matchRound;
   Tournament? _tournament;
 
@@ -28,26 +30,10 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      final String? tournamentId = GoRouterState.of(context).extra as String?;
-
-      if (tournamentId == null) {
-        debugPrint('**************tournamentId can\'t be null');
-        return;
-      }
-
-      _tournament = Tournament.getById(tournamentId);
-
-      if (_tournament == null) {
-        debugPrint('**************Tournament can\'t be null');
-        return;
-      }
+      _tournament = getTournamentById(context, throwErrorOnNull: true);
 
       if (_tournament!.currentRoundId.isNotEmpty) {
         _matchRound = _tournament!.getCurrentMatchRound();
-        if (_matchRound == null) {
-          debugPrint('**************matchRound can\'t be null');
-          return;
-        }
       } else {
         _initMatchRound(_tournament!);
       }
@@ -81,8 +67,8 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
   }
 
   void _calculateMatches(bool isFirstRound) {
-    // TODO: HVORFOR BRUGER VI PLAYERS FRA TOURNAMENT OG IKKE FRA MATCHROUND?
-    // TODO: SKAL VI SLETTE PLAYERS FRA MATCHROUND?
+    // TODO: HVORFOR BRUGER VI PLAYERS FRA TOURNAMENT OG IKKE FRA MATCH ROUND?
+    // TODO: SKAL VI SLETTE PLAYERS FRA MATCH ROUND?
     final players = _tournament!.getPlayersSortedByTournamentPoints();
     debugPrint('********Players sorted by points: ${players.length}');
 
@@ -121,10 +107,16 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: Text('Runde ${_matchRound?.roundIndex}'),
+        title: ElevatedButton(
+          onPressed: () {
+            _matchRound?.startRound();
+            context.goNamed(MatchesScreen.routerPath, extra: _matchRound!.id);
+          },
+          child: Text('Start Runde ${_matchRound?.roundIndex}'),
+        ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Symbols.home),
           onPressed: () {
             context.goNamed(TournamentScreen.routerPath, extra: _tournament!.id);
           },
@@ -140,13 +132,6 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              _matchRound?.startRound();
-              context.goNamed(MatchesScreen.routerPath, extra: _matchRound!.id);
-            },
-            child: Text('Start Runde ${_matchRound?.roundIndex}'),
-          ),
           Expanded(
             child: ListView(
               shrinkWrap: true,

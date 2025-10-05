@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:silkeborgcano/dialogs/register_points_dialog.dart';
 import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
+import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/tournament.dart';
-import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
 class MatchesScreen extends StatefulWidget {
   static const String routerPath = "/matches";
@@ -18,7 +20,7 @@ class MatchesScreen extends StatefulWidget {
   State<MatchesScreen> createState() => _MatchesScreenState();
 }
 
-class _MatchesScreenState extends State<MatchesScreen> {
+class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
   MatchRound? _matchRound;
   List<Match> _matches = [];
   int _pointPerMatch = 21;
@@ -28,18 +30,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
     super.didChangeDependencies();
 
     if (_matchRound == null) {
-      final String? matchRoundId = GoRouterState.of(context).extra as String?;
-      if (matchRoundId == null) {
-        debugPrint('**************MatchRoundId can\'t be null');
-        return;
-      }
-
-      _matchRound = MatchRound.getById(matchRoundId);
-
-      if (_matchRound == null) {
-        debugPrint('**************MatchRound can\'t be null');
-        return;
-      }
+      _matchRound = getMatchRoundById(context, throwErrorOnNull: true);
 
       final Tournament tournament = _matchRound!.getTournament();
       _pointPerMatch = tournament.pointPerMatch;
@@ -74,92 +65,82 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Runde ${_matchRound?.roundIndex ?? ''}'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            context.goNamed(HomeScreen.routerPath);
+    return ScreenScaffold(
+      title: Text('Runde ${_matchRound?.roundIndex}'),
+      actions: [
+        IconButton(
+          onPressed: () async {
+            if (!_validateThatAllMatchesHaveScore()) {
+              await YesNoDialog.show(
+                context,
+                title: 'Før du kan afslutte en runde skal alle kampe have indtastet en score',
+                yesButtonText: 'Ok',
+              );
+              return;
+            }
+            _matchRound?.endRound();
+
+            if (mounted) {
+              context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
+            }
           },
+          icon: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(Symbols.sports_volleyball, size: 32, color: Colors.yellow.shade900, fill: 1),
+              Icon(Symbols.check, size: 28, color: Colors.white, fontWeight: FontWeight.bold),
+            ],
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                if (!_validateThatAllMatchesHaveScore()) {
-                  await YesNoDialog.show(
-                    context,
-                    title: 'Før du kan afslutte en runde skal alle kampe have indtastet en score',
-                    yesButtonText: 'Ok',
-                  );
-                  return;
-                }
-                _matchRound?.endRound();
+      ],
+      body: ListView.separated(
+        itemBuilder: (context, index) {
+          final m = _matches[index];
+          return MatchListTile(
+            court: m.courtNumber,
+            team1: m.team1,
+            team2: m.team2,
+            pointsTeam1: m.team1Score,
+            pointsTeam2: m.team2Score,
+            onTapTeam1: () async {
+              final result = await RegisterPointsDialog.show(
+                context,
+                team: RegisterPointsDialogTeamEnum.team1,
+                initialValue: m.team1Score,
+                maxPoints: _pointPerMatch,
+                player1Name: m.team1[0].name,
+                player2Name: m.team1[1].name,
+              );
 
-                if (mounted) {
-                  context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
-                }
-              },
-              child: Text('Afslut runde'),
-            ),
-            Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final m = _matches[index];
-                  return MatchListTile(
-                    court: m.courtNumber,
-                    team1: m.team1,
-                    team2: m.team2,
-                    pointsTeam1: m.team1Score,
-                    pointsTeam2: m.team2Score,
-                    onTapTeam1: () async {
-                      final result = await RegisterPointsDialog.show(
-                        context,
-                        team: RegisterPointsDialogTeamEnum.team1,
-                        initialValue: m.team1Score,
-                        maxPoints: _pointPerMatch,
-                        player1Name: m.team1[0].name,
-                        player2Name: m.team1[1].name,
-                      );
+              if (result != null) {
+                final score = _calculatePointsForMatch(result, 0);
+                setState(() {
+                  m.addScore(score.team1, score.team2);
+                });
+              }
+            },
+            onTapTeam2: () async {
+              final result = await RegisterPointsDialog.show(
+                context,
+                team: RegisterPointsDialogTeamEnum.team2,
+                initialValue: m.team2Score,
+                maxPoints: _pointPerMatch,
+                player1Name: m.team2[0].name,
+                player2Name: m.team2[1].name,
+              );
 
-                      if (result != null) {
-                        final score = _calculatePointsForMatch(result, 0);
-                        setState(() {
-                          m.addScore(score.team1, score.team2);
-                        });
-                      }
-                    },
-                    onTapTeam2: () async {
-                      final result = await RegisterPointsDialog.show(
-                        context,
-                        team: RegisterPointsDialogTeamEnum.team2,
-                        initialValue: m.team2Score,
-                        maxPoints: _pointPerMatch,
-                        player1Name: m.team2[0].name,
-                        player2Name: m.team2[1].name,
-                      );
-
-                      if (result != null) {
-                        final score = _calculatePointsForMatch(0, result);
-                        setState(() {
-                          m.addScore(score.team1, score.team2);
-                        });
-                      }
-                    },
-                    showPoints: true,
-                  );
-                },
-                separatorBuilder: (context, index) => Gap(8),
-                itemCount: _matches.length,
-              ),
-            ),
-          ],
-        ),
+              if (result != null) {
+                final score = _calculatePointsForMatch(0, result);
+                setState(() {
+                  m.addScore(score.team1, score.team2);
+                });
+              }
+            },
+            showPoints: true,
+          );
+        },
+        separatorBuilder: (context, index) => Gap(8),
+        itemCount: _matches.length,
       ),
     );
   }

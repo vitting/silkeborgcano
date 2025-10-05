@@ -8,17 +8,12 @@ class MatchListTilePoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.grey.shade300),
-            child: Text(
-              '$pointsTeam1 : $pointsTeam2',
-              style: TextStyle(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
+        Text(
+          '$pointsTeam1 : $pointsTeam2',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          textAlign: TextAlign.center,
         ),
       ],
     );

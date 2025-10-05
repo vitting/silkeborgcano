@@ -61,6 +61,14 @@ class MatchRound {
     return null;
   }
 
+  Duration get roundTotalTimeUtc {
+    if (roundStart != null && roundEnd != null) {
+      return roundEndUtc!.difference(roundStartUtc!);
+    }
+
+    return Duration.zero;
+  }
+
   int save() {
     return objectbox.store.box<MatchRound>().put(this);
   }
@@ -156,5 +164,13 @@ class MatchRound {
     }
 
     objectbox.store.box<MatchRound>().put(this);
+  }
+
+  Set<String> getPlayerIdsSittingOverAsSet() {
+    final Set<String> playerIds = {};
+    for (var player in sittingOver) {
+      playerIds.add(player.id);
+    }
+    return playerIds;
   }
 }

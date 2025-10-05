@@ -21,44 +21,67 @@ class MatchListTileArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            splashColor: Colors.amber.shade900,
-            onTap: onTapTeam1,
-            child: Ink(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(team1Name1), const Gap(8), Text(team1Name2)],
-              ),
-            ),
-          ),
-        ),
-        // VerticalDivider(color: Colors.green, width: 9, thickness: 1),
-        Expanded(
-          child: InkWell(
-            splashColor: Colors.blue.shade900,
-            onTap: onTapTeam2,
-            child: Ink(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(team2Name1), const Gap(8), Text(team2Name2)],
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              splashColor: Colors.amber,
+              onTap: onTapTeam1,
+              child: Ink(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 202, 154, 10),
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      team1Name1,
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const Gap(8),
+                    Text(
+                      team1Name2,
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+          // VerticalDivider(color: Colors.green, width: 9, thickness: 1),
+          Expanded(
+            child: InkWell(
+              splashColor: Colors.blue,
+              onTap: onTapTeam2,
+              child: Ink(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 14, 82, 138),
+                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      team2Name1,
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const Gap(8),
+                    Text(
+                      team2Name2,
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

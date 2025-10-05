@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
@@ -20,7 +22,7 @@ class TournamentScreen extends StatefulWidget {
   State<TournamentScreen> createState() => _TournamentScreenState();
 }
 
-class _TournamentScreenState extends State<TournamentScreen> {
+class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
   Tournament? _tournament;
 
   @override
@@ -28,10 +30,10 @@ class _TournamentScreenState extends State<TournamentScreen> {
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      final String? tournamentId = GoRouterState.of(context).extra as String?;
+      final Tournament? tournament = getTournamentById(context);
 
-      if (tournamentId != null) {
-        _tournament = Tournament.getById(tournamentId);
+      if (tournament != null) {
+        _tournament = tournament;
       } else {
         _tournament = Tournament.newTournament();
         _tournament!.save();
@@ -103,7 +105,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
         appBar: AppBar(
           forceMaterialTransparency: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Symbols.home),
             onPressed: () async {
               await _validateAndReturnToHome();
             },
@@ -114,7 +116,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
             },
             iconAlignment: IconAlignment.end,
             label: Text('Start turnering'),
-            icon: Icon(Icons.play_arrow),
+            icon: Icon(Symbols.play_arrow),
           ),
           centerTitle: true,
           actions: [
@@ -136,7 +138,7 @@ class _TournamentScreenState extends State<TournamentScreen> {
                   }
                 }
               },
-              icon: Icon(Icons.delete_forever_rounded),
+              icon: Icon(Symbols.delete_forever_rounded),
             ),
           ],
         ),
