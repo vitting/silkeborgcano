@@ -140,6 +140,7 @@ class MatchRound {
   void endRound() {
     active = false;
     roundEnd = DateTime.now().millisecondsSinceEpoch;
+    getTournament().updateCurrentRoundId('');
 
     for (var match in matches) {
       final team1Points = match.team1Score;

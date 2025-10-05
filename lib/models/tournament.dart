@@ -1,10 +1,10 @@
 import 'package:uuid/uuid.dart';
-
+import 'package:objectbox/objectbox.dart' show Entity, Id, ToMany;
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_tournament_points.dart';
-import 'package:silkeborgcano/objectbox.g.dart';
+import 'package:silkeborgcano/objectbox.g.dart' hide Entity, Id;
 
 @Entity()
 class Tournament {
@@ -12,6 +12,7 @@ class Tournament {
   int oid; // ObjectBox ID
   String id;
   String name;
+  String currentRoundId;
   final playerTournamentPoints = ToMany<PlayerTournamentPoints>();
   final players = ToMany<Player>();
   int pointPerMatch;
@@ -19,11 +20,19 @@ class Tournament {
   int? tournamentEnd;
   int? tournamentStart;
 
-  Tournament({this.oid = 0, this.id = '', this.name = '', this.pointPerMatch = 0, this.tournamentStart, this.tournamentEnd});
+  Tournament({
+    this.oid = 0,
+    this.id = '',
+    this.name = '',
+    this.pointPerMatch = 0,
+    this.tournamentStart,
+    this.tournamentEnd,
+    this.currentRoundId = '',
+  });
 
   @override
   String toString() {
-    return 'Tournament(oid: $oid, id: $id, name: $name, pointPerMatch: $pointPerMatch, tournamentEnd: $tournamentEnd, tournamentStart: $tournamentStart)';
+    return 'Tournament(oid: $oid, id: $id, name: $name, currentRoundId: $currentRoundId, pointPerMatch: $pointPerMatch, tournamentEnd: $tournamentEnd, tournamentStart: $tournamentStart)';
   }
 
   factory Tournament.newTournament({String name = '', int pointPerMatch = 21}) {
@@ -139,22 +148,15 @@ class Tournament {
 
   void addMatchRound(MatchRound matchRound) {
     if (!rounds.any((r) => r.id == matchRound.id)) {
+      currentRoundId = matchRound.id;
       rounds.add(matchRound);
       objectbox.store.box<Tournament>().put(this);
     }
   }
 
-  void updateMatchRound(MatchRound matchRound) {
-    final index = rounds.indexWhere((r) => r.id == matchRound.id);
-    if (index != -1) {
-      rounds[index] = matchRound;
-      objectbox.store.box<Tournament>().put(this);
-    }
-  }
-
-  MatchRound? getActiveMatchRound() {
+  MatchRound? getCurrentMatchRound() {
     try {
-      return rounds.firstWhere((r) => r.active);
+      return rounds.firstWhere((r) => r.id == currentRoundId);
     } catch (e) {
       return null;
     }
@@ -184,5 +186,10 @@ class Tournament {
     }
 
     return playersSittingOver;
+  }
+
+  void updateCurrentRoundId(String matchRoundId) {
+    currentRoundId = matchRoundId;
+    objectbox.store.box<Tournament>().put(this);
   }
 }

@@ -12,6 +12,7 @@ import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 
 class MatchRoundScreen extends StatefulWidget {
   static const String routerPath = "/matchRound";
+
   const MatchRoundScreen({super.key});
 
   @override
@@ -19,8 +20,8 @@ class MatchRoundScreen extends StatefulWidget {
 }
 
 class _MatchRoundScreenState extends State<MatchRoundScreen> {
-  Tournament? _tournament;
   MatchRound? _matchRound;
+  Tournament? _tournament;
 
   @override
   void didChangeDependencies() {
@@ -29,16 +30,25 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
     if (_tournament == null) {
       final String? tournamentId = GoRouterState.of(context).extra as String?;
 
-      debugPrint('**************tournamentId can\'t be null');
+      if (tournamentId == null) {
+        debugPrint('**************tournamentId can\'t be null');
+        return;
+      }
 
-      if (tournamentId != null) {
-        _tournament = Tournament.getById(tournamentId);
+      _tournament = Tournament.getById(tournamentId);
 
-        if (_tournament == null) {
-          debugPrint('**************Tournament can\'t be null');
+      if (_tournament == null) {
+        debugPrint('**************Tournament can\'t be null');
+        return;
+      }
+
+      if (_tournament!.currentRoundId.isNotEmpty) {
+        _matchRound = _tournament!.getCurrentMatchRound();
+        if (_matchRound == null) {
+          debugPrint('**************matchRound can\'t be null');
           return;
         }
-
+      } else {
         _initMatchRound(_tournament!);
       }
     }
@@ -54,9 +64,11 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
       return;
     }
 
-    final activeMatchRound = tournament.getActiveMatchRound();
-    if (activeMatchRound != null) {
-      _matchRound = activeMatchRound;
+    final currentMatchRound = tournament.getCurrentMatchRound();
+    // If there is an active round, use that
+    // If there is no active round, create a new round
+    if (currentMatchRound != null) {
+      _matchRound = currentMatchRound;
       return;
     } else {
       int nextRoundIndex = tournament.getLastRoundIndex() + 1;
@@ -68,18 +80,21 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
     }
   }
 
-  // TODO: HOW DO WE CALCULATE WHICH PLAYERS SIT OVER
   void _calculateMatches(bool isFirstRound) {
     // TODO: HVORFOR BRUGER VI PLAYERS FRA TOURNAMENT OG IKKE FRA MATCHROUND?
     // TODO: SKAL VI SLETTE PLAYERS FRA MATCHROUND?
     final players = _tournament!.getPlayersSortedByTournamentPoints();
     debugPrint('********Players sorted by points: ${players.length}');
 
-    // final AvailablePlayersResult availablePlayersResult = MatchCalculation.getAvailablePlayersForFirstRound(players);
-    final AvailablePlayersResult availablePlayersResult = MatchCalculation.getAvailablePlayersForRound(players, _tournament!.id);
-    final result = MatchCalculation.getMatches(availablePlayersResult.players);
+    final AvailablePlayersResult availablePlayersResult = MatchCalculation.getAvailablePlayersForRound(
+      players,
+      _tournament!.id,
+      isFirstRound,
+    );
     _matchRound!.setSittingOverPlayers(availablePlayersResult.benchedPlayers);
-    _matchRound!.setMatches(result);
+
+    final matches = MatchCalculation.getMatches(availablePlayersResult.players);
+    _matchRound!.setMatches(matches);
   }
 
   Widget _matches() {
@@ -111,7 +126,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            context.goNamed(TournamentScreen.routerPath, extra: _tournament);
+            context.goNamed(TournamentScreen.routerPath, extra: _tournament!.id);
           },
         ),
         actions: [

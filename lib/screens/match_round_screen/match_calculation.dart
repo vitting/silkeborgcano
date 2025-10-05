@@ -6,8 +6,8 @@ import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 
 class AvailablePlayersResult {
-  final List<Player> players;
   final List<Player> benchedPlayers;
+  final List<Player> players;
 
   AvailablePlayersResult({required this.players, required this.benchedPlayers});
 }
@@ -19,68 +19,26 @@ class Team {
 }
 
 class CourtMatch {
+  final int courtNumber;
   final Team team1;
   final Team team2;
-  final int courtNumber;
 
   CourtMatch({required this.team1, required this.team2, required this.courtNumber});
 }
 
 class MatchCalculation {
-  static AvailablePlayersResult getAvailablePlayersForFirstRound(List<Player> players) {
-    final shuffledPlayers = _shufflePlayers(UnmodifiableListView(players));
+  static AvailablePlayersResult getAvailablePlayersForRound(List<Player> players, String tournamentId, bool isFirstRound) {
+    List<Player> playerTemp = [];
 
-    final (:playersSittingOver, :playersForMatches) = _getPlayersSittingOver(UnmodifiableListView(shuffledPlayers));
-
-    return AvailablePlayersResult(players: playersForMatches, benchedPlayers: playersSittingOver);
-  }
-
-  static List<Player> _shufflePlayers(UnmodifiableListView<Player> players) {
-    final random = Random();
-    final shuffledPlayers = List<Player>.from(players)..shuffle(random);
-    return shuffledPlayers;
-  }
-
-  static ({List<Player> playersSittingOver, List<Player> playersForMatches}) _getPlayersSittingOver(
-    UnmodifiableListView<Player> players,
-  ) {
-    final playersTemp = List<Player>.from(players);
-    final numberOfPeopleSittingOver = playersTemp.length % 4;
-    final List<Player> playersSittingOver = [];
-
-    for (var i = 0; i < numberOfPeopleSittingOver; i++) {
-      final p = playersTemp.removeLast();
-      playersSittingOver.add(p);
+    if (isFirstRound) {
+      playerTemp = _shufflePlayers(UnmodifiableListView(players));
+    } else {
+      playerTemp = List<Player>.from(players);
     }
 
-    return (playersSittingOver: playersSittingOver, playersForMatches: playersTemp);
-  }
+    final playersSittingOver = _getPlayersSittingOver(UnmodifiableListView(playerTemp), tournamentId, isFirstRound);
 
-  static AvailablePlayersResult getAvailablePlayersForRound(List<Player> players, String tournamentId) {
-    final playersTemp = List<Player>.from(players);
-    final tournament = Tournament.getById(tournamentId);
-    if (tournament == null) {
-      throw Exception('Tournament with id $tournamentId not found');
-    }
-
-    final Map<String, int> playersSittingOverStats = tournament.getPlayersSittingOverStats();
-    playersTemp.sort((a, b) {
-      final aSittingOver = playersSittingOverStats[a.id] ?? 0;
-      final bSittingOver = playersSittingOverStats[b.id] ?? 0;
-
-      if (aSittingOver != bSittingOver) {
-        return bSittingOver.compareTo(aSittingOver);
-      } else {
-        //
-        return Random().nextInt(3) - 1; // Random order if same sitting over count
-      }
-    });
-
-    for (var p in playersTemp) {
-      debugPrint('Player ${p.name} has sat over ${playersSittingOverStats[p.id] ?? 0} times');
-    }
-
-    final (:playersSittingOver, :playersForMatches) = _getPlayersSittingOver(UnmodifiableListView(playersTemp));
+    final playersForMatches = _getPlayersForMatches(UnmodifiableListView(playerTemp), UnmodifiableListView(playersSittingOver));
 
     return AvailablePlayersResult(players: playersForMatches, benchedPlayers: playersSittingOver);
   }
@@ -112,5 +70,58 @@ class MatchCalculation {
     }
 
     return matches;
+  }
+
+  static List<Player> _shufflePlayers(UnmodifiableListView<Player> players) {
+    final random = Random();
+    final shuffledPlayers = List<Player>.from(players)..shuffle(random);
+    return shuffledPlayers;
+  }
+
+  static List<Player> _getPlayersSittingOver(UnmodifiableListView<Player> players, String tournamentId, bool isFirstRound) {
+    final playersForSittingOverCalculation = List<Player>.from(players);
+    final numberOfPeopleSittingOver = playersForSittingOverCalculation.length % 4;
+    final List<Player> playersSittingOver = [];
+
+    if (isFirstRound == false) {
+      final tournament = Tournament.getById(tournamentId);
+      if (tournament == null) {
+        throw Exception('Tournament with id $tournamentId not found');
+      }
+
+      final Map<String, int> playersSittingOverStats = tournament.getPlayersSittingOverStats();
+      playersForSittingOverCalculation.sort((a, b) {
+        final aSittingOver = playersSittingOverStats[a.id] ?? 0;
+        final bSittingOver = playersSittingOverStats[b.id] ?? 0;
+
+        if (aSittingOver != bSittingOver) {
+          return bSittingOver.compareTo(aSittingOver);
+        } else {
+          // Random order if same sitting over count
+          return Random().nextInt(3) - 1;
+        }
+      });
+
+      for (var p in playersForSittingOverCalculation) {
+        debugPrint('Player ${p.name} has sat over ${playersSittingOverStats[p.id] ?? 0} times');
+      }
+    }
+
+    for (var i = 0; i < numberOfPeopleSittingOver; i++) {
+      final p = playersForSittingOverCalculation.removeLast();
+      playersSittingOver.add(p);
+    }
+
+    return playersSittingOver;
+  }
+
+  static List<Player> _getPlayersForMatches(UnmodifiableListView<Player> players, UnmodifiableListView<Player> benchedPlayers) {
+    final playersTemp = List<Player>.from(players);
+
+    for (var p in benchedPlayers) {
+      playersTemp.removeWhere((player) => player.id == p.id);
+    }
+
+    return playersTemp;
   }
 }

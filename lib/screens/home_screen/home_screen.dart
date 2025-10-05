@@ -4,6 +4,7 @@ import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
+import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 
@@ -64,12 +65,16 @@ class HomeScreen extends StatelessWidget {
                         title: Text(tournament.name),
 
                         onTap: () {
-                          final matchRound = tournament.getActiveMatchRound();
+                          final matchRound = tournament.getCurrentMatchRound();
 
                           debugPrint('ACtive mach round: $matchRound');
 
                           if (matchRound != null) {
-                            context.goNamed(MatchesScreen.routerPath, extra: matchRound.id);
+                            if (matchRound.active) {
+                              context.goNamed(MatchesScreen.routerPath, extra: matchRound.id);
+                            } else {
+                              context.goNamed(MatchRoundScreen.routerPath, extra: tournament.id);
+                            }
                           } else {
                             context.goNamed(TournamentScreen.routerPath, extra: tournament.id);
                           }
