@@ -1,15 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:silkeborgcano/main.dart';
-import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routerPath = "/home";
@@ -18,25 +18,23 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      title: Text('Forside'),
+      title: ScreenScaffoldTitle('Forside'),
       leading: SizedBox.shrink(),
       actions: [
         IconButton(
           tooltip: 'Administrer spillere',
-          icon: Icon(Symbols.groups, size: 32, color: Colors.yellow.shade900, fontWeight: FontWeight.w300, fill: 1),
+          icon: CustomIcon(Symbols.groups),
           onPressed: () {
             AdministratePlayersDialog.show(context);
           },
         ),
       ],
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: CustomFloatingActionButton(
+        icon: Symbols.add,
+        tooltip: 'Opret ny turnering',
         onPressed: () {
           context.goNamed(TournamentScreen.routerPath);
         },
-        shape: CircleBorder(),
-        elevation: 0,
-        backgroundColor: Colors.yellow.shade900,
-        child: Icon(Symbols.add, size: 32, color: Colors.white),
       ),
       body: Column(
         children: [

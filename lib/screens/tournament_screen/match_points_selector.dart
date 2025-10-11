@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 
 class MatchPointsSelector extends StatelessWidget {
   final int? initialPointPerMatch;
   final ValueChanged<int?> onChanged;
-  const MatchPointsSelector({
-    super.key,
-    this.initialPointPerMatch,
-    required this.onChanged,
-  });
+  const MatchPointsSelector({super.key, this.initialPointPerMatch, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +14,49 @@ class MatchPointsSelector extends StatelessWidget {
       child: Row(
         children: [
           Flexible(
-            child: RadioListTile(value: 11, title: Text('11'), dense: true),
+            child: RadioListTile(
+              value: 11,
+              title: Text('11', style: TextStyle(color: AppColors.textAndIcon, fontSize: 16)),
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              contentPadding: EdgeInsets.zero,
+              fillColor: WidgetStateColor.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.textAndIcon;
+                }
+                return AppColors.textAndIconDisabled;
+              }),
+            ),
           ),
           Flexible(
-            child: RadioListTile(value: 15, title: Text('15'), dense: true),
+            child: RadioListTile(
+              value: 15,
+              title: Text('15', style: TextStyle(color: AppColors.textAndIcon, fontSize: 16)),
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              contentPadding: EdgeInsets.zero,
+              fillColor: WidgetStateColor.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.textAndIcon;
+                }
+                return AppColors.textAndIconDisabled;
+              }),
+            ),
           ),
           Flexible(
-            child: RadioListTile(value: 21, title: Text('21'), dense: true),
+            child: RadioListTile(
+              value: 21,
+              title: Text('21', style: TextStyle(color: AppColors.textAndIcon, fontSize: 16)),
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              contentPadding: EdgeInsets.zero,
+              fillColor: WidgetStateColor.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.textAndIcon;
+                }
+                return AppColors.textAndIconDisabled;
+              }),
+            ),
           ),
         ],
       ),

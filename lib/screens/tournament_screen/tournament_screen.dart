@@ -12,7 +12,15 @@ import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/match_points_selector.dart';
 import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
+import 'package:vibration/vibration.dart';
+import 'package:vibration/vibration_presets.dart';
 
 class TournamentScreen extends StatefulWidget {
   static const String routerPath = "/tournament";
@@ -24,6 +32,7 @@ class TournamentScreen extends StatefulWidget {
 
 class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
   Tournament? _tournament;
+  bool isValid = false;
 
   @override
   void didChangeDependencies() {
@@ -41,7 +50,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
     }
   }
 
-  bool _validateName() {
+  bool _isNameValid() {
     return _tournament != null && _tournament!.name.isNotEmpty;
   }
 
@@ -55,27 +64,22 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
     }
   }
 
+  bool get isTournamentValid {
+    final isNameValid = _isNameValid();
+    final hasEnoughPlayers = _validateNumberOfPlayers();
+
+    return isNameValid && hasEnoughPlayers;
+  }
+
   Future<void> _validateAndReturnToHome() async {
-    bool nameValid = _validateName();
-    bool numberOfPlayersValid = _validateNumberOfPlayers();
-
-    if (nameValid == false) {
-      final deleteTournament = await YesNoDialog.show(
-        context,
-        title: 'Turneringen skal have et navn. Vil du slette turneringen?',
-        noButtonText: 'Fortryd',
-        yesButtonText: 'Slet',
-      );
-
-      if (deleteTournament != null && deleteTournament == true) {
-        _tournament?.delete();
-        _navigateToHome();
-      }
+    if (_isNameValid() == false) {
+      _tournament?.delete();
+      _navigateToHome();
 
       return;
     }
 
-    if (mounted && numberOfPlayersValid == false) {
+    if (mounted && _validateNumberOfPlayers() == false) {
       final deleteTournament = await YesNoDialog.show(
         context,
         title: 'Turneringen skal have mindst 4 spillere. Vil du slette turneringen?',
@@ -101,47 +105,43 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
       onPopInvokedWithResult: (didPop, result) async {
         await _validateAndReturnToHome();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-          leading: IconButton(
-            icon: Icon(Symbols.home),
+      child: ScreenScaffold(
+        onHomeTap: () async {
+          await _validateAndReturnToHome();
+        },
+        title: ScreenScaffoldTitle('Turnering'),
+        floatingActionButton: isValid
+            ? CustomFloatingActionButton(
+                tooltip: 'Start turnering',
+                onPressed: () {
+                  context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
+                },
+                icon: Symbols.play_arrow,
+              )
+            : null,
+        actions: [
+          CustomIconButton(
+            tooltip: 'Slet turnering',
             onPressed: () async {
-              await _validateAndReturnToHome();
-            },
-          ),
-          title: ElevatedButton.icon(
-            onPressed: () {
-              context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
-            },
-            iconAlignment: IconAlignment.end,
-            label: Text('Start turnering'),
-            icon: Icon(Symbols.play_arrow),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              tooltip: 'Slet turnering',
-              onPressed: () async {
-                final result = await YesNoDialog.show(
-                  context,
-                  title: 'Vil du slette turneringen?',
-                  noButtonText: 'Fortryd',
-                  yesButtonText: 'Slet',
-                );
+              final result = await YesNoDialog.show(
+                context,
+                title: 'Vil du slette turneringen?',
+                noButtonText: 'Fortryd',
+                yesButtonText: 'Slet',
+              );
 
-                if (result == true && _tournament != null) {
-                  _tournament?.delete();
+              if (result == true && _tournament != null) {
+                _tournament?.delete();
 
-                  if (mounted) {
-                    context.goNamed(HomeScreen.routerPath);
-                  }
+                if (mounted) {
+                  context.goNamed(HomeScreen.routerPath);
                 }
-              },
-              icon: Icon(Symbols.delete_forever_rounded),
-            ),
-          ],
-        ),
+              }
+            },
+            icon: Symbols.delete_forever_rounded,
+          ),
+        ],
+
         body: Column(
           children: [
             SectionHeader(title: 'Navn på turnering'),
@@ -162,21 +162,47 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                 child: Column(
                   children: [
                     SectionHeader(title: 'Point per kamp'),
+                    const Gap(8),
                     MatchPointsSelector(
                       initialPointPerMatch: _tournament?.pointPerMatch,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         if (value == null) return;
+                        if (await Vibration.hasVibrator()) {
+                          Vibration.vibrate(duration: 100);
+                        }
+
                         setState(() {
                           _tournament?.save(pointPerMatch: value);
                         });
                       },
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Gap(82),
-                        Expanded(child: SectionHeader(title: 'Spillere (${_tournament?.players.length})')),
-                        IconButton(
+                        CustomIconButton(
+                          tooltip: 'Tilføj ny spiller',
+                          onPressed: () {
+                            setState(() {
+                              final newPlayer = Player.createNewPlayer();
+                              _tournament?.addNewPlayer(newPlayer);
+                            });
+                          },
+                          icon: Symbols.add,
+                        ),
+                        const Gap(AppSizes.s),
+                        SectionHeader(title: 'Spillere'),
+                        const Gap(AppSizes.xs),
+                        CircleAvatar(
+                          radius: AppSizes.s,
+                          backgroundColor: AppColors.textAndIcon,
+                          child: Text(
+                            _tournament?.players.length.toString() ?? '0',
+                            style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: AppSizes.s),
+                          ),
+                        ),
+                        const Gap(AppSizes.s),
+                        CustomIconButton(
+                          tooltip: 'Vælg eksisterende spillere',
                           onPressed: () async {
                             final List<Player>? chosenPlayers = await ChosePlayerDialog.show(
                               context,
@@ -189,24 +215,11 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                               });
                             }
                           },
-                          color: Colors.blue,
-                          iconSize: 28,
-                          icon: Icon(Icons.group_add),
+                          icon: Symbols.group_add,
                         ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              final newPlayer = Player.createNewPlayer();
-                              _tournament?.addNewPlayer(newPlayer);
-                            });
-                          },
-                          icon: Icon(Icons.add),
-                          color: Colors.blue,
-                          iconSize: 28,
-                        ),
-                        const Gap(24),
                       ],
                     ),
+
                     Expanded(
                       child: SelectedPlayers(
                         players: _tournament?.getPlayersSortedByName() ?? [],
@@ -234,6 +247,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                 ),
               ),
             ),
+            const Gap(AppSizes.xs),
           ],
         ),
       ),

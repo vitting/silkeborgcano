@@ -18,26 +18,28 @@ class SelectedPlayers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: players.length,
-      itemBuilder: (context, index) {
-        final item = players.elementAt(index);
-        return EditableListTile(
-          key: ObjectKey(item),
-          initialValue: item.name,
-          isEditing: item.name.isEmpty,
-          onTapOutside: (value) {
-            if (value.isEmpty) {
-              onTapOutsideWithEmptyValue(item);
-            }
-          },
-          onChanged: (value) {
-            onChanged(item, value);
-          },
-          onDelete: () => onDelete(item),
-        );
-      },
+    return Scrollbar(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: players.length,
+        itemBuilder: (context, index) {
+          final item = players.elementAt(index);
+          return EditableListTile(
+            key: ObjectKey(item),
+            initialValue: item.name,
+            isEditing: item.name.isEmpty,
+            onTapOutside: (value) {
+              if (value.isEmpty) {
+                onTapOutsideWithEmptyValue(item);
+              }
+            },
+            onChanged: (value) {
+              onChanged(item, value);
+            },
+            onDelete: () => onDelete(item),
+          );
+        },
+      ),
     );
   }
 }

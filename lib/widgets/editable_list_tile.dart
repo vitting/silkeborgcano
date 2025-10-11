@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
 
 class EditableListTile extends StatefulWidget {
@@ -66,50 +69,36 @@ class _EditableListTileState extends State<EditableListTile> {
   Widget build(BuildContext context) {
     return ListTile(
       title: _isEditing
-          ? CustomTextFormField(
-              controller: _controller,
-              onEditingComplete: _save,
-              onTapOutside: widget.onTapOutside,
-            )
-          : Text(_controller.text),
+          ? CustomTextFormField(controller: _controller, onEditingComplete: _save, onTapOutside: widget.onTapOutside)
+          : Text(
+              _controller.text,
+              style: TextStyle(fontSize: AppSizes.sm, color: AppColors.textAndIcon),
+            ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           AnimatedCrossFade(
-            firstChild: _isEditing
-                ? IconButton(
-                    icon: Icon(Icons.save),
-                    onPressed: _valid ? _save : null,
-                  )
-                : SizedBox.shrink(),
+            firstChild: _isEditing ? CustomIconButton(icon: Icons.save, onPressed: _valid ? _save : null) : SizedBox.shrink(),
             secondChild: Row(
               children: [
                 if (widget.showEdit && !_isEditing)
-                  IconButton(
-                    icon: Icon(Icons.edit),
+                  CustomIconButton(
+                    icon: Icons.edit,
                     onPressed: () async {
                       setState(() {
                         _isEditing = true;
                       });
                     },
                   ),
-                if (widget.showDelete && !_isEditing)
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: widget.onDelete,
-                  ),
+                if (widget.showDelete && !_isEditing) CustomIconButton(icon: Icons.delete, onPressed: widget.onDelete),
               ],
             ),
-            crossFadeState: _isEditing
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
+            crossFadeState: _isEditing ? CrossFadeState.showFirst : CrossFadeState.showSecond,
             duration: Duration(milliseconds: 300),
           ),
         ],
       ),
-      // title: Center(
-      //   child: Text(item.name, style: TextStyle()),
-      // ),
+
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
     );

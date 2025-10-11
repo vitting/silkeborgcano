@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 
 enum CustomTextFormFieldBehavior { normal, number }
 
@@ -76,9 +77,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: AppColors.white, width: 2),
+        ),
         errorText: widget.errorText,
-
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: AppColors.textAndIcon, width: 2),
+        ),
         counterText: widget.behavior == CustomTextFormFieldBehavior.number ? '' : null,
         floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
