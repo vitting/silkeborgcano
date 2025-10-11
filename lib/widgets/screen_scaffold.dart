@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 
 class ScreenScaffold extends StatelessWidget {

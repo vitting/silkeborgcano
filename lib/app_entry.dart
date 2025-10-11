@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:silkeborgcano/l10n/app_localizations.dart';
 import 'package:silkeborgcano/router.dart';
 
 class AppEntry extends StatelessWidget {
@@ -11,6 +13,16 @@ class AppEntry extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: router,
       theme: ThemeData(textTheme: GoogleFonts.latoTextTheme(textTheme)),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      // add this code
+      supportedLocales: const [
+        Locale('da'), // English
+      ],
     );
   }
 }
