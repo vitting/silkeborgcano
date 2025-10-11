@@ -37,6 +37,20 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    configurations {
+        getByName("debugImplementation") {
+            exclude(group = "io.objectbox", module = "objectbox-android")
+        }
+    }
+
+    dependencies {
+        // Add the Android library with ObjectBox Admin only for debug builds.
+        // Note: when the objectbox package updates, check if the Android
+        // library below needs to be updated as well.
+        // TODO Replace <version> with the one noted in the release notes (https://github.com/objectbox/objectbox-dart/releases)
+        debugImplementation("io.objectbox:objectbox-android-objectbrowser:5.0.1")
+    }
 }
 
 flutter {
