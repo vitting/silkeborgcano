@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:silkeborgcano/l10n/app_localizations.dart';
 import 'package:silkeborgcano/router.dart';
 
+BuildContext? buildContext;
+AppLocalizations? appLocalizations;
+
 class AppEntry extends StatelessWidget {
   const AppEntry({super.key});
 
@@ -23,6 +26,11 @@ class AppEntry extends StatelessWidget {
       supportedLocales: const [
         Locale('da'), // English
       ],
+      onGenerateTitle: (context) {
+        buildContext = context;
+        appLocalizations = AppLocalizations.of(context);
+        return 'SilkeborgCaron';
+      },
     );
   }
 }

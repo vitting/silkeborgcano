@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:silkeborgcano/app_entry.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 
 class ScreenScaffold extends StatelessWidget {
