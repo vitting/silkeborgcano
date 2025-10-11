@@ -8,6 +8,7 @@ import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/tournament.dart';
+import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
@@ -67,6 +68,9 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
   Widget build(BuildContext context) {
     return ScreenScaffold(
       title: Text('Runde ${_matchRound?.roundIndex}'),
+      onHomeTap: () {
+        context.goNamed(HomeScreen.routerPath);
+      },
       actions: [
         IconButton(
           onPressed: () async {

@@ -68,6 +68,8 @@ class _EditableListTileState extends State<EditableListTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.zero,
+      dense: true,
       title: _isEditing
           ? CustomTextFormField(controller: _controller, onEditingComplete: _save, onTapOutside: widget.onTapOutside)
           : Text(

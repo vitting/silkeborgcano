@@ -7,7 +7,8 @@ class CustomFloatingActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? tooltip;
   final IconData icon;
-  const CustomFloatingActionButton({super.key, this.onPressed, this.tooltip, required this.icon});
+  final IconData? iconStacked;
+  const CustomFloatingActionButton({super.key, this.onPressed, this.tooltip, required this.icon, this.iconStacked});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class CustomFloatingActionButton extends StatelessWidget {
       tooltip: tooltip,
       onPressed: onPressed,
       shape: CircleBorder(),
-      elevation: 0,
+      elevation: 3,
       backgroundColor: AppColors.textAndIcon,
       child: CustomIcon(icon, size: AppSizes.l, color: AppColors.white),
     );

@@ -20,7 +20,6 @@ import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 import 'package:vibration/vibration.dart';
-import 'package:vibration/vibration_presets.dart';
 
 class TournamentScreen extends StatefulWidget {
   static const String routerPath = "/tournament";
@@ -43,6 +42,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
 
       if (tournament != null) {
         _tournament = tournament;
+        isValid = isTournamentValid;
       } else {
         _tournament = Tournament.newTournament();
         _tournament!.save();
@@ -141,8 +141,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
             icon: Symbols.delete_forever_rounded,
           ),
         ],
-
-        body: Column(
+        body: ListView(
           children: [
             SectionHeader(title: 'Navn på turnering'),
             EditableListTile(
@@ -155,96 +154,91 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                 });
               },
             ),
-            Expanded(
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 300),
-                opacity: _tournament?.name.isNotEmpty ?? false ? 1 : 0,
-                child: Column(
-                  children: [
-                    SectionHeader(title: 'Point per kamp'),
-                    const Gap(8),
-                    MatchPointsSelector(
-                      initialPointPerMatch: _tournament?.pointPerMatch,
-                      onChanged: (value) async {
-                        if (value == null) return;
-                        if (await Vibration.hasVibrator()) {
-                          Vibration.vibrate(duration: 100);
-                        }
+            AnimatedOpacity(
+              duration: Duration(milliseconds: 300),
+              opacity: _tournament?.name.isNotEmpty ?? false ? 1 : 0,
+              child: Column(
+                children: [
+                  SectionHeader(title: 'Point per kamp'),
+                  const Gap(8),
+                  MatchPointsSelector(
+                    initialPointPerMatch: _tournament?.pointPerMatch,
+                    onChanged: (value) async {
+                      if (value == null) return;
+                      if (await Vibration.hasVibrator()) {
+                        Vibration.vibrate(duration: 100);
+                      }
 
-                        setState(() {
-                          _tournament?.save(pointPerMatch: value);
-                        });
-                      },
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomIconButton(
-                          tooltip: 'Tilføj ny spiller',
-                          onPressed: () {
-                            setState(() {
-                              final newPlayer = Player.createNewPlayer();
-                              _tournament?.addNewPlayer(newPlayer);
-                            });
-                          },
-                          icon: Symbols.add,
-                        ),
-                        const Gap(AppSizes.s),
-                        SectionHeader(title: 'Spillere'),
-                        const Gap(AppSizes.xs),
-                        CircleAvatar(
-                          radius: AppSizes.s,
-                          backgroundColor: AppColors.textAndIcon,
-                          child: Text(
-                            _tournament?.players.length.toString() ?? '0',
-                            style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: AppSizes.s),
-                          ),
-                        ),
-                        const Gap(AppSizes.s),
-                        CustomIconButton(
-                          tooltip: 'Vælg eksisterende spillere',
-                          onPressed: () async {
-                            final List<Player>? chosenPlayers = await ChosePlayerDialog.show(
-                              context,
-                              _tournament?.players.toList() ?? [],
-                            );
-
-                            if (chosenPlayers != null) {
-                              setState(() {
-                                _tournament?.setPlayers(chosenPlayers);
-                              });
-                            }
-                          },
-                          icon: Symbols.group_add,
-                        ),
-                      ],
-                    ),
-
-                    Expanded(
-                      child: SelectedPlayers(
-                        players: _tournament?.getPlayersSortedByName() ?? [],
-                        onChanged: (player, name) {
-                          player.save(name: name.trim());
-                          _tournament?.save();
-                        },
-                        onTapOutsideWithEmptyValue: (player) {
+                      setState(() {
+                        _tournament?.save(pointPerMatch: value);
+                      });
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomIconButton(
+                        tooltip: 'Tilføj ny spiller',
+                        onPressed: () {
                           setState(() {
-                            _tournament?.deletePlayerWithEmptyName(player);
+                            final newPlayer = Player.createNewPlayer();
+                            _tournament?.addNewPlayer(newPlayer);
                           });
                         },
-                        onDelete: (player) {
-                          setState(() {
-                            if (player.name.isNotEmpty) {
-                              _tournament?.removePlayer(player);
-                            } else {
-                              _tournament?.deletePlayerWithEmptyName(player);
-                            }
-                          });
-                        },
+                        icon: Symbols.add,
                       ),
-                    ),
-                  ],
-                ),
+                      const Gap(AppSizes.s),
+                      SectionHeader(title: 'Spillere'),
+                      const Gap(AppSizes.xs),
+                      CircleAvatar(
+                        radius: AppSizes.s,
+                        backgroundColor: AppColors.textAndIcon,
+                        child: Text(
+                          _tournament?.players.length.toString() ?? '0',
+                          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: AppSizes.s),
+                        ),
+                      ),
+                      const Gap(AppSizes.s),
+                      CustomIconButton(
+                        tooltip: 'Vælg eksisterende spillere',
+                        onPressed: () async {
+                          final List<Player>? chosenPlayers = await ChosePlayerDialog.show(
+                            context,
+                            _tournament?.players.toList() ?? [],
+                          );
+
+                          if (chosenPlayers != null) {
+                            setState(() {
+                              _tournament?.setPlayers(chosenPlayers);
+                            });
+                          }
+                        },
+                        icon: Symbols.group_add,
+                      ),
+                    ],
+                  ),
+                  SelectedPlayers(
+                    players: _tournament?.getPlayersSortedByName() ?? [],
+                    onChanged: (player, name) {
+                      player.save(name: name.trim());
+                      _tournament?.save();
+                    },
+                    onTapOutsideWithEmptyValue: (player) {
+                      setState(() {
+                        _tournament?.deletePlayerWithEmptyName(player);
+                      });
+                    },
+                    onDelete: (player) {
+                      setState(() {
+                        if (player.name.isNotEmpty) {
+                          _tournament?.removePlayer(player);
+                        } else {
+                          _tournament?.deletePlayerWithEmptyName(player);
+                        }
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
             const Gap(AppSizes.xs),

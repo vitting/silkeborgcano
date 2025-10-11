@@ -21,6 +21,7 @@ class SelectedPlayers extends StatelessWidget {
     return Scrollbar(
       child: ListView.builder(
         shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         itemCount: players.length,
         itemBuilder: (context, index) {
           final item = players.elementAt(index);

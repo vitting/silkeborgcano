@@ -26,6 +26,7 @@ class ScreenScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: title,
