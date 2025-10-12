@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 
 class MatchListTileArea extends StatelessWidget {
   final String team1Name1;
@@ -31,7 +32,7 @@ class MatchListTileArea extends StatelessWidget {
               child: Ink(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 202, 154, 10),
+                  color: AppColors.textAndIcon2,
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8)),
                 ),
                 child: Column(
@@ -59,7 +60,7 @@ class MatchListTileArea extends StatelessWidget {
               child: Ink(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 14, 82, 138),
+                  color: AppColors.textAndIcon3,
                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
                 ),
                 child: Column(

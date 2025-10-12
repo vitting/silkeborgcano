@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_match_points.dart';
+import 'package:silkeborgcano/screens/match_summary_screen/summary_list_tile.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
 class MatchSummaryScreen extends StatefulWidget {
   static const String routerPath = "/matchSummary";
@@ -35,43 +42,44 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Rounde placering'), forceMaterialTransparency: true),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return ScreenScaffold(
+      title: ScreenScaffoldTitle('Rounde placering'),
+      floatingActionButton: CustomFloatingActionButton(
+        icon: Symbols.crown,
+        onPressed: () {
+          context.goNamed(TournamentSummaryScreen.routerPath, extra: _matchRound!.id);
+        },
+      ),
+      leading: SizedBox.shrink(),
+      body: ListView(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              context.goNamed(TournamentSummaryScreen.routerPath, extra: _matchRound!.id);
-            },
-            child: Text('Se Rangliste turnering'),
-          ),
           Row(
             children: [
-              Container(width: 20, height: 20, color: Colors.yellow[100]),
+              Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.textAndIcon1),
+              ),
               Gap(8),
-              Text('Sad over denne runde'),
+              Text('Sad over denne runde', style: TextStyle(fontSize: 16)),
             ],
           ),
           Text(
             'Runde tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)} minutter, ${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)} sekunder',
+            style: TextStyle(fontSize: 16),
           ),
 
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: _players.length,
-              itemBuilder: (context, index) {
-                final player = _players[index];
-                final isSittingOver = _sittingOverPlayerIds.contains(player.id);
-                final pmp = PlayerMatchPoints.getByPlayerIdAndMatchRoundId(player.id, _matchRound!.id);
-                return ListTile(
-                  title: Text(player.name),
-                  trailing: Text('${pmp.points} points'),
-                  tileColor: isSittingOver ? Colors.yellow[100] : null,
-                );
-              },
-            ),
+          ListView.separated(
+            physics: NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => Gap(AppSizes.xxs),
+            shrinkWrap: true,
+            itemCount: _players.length,
+            itemBuilder: (context, index) {
+              final player = _players[index];
+              final isSittingOver = _sittingOverPlayerIds.contains(player.id);
+              final pmp = PlayerMatchPoints.getByPlayerIdAndMatchRoundId(player.id, _matchRound!.id);
+              return SummaryListTile(playerName: player.name, isSittingOver: isSittingOver, points: pmp.points);
+            },
           ),
         ],
       ),

@@ -11,7 +11,7 @@ class MatchListTileTitle extends StatelessWidget {
       children: [
         Text(
           'Bane $court',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ],

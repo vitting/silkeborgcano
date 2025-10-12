@@ -12,7 +12,7 @@ class MatchListTilePoints extends StatelessWidget {
       children: [
         Text(
           '$pointsTeam1 : $pointsTeam2',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ],

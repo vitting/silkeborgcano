@@ -6,7 +6,7 @@ import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/match_round_screen/administrate_match_round_players_dialog.dart';
-import 'package:silkeborgcano/screens/match_round_screen/benched_players.dart';
+import 'package:silkeborgcano/screens/match_round_screen/benched_players_tile.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_calculation.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
@@ -140,7 +140,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
               padding: EdgeInsets.all(16),
               children: [
                 if (_matchRound != null && _matchRound!.sittingOver.isNotEmpty) ...[
-                  BenchedPlayers(players: _matchRound!.sittingOver),
+                  BenchedPlayersTile(players: _matchRound!.sittingOver),
                   Gap(8),
                 ],
                 _matches(),

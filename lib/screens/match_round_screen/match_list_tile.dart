@@ -4,6 +4,7 @@ import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile_area.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile_points.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile_title.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 
 class MatchListTile extends StatelessWidget {
   final int court;
@@ -37,7 +38,7 @@ class MatchListTile extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.limeAccent,
+                  color: AppColors.textAndIcon,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                 ),
                 child: Column(

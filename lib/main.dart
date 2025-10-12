@@ -11,10 +11,10 @@ void main() async {
 
   objectbox = await ObjectBox.create();
 
-  if (Admin.isAvailable()) {
-    // Keep a reference until no longer needed or manually closed.
-    admin = Admin(objectbox.store);
-  }
+  // if (Admin.isAvailable()) {
+  //   // Keep a reference until no longer needed or manually closed.
+  //   admin = Admin(objectbox.store);
+  // }
 
   runApp(const AppEntry());
 }
