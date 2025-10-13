@@ -29,39 +29,42 @@ class MatchListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.driftwoodGray,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.playerCardHeader,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                  ),
+                  child: Column(
+                    children: [
+                      MatchListTileTitle(court: court),
+                      if (showPoints) const Gap(4),
+                      if (showPoints) MatchListTilePoints(pointsTeam1: pointsTeam1, pointsTeam2: pointsTeam2),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    MatchListTileTitle(court: court),
-                    if (showPoints) const Gap(4),
-                    if (showPoints) MatchListTilePoints(pointsTeam1: pointsTeam1, pointsTeam2: pointsTeam2),
-                  ],
-                ),
-              ),
 
-              MatchListTileArea(
-                team1Name1: team1[0].name,
-                team1Name2: team1[1].name,
-                team2Name1: team2[0].name,
-                team2Name2: team2[1].name,
-                onTapTeam1: onTapTeam1,
-                onTapTeam2: onTapTeam2,
-              ),
-            ],
+                MatchListTileArea(
+                  team1Name1: team1[0].name,
+                  team1Name2: team1[1].name,
+                  team2Name1: team2[0].name,
+                  team2Name2: team2[1].name,
+                  onTapTeam1: onTapTeam1,
+                  onTapTeam2: onTapTeam2,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
