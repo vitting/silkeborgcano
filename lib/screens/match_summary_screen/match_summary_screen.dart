@@ -11,6 +11,7 @@ import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summa
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
@@ -45,6 +46,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
     return ScreenScaffold(
       title: ScreenScaffoldTitle('Rounde placering'),
       floatingActionButton: CustomFloatingActionButton(
+        tooltip: 'Gå til rangliste',
         icon: Symbols.crown,
         onPressed: () {
           context.goNamed(TournamentSummaryScreen.routerPath, extra: _matchRound!.id);
@@ -53,25 +55,41 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
       leading: SizedBox.shrink(),
       body: ListView(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.textAndIcon1),
+          Card(
+            color: AppColors.deepSea1,
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.xs),
+              child: Column(
+                children: [
+                  Text(
+                    'Tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)}m:${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)}s',
+                    style: TextStyle(fontSize: 20, color: AppColors.textColor, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.sunburstYellow),
+                      ),
+                      Gap(8),
+                      if (_sittingOverPlayerIds.isNotEmpty)
+                        Text(
+                          'Sad over denne runde',
+                          style: TextStyle(fontSize: 20, color: AppColors.textColor, fontWeight: FontWeight.bold),
+                        ),
+                    ],
+                  ),
+                ],
               ),
-              Gap(8),
-              Text('Sad over denne runde', style: TextStyle(fontSize: 16)),
-            ],
+            ),
           ),
-          Text(
-            'Runde tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)} minutter, ${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)} sekunder',
-            style: TextStyle(fontSize: 16),
-          ),
-
+          const Gap(AppSizes.xs),
           ListView.separated(
             physics: NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => Gap(AppSizes.xxs),
+            separatorBuilder: (context, index) => ListViewSeparator(),
             shrinkWrap: true,
             itemCount: _players.length,
             itemBuilder: (context, index) {

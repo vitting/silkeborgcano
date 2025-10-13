@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:silkeborgcano/app_entry.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
+import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 
 class ScreenScaffold extends StatelessWidget {
   final Widget? title;
@@ -23,23 +25,21 @@ class ScreenScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: AppColors.scaffoldBackgroundColor,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: title,
-        titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textAndIcon),
+        titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textColor),
         centerTitle: true,
         actions: actions,
-        leading:
-            leading ??
-            IconButton(
-              icon: Icon(Symbols.home, size: 32, color: AppColors.textAndIcon, fontWeight: FontWeight.w300, fill: 1),
-              onPressed: onHomeTap,
-            ),
+        leading: leading ?? CustomIconButton(icon: Symbols.home, onPressed: onHomeTap, size: CustomIconSize.m),
       ),
-      body: Padding(padding: const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 0), child: body),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 0, left: AppSizes.s, right: AppSizes.s, bottom: AppSizes.s),
+        child: body,
+      ),
     );
   }
 }

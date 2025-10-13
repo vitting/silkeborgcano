@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:silkeborgcano/screens/home_screen/colors_screen.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
@@ -33,5 +34,6 @@ final router = GoRouter(
       name: TournamentSummaryScreen.routerPath,
       builder: (context, state) => TournamentSummaryScreen(),
     ),
+    GoRoute(path: ColorsScreen.routerPath, name: ColorsScreen.routerPath, builder: (context, state) => ColorsScreen()),
   ],
 );

@@ -32,7 +32,7 @@ class MatchListTileArea extends StatelessWidget {
               child: Ink(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.textAndIcon2,
+                  color: AppColors.tropicalSunset,
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8)),
                 ),
                 child: Column(
@@ -60,7 +60,7 @@ class MatchListTileArea extends StatelessWidget {
               child: Ink(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.textAndIcon3,
+                  color: AppColors.deepSea,
                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
                 ),
                 child: Column(

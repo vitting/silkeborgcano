@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class MatchPointsSelector extends StatelessWidget {
   final int? initialPointPerMatch;
@@ -16,45 +17,45 @@ class MatchPointsSelector extends StatelessWidget {
           Flexible(
             child: RadioListTile(
               value: 11,
-              title: Text('11', style: TextStyle(color: AppColors.textAndIcon, fontSize: 16)),
+              title: CustomText(data: '11', size: CustomTextSize.s),
               dense: true,
               visualDensity: VisualDensity.compact,
               contentPadding: EdgeInsets.zero,
               fillColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return AppColors.textAndIcon;
+                  return AppColors.iconColor;
                 }
-                return AppColors.textAndIconDisabled;
+                return AppColors.iconDisabled;
               }),
             ),
           ),
           Flexible(
             child: RadioListTile(
               value: 15,
-              title: Text('15', style: TextStyle(color: AppColors.textAndIcon, fontSize: 16)),
+              title: CustomText(data: '15', size: CustomTextSize.s),
               dense: true,
               visualDensity: VisualDensity.compact,
               contentPadding: EdgeInsets.zero,
               fillColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return AppColors.textAndIcon;
+                  return AppColors.iconColor;
                 }
-                return AppColors.textAndIconDisabled;
+                return AppColors.iconDisabled;
               }),
             ),
           ),
           Flexible(
             child: RadioListTile(
               value: 21,
-              title: Text('21', style: TextStyle(color: AppColors.textAndIcon, fontSize: 16)),
+              title: CustomText(data: '21', size: CustomTextSize.s),
               dense: true,
               visualDensity: VisualDensity.compact,
               contentPadding: EdgeInsets.zero,
               fillColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return AppColors.textAndIcon;
+                  return AppColors.iconColor;
                 }
-                return AppColors.textAndIconDisabled;
+                return AppColors.iconDisabled;
               }),
             ),
           ),

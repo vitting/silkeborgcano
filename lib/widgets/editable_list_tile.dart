@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:silkeborgcano/standards/app_colors.dart';
-import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
+import 'package:silkeborgcano/widgets/custom_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
 
 class EditableListTile extends StatefulWidget {
@@ -67,24 +68,19 @@ class _EditableListTileState extends State<EditableListTile> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      dense: true,
-      title: _isEditing
-          ? CustomTextFormField(controller: _controller, onEditingComplete: _save, onTapOutside: widget.onTapOutside)
-          : Text(
-              _controller.text,
-              style: TextStyle(fontSize: AppSizes.sm, color: AppColors.textAndIcon),
-            ),
+    return CustomListTile(
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           AnimatedCrossFade(
-            firstChild: _isEditing ? CustomIconButton(icon: Icons.save, onPressed: _valid ? _save : null) : SizedBox.shrink(),
+            firstChild: _isEditing
+                ? CustomIconButton(icon: Icons.save, onPressed: _valid ? _save : null, size: CustomIconSize.m)
+                : SizedBox.shrink(),
             secondChild: Row(
               children: [
                 if (widget.showEdit && !_isEditing)
                   CustomIconButton(
+                    size: CustomIconSize.s,
                     icon: Icons.edit,
                     onPressed: () async {
                       setState(() {
@@ -92,7 +88,8 @@ class _EditableListTileState extends State<EditableListTile> {
                       });
                     },
                   ),
-                if (widget.showDelete && !_isEditing) CustomIconButton(icon: Icons.delete, onPressed: widget.onDelete),
+                if (widget.showDelete && !_isEditing)
+                  CustomIconButton(icon: Icons.delete_forever, onPressed: widget.onDelete, size: CustomIconSize.s),
               ],
             ),
             crossFadeState: _isEditing ? CrossFadeState.showFirst : CrossFadeState.showSecond,
@@ -103,6 +100,9 @@ class _EditableListTileState extends State<EditableListTile> {
 
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
+      child: _isEditing
+          ? CustomTextFormField(controller: _controller, onEditingComplete: _save, onTapOutside: widget.onTapOutside)
+          : CustomText(data: _controller.text, size: CustomTextSize.s),
     );
   }
 }

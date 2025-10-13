@@ -38,7 +38,7 @@ class MatchListTile extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.textAndIcon,
+                  color: AppColors.driftwoodGray,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                 ),
                 child: Column(

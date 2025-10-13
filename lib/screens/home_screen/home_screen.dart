@@ -1,13 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
+import 'package:silkeborgcano/screens/home_screen/colors_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
+import 'package:silkeborgcano/widgets/custom_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
+import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
@@ -54,18 +61,18 @@ class HomeScreen extends StatelessWidget {
               }
 
               if (asyncSnapshot.hasError) {
-                return Text('Error: ${asyncSnapshot.error}');
+                return CustomText(data: 'Error: ${asyncSnapshot.error}');
               }
 
               final data = asyncSnapshot.data!;
               return Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => ListViewSeparator(),
                   itemCount: data.length,
                   itemBuilder: (context, index) {
                     final tournament = data[index];
-                    return ListTile(
-                      title: Text(tournament.name),
-
+                    return CustomListTile(
+                      child: CustomText(data: tournament.name),
                       onTap: () {
                         final matchRound = tournament.getCurrentMatchRound();
 

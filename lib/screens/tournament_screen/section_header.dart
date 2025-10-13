@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:silkeborgcano/standards/app_colors.dart';
-import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -8,10 +7,6 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(fontSize: AppSizes.sm, fontWeight: FontWeight.bold, color: AppColors.textAndIcon),
-      textAlign: TextAlign.center,
-    );
+    return CustomText(data: title, size: CustomTextSize.m, textAlign: TextAlign.center);
   }
 }

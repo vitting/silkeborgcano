@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
-import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
@@ -17,8 +16,8 @@ class CustomFloatingActionButton extends StatelessWidget {
       onPressed: onPressed,
       shape: CircleBorder(),
       elevation: 3,
-      backgroundColor: AppColors.textAndIcon,
-      child: CustomIcon(icon, size: AppSizes.l, color: AppColors.white),
+      backgroundColor: AppColors.floatingActionButton,
+      child: CustomIcon(icon, size: CustomIconSize.l, color: AppColors.white),
     );
   }
 }

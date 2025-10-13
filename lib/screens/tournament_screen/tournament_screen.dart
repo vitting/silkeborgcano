@@ -15,7 +15,10 @@ import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
+import 'package:silkeborgcano/widgets/custom_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
@@ -122,6 +125,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         actions: [
           CustomIconButton(
             tooltip: 'Slet turnering',
+            size: CustomIconSize.m,
             onPressed: () async {
               final result = await YesNoDialog.show(
                 context,
@@ -144,6 +148,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         body: ListView(
           children: [
             SectionHeader(title: 'Navn på turnering'),
+            const Gap(AppSizes.xs),
             EditableListTile(
               initialValue: _tournament?.name,
               isEditing: _tournament?.name.isEmpty ?? false,
@@ -159,25 +164,29 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
               opacity: _tournament?.name.isNotEmpty ?? false ? 1 : 0,
               child: Column(
                 children: [
+                  const Gap(AppSizes.xs),
                   SectionHeader(title: 'Point per kamp'),
                   const Gap(8),
-                  MatchPointsSelector(
-                    initialPointPerMatch: _tournament?.pointPerMatch,
-                    onChanged: (value) async {
-                      if (value == null) return;
-                      if (await Vibration.hasVibrator()) {
-                        Vibration.vibrate(duration: 100);
-                      }
+                  CustomListTile(
+                    child: MatchPointsSelector(
+                      initialPointPerMatch: _tournament?.pointPerMatch,
+                      onChanged: (value) async {
+                        if (value == null) return;
+                        if (await Vibration.hasVibrator()) {
+                          Vibration.vibrate(duration: 100);
+                        }
 
-                      setState(() {
-                        _tournament?.save(pointPerMatch: value);
-                      });
-                    },
+                        setState(() {
+                          _tournament?.save(pointPerMatch: value);
+                        });
+                      },
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomIconButton(
+                        size: CustomIconSize.m,
                         tooltip: 'Tilføj ny spiller',
                         onPressed: () {
                           setState(() {
@@ -188,18 +197,10 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                         icon: Symbols.add,
                       ),
                       const Gap(AppSizes.s),
-                      SectionHeader(title: 'Spillere'),
+                      SectionHeader(title: 'Spillere (${_tournament?.players.length ?? 0})'),
                       const Gap(AppSizes.xs),
-                      CircleAvatar(
-                        radius: AppSizes.s,
-                        backgroundColor: AppColors.textAndIcon,
-                        child: Text(
-                          _tournament?.players.length.toString() ?? '0',
-                          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: AppSizes.s),
-                        ),
-                      ),
-                      const Gap(AppSizes.s),
                       CustomIconButton(
+                        size: CustomIconSize.m,
                         tooltip: 'Vælg eksisterende spillere',
                         onPressed: () async {
                           final List<Player>? chosenPlayers = await ChosePlayerDialog.show(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
@@ -8,6 +9,10 @@ import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
+import 'package:silkeborgcano/screens/match_summary_screen/summary_list_tile.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/list_view_separator.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
 class TournamentSummaryScreen extends StatefulWidget {
   static const String routerPath = "/tournamentSummary";
@@ -35,9 +40,12 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Rangliste'), forceMaterialTransparency: true),
-      body: Column(
+    return ScreenScaffold(
+      title: Text('Rangliste'),
+      onHomeTap: () {
+        context.goNamed(HomeScreen.routerPath);
+      },
+      body: ListView(
         children: [
           ElevatedButton(
             onPressed: () {
@@ -57,20 +65,16 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
             },
             child: Text('Ny runde'),
           ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: _players.length,
-              itemBuilder: (context, index) {
-                final player = _players[index];
-                final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, _tournament!.id);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text(player.name), Text('${ptp.points} points')],
-                );
-                // return ListTile(title: Text(player.name), trailing: Text('${ptp.points} points'));
-              },
-            ),
+          ListView.separated(
+            separatorBuilder: (context, index) => ListViewSeparator(),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _players.length,
+            itemBuilder: (context, index) {
+              final player = _players[index];
+              final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, _tournament!.id);
+              return SummaryListTile(playerName: player.name, points: ptp.points);
+            },
           ),
         ],
       ),

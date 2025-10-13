@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 
 enum CustomTextFormFieldBehavior { normal, number }
 
@@ -62,6 +63,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 16, color: AppColors.textColor),
       textAlign: widget.behavior == CustomTextFormFieldBehavior.number ? TextAlign.center : TextAlign.start,
       inputFormatters: [if (widget.behavior == CustomTextFormFieldBehavior.number) FilteringTextInputFormatter.digitsOnly],
       keyboardType: widget.behavior == CustomTextFormFieldBehavior.number ? TextInputType.number : null,
@@ -77,6 +79,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
+        contentPadding: EdgeInsetsGeometry.symmetric(horizontal: AppSizes.xs),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: AppColors.white, width: 2),
@@ -85,7 +88,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.textAndIcon, width: 2),
+          borderSide: BorderSide(color: AppColors.borderColor, width: 2),
         ),
         counterText: widget.behavior == CustomTextFormFieldBehavior.number ? '' : null,
         floatingLabelBehavior: FloatingLabelBehavior.never,
