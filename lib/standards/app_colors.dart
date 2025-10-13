@@ -10,6 +10,7 @@ class AppColors {
   static const Color floatingActionButton = deepSea;
   static const Color scaffoldBackgroundColor = tangerineOrange;
   static const Color checkboxSelectedBackground = deepSea;
+  static const Color radioSelectedBackground = deepSea;
   static const Color iconDisabled = Color.fromARGB(176, 255, 255, 255);
 
   static const Color white = Colors.white;

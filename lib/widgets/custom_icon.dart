@@ -22,11 +22,11 @@ class CustomIcon extends StatelessWidget {
   double _getSize() {
     switch (size) {
       case CustomIconSize.l:
-        return 32;
+        return 30;
       case CustomIconSize.m:
-        return 28;
+        return 26;
       case CustomIconSize.s:
-        return 24;
+        return 22;
     }
   }
 

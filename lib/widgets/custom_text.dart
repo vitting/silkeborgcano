@@ -22,11 +22,11 @@ class CustomText extends StatelessWidget {
   double _getFontSize() {
     switch (size) {
       case CustomTextSize.l:
-        return 24;
-      case CustomTextSize.m:
         return 20;
-      case CustomTextSize.s:
+      case CustomTextSize.m:
         return 16;
+      case CustomTextSize.s:
+        return 12;
     }
   }
 

@@ -74,7 +74,7 @@ class _EditableListTileState extends State<EditableListTile> {
         children: [
           AnimatedCrossFade(
             firstChild: _isEditing
-                ? CustomIconButton(icon: Icons.save, onPressed: _valid ? _save : null, size: CustomIconSize.m)
+                ? CustomIconButton(icon: Icons.save, onPressed: _valid ? _save : null, size: CustomIconSize.s)
                 : SizedBox.shrink(),
             secondChild: Row(
               children: [

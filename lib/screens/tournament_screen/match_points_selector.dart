@@ -23,7 +23,7 @@ class MatchPointsSelector extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               fillColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return AppColors.iconColor;
+                  return AppColors.radioSelectedBackground;
                 }
                 return AppColors.iconDisabled;
               }),
@@ -38,7 +38,7 @@ class MatchPointsSelector extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               fillColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return AppColors.iconColor;
+                  return AppColors.radioSelectedBackground;
                 }
                 return AppColors.iconDisabled;
               }),
@@ -53,7 +53,7 @@ class MatchPointsSelector extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               fillColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return AppColors.iconColor;
+                  return AppColors.radioSelectedBackground;
                 }
                 return AppColors.iconDisabled;
               }),
