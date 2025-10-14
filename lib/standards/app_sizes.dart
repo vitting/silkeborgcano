@@ -5,4 +5,6 @@ class AppSizes {
   static const double sm = 20;
   static const double m = 24;
   static const double l = 32;
+
+  static const double borderSize = 8;
 }

@@ -13,12 +13,12 @@ class SummaryListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      tileColor: isSittingOver ? AppColors.sunburstYellow : AppColors.tileBackground,
+      tileColor: isSittingOver ? AppColors.summaryListTileSittingOverBackgroundColor : AppColors.summaryListTileBackgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CustomText(data: playerName, size: CustomTextSize.s),
-          CustomText(data: '$points points', size: CustomTextSize.s),
+          Expanded(child: CustomText(data: playerName)),
+          CustomText(data: '$points points'),
         ],
       ),
     );

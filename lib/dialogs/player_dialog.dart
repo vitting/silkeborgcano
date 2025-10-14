@@ -43,6 +43,7 @@ class _PlayerDialogState extends State<PlayerDialog> {
   @override
   Widget build(BuildContext context) {
     return DefaultDialog(
+      title: 'Spiller',
       children: [
         Text('Navn'),
         Gap(16),

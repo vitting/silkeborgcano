@@ -16,7 +16,11 @@ class AppColors {
   static const Color benchedPlayerCardBackground = coralPink;
   static const Color matchTileArea1Background = oceanWave;
   static const Color matchTileArea2Background = deepSea;
-
+  static const Color matchSummaryInfoCardBackgorundColor = coralPink;
+  static const Color summaryListTileBackgroundColor = tileBackground;
+  static const Color summaryListTileSittingOverBackgroundColor = sunburstYellow;
+  static const Color dialogBackgroundColor = volleyballOrange;
+  static const Color buttonBackgroundColor = deepSea;
   static const Color white = Colors.white;
   static const Color black = Colors.black;
 
@@ -30,11 +34,11 @@ class AppColors {
 
   // Sky & Sun Inspired Colors
   static const Color clearSky = Color(0xFF4FC3F7);
-  static const Color sunburstYellow = Color(0xFFFFC107);
+  static const Color sunburstYellow = Color.fromARGB(255, 241, 184, 12);
   static const Color tropicalSunset = Color(0xFFFF6F61);
 
   // Sport & Activity Inspired Colors
-  static const Color volleyballOrange = Color(0xFFFF9800);
+  static const Color volleyballOrange = Color.fromARGB(255, 242, 148, 8);
 
   // Accent Colors
   static const Color coralPink = Color.fromARGB(255, 192, 79, 117);

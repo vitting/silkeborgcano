@@ -5,6 +5,7 @@ enum CustomIconSize { l, m, s }
 
 class CustomIcon extends StatelessWidget {
   final IconData icon;
+  final Widget? stackedIcon;
   final CustomIconSize size;
   final Color color;
   final double? fill;
@@ -17,6 +18,7 @@ class CustomIcon extends StatelessWidget {
     this.color = AppColors.iconColor,
     this.fill = 1,
     this.fontWeight = FontWeight.w300,
+    this.stackedIcon,
   });
 
   double _getSize() {
@@ -32,6 +34,16 @@ class CustomIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(icon, size: _getSize(), color: color, fontWeight: fontWeight, fill: fill);
+    if (stackedIcon != null) {
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(icon, size: _getSize(), color: color, fill: fill),
+          stackedIcon!,
+        ],
+      );
+    } else {
+      return Icon(icon, size: _getSize(), color: color, fontWeight: fontWeight, fill: fill);
+    }
   }
 }

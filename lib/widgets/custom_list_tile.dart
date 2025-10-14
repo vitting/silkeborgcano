@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 
 class CustomListTile extends StatelessWidget {
   final Widget child;
@@ -32,7 +33,7 @@ class CustomListTile extends StatelessWidget {
         contentPadding: EdgeInsets.only(left: 16, right: 8, top: 4, bottom: 4),
         dense: dense,
         visualDensity: VisualDensity.compact,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
         title: child,
         tileColor: tileColor,
         onTap: onTap,

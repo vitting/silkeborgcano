@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class MatchListTileArea extends StatelessWidget {
   final String team1Name1;
@@ -38,15 +39,9 @@ class MatchListTileArea extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      team1Name1,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
+                    CustomText(data: team1Name1),
                     const Gap(8),
-                    Text(
-                      team1Name2,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
+                    CustomText(data: team1Name2),
                   ],
                 ),
               ),
@@ -67,15 +62,9 @@ class MatchListTileArea extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      team2Name1,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
+                    CustomText(data: team2Name1),
                     const Gap(8),
-                    Text(
-                      team2Name2,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
+                    CustomText(data: team2Name2),
                   ],
                 ),
               ),

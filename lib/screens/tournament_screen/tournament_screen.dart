@@ -12,13 +12,11 @@ import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/match_points_selector.dart';
 import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
-import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_list_tile.dart';
-import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
@@ -34,7 +32,7 @@ class TournamentScreen extends StatefulWidget {
 
 class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
   Tournament? _tournament;
-  bool isValid = false;
+  bool _isValid = false;
 
   @override
   void didChangeDependencies() {
@@ -45,7 +43,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
 
       if (tournament != null) {
         _tournament = tournament;
-        isValid = isTournamentValid;
+        _isValid = isTournamentValid;
       } else {
         _tournament = Tournament.newTournament();
         _tournament!.save();
@@ -74,6 +72,15 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
     return isNameValid && hasEnoughPlayers;
   }
 
+  void _checkIfTournamentIsValidOnChanges() {
+    final valid = isTournamentValid;
+    if (valid != _isValid) {
+      setState(() {
+        _isValid = valid;
+      });
+    }
+  }
+
   Future<void> _validateAndReturnToHome() async {
     if (_isNameValid() == false) {
       _tournament?.delete();
@@ -85,7 +92,8 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
     if (mounted && _validateNumberOfPlayers() == false) {
       final deleteTournament = await YesNoDialog.show(
         context,
-        title: 'Turneringen skal have mindst 4 spillere. Vil du slette turneringen?',
+        title: 'Slet turnering',
+        body: 'Turneringen skal have mindst 4 spillere. Vil du slette turneringen?',
         noButtonText: 'Fortryd',
         yesButtonText: 'Slet',
       );
@@ -113,7 +121,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
           await _validateAndReturnToHome();
         },
         title: ScreenScaffoldTitle('Turnering'),
-        floatingActionButton: isValid
+        floatingActionButton: _isValid
             ? CustomFloatingActionButton(
                 tooltip: 'Start turnering',
                 onPressed: () {
@@ -129,7 +137,8 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
             onPressed: () async {
               final result = await YesNoDialog.show(
                 context,
-                title: 'Vil du slette turneringen?',
+                title: 'Slet turnering',
+                body: 'Vil du slette turneringen?',
                 noButtonText: 'Fortryd',
                 yesButtonText: 'Slet',
               );
@@ -156,6 +165,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
               onChanged: (value) {
                 setState(() {
                   _tournament?.save(name: value.trim());
+                  _isValid = isTournamentValid;
                 });
               },
             ),
@@ -192,6 +202,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                           setState(() {
                             final newPlayer = Player.createNewPlayer();
                             _tournament?.addNewPlayer(newPlayer);
+                            _isValid = isTournamentValid;
                           });
                         },
                         icon: Symbols.add,
@@ -211,6 +222,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                           if (chosenPlayers != null) {
                             setState(() {
                               _tournament?.setPlayers(chosenPlayers);
+                              _isValid = isTournamentValid;
                             });
                           }
                         },
@@ -223,18 +235,22 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                     onChanged: (player, name) {
                       player.save(name: name.trim());
                       _tournament?.save();
+                      _checkIfTournamentIsValidOnChanges();
                     },
                     onTapOutsideWithEmptyValue: (player) {
                       setState(() {
                         _tournament?.deletePlayerWithEmptyName(player);
+                        _isValid = isTournamentValid;
                       });
                     },
                     onDelete: (player) {
                       setState(() {
                         if (player.name.isNotEmpty) {
                           _tournament?.removePlayer(player);
+                          _isValid = isTournamentValid;
                         } else {
                           _tournament?.deletePlayerWithEmptyName(player);
+                          _isValid = isTournamentValid;
                         }
                       });
                     },

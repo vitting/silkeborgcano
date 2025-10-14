@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:silkeborgcano/models/player.dart';
-import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 

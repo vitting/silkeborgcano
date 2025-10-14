@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/dialogs/default_dialog.dart';
-import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 
 enum RegisterPointsDialogTeamEnum { team1, team2 }
 
@@ -12,13 +14,17 @@ class RegisterPointsDialog extends StatefulWidget {
   final String? player1Name;
   final String? player2Name;
   final int maxPoints;
+  final Color backgroundColor;
+  final bool isValueSelected;
   const RegisterPointsDialog({
     super.key,
     this.initialValue = 0,
     required this.team,
+    required this.backgroundColor,
     this.maxPoints = 21,
     this.player1Name,
     this.player2Name,
+    this.isValueSelected = false,
   });
 
   static Future<int?> show(
@@ -28,16 +34,20 @@ class RegisterPointsDialog extends StatefulWidget {
     required int maxPoints,
     String? player1Name,
     String? player2Name,
+    required Color backgroundColor,
+    bool isValueSelected = false,
   }) {
     return showDialog<int?>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) => RegisterPointsDialog(
         initialValue: initialValue,
         team: team,
         maxPoints: maxPoints,
         player1Name: player1Name,
         player2Name: player2Name,
+        backgroundColor: backgroundColor,
+        isValueSelected: isValueSelected,
       ),
     );
   }
@@ -46,9 +56,8 @@ class RegisterPointsDialog extends StatefulWidget {
   State<RegisterPointsDialog> createState() => _RegisterPointsDialogState();
 }
 
-class _RegisterPointsDialogState extends State<RegisterPointsDialog> {
+class _RegisterPointsDialogState extends State<RegisterPointsDialog> with VibrateMixin {
   late final TextEditingController controller;
-  String? errorText;
 
   @override
   void initState() {
@@ -56,76 +65,65 @@ class _RegisterPointsDialogState extends State<RegisterPointsDialog> {
     controller = TextEditingController(text: widget.initialValue == 0 ? '' : widget.initialValue.toString());
   }
 
-  void _validateInput(String input) {
-    int points = int.tryParse(controller.text) ?? 0;
-    if (points > widget.maxPoints) {
-      setState(() {
-        errorText = 'Maksimum point er ${widget.maxPoints}';
-      });
+  String _getTitle() {
+    if (widget.team == RegisterPointsDialogTeamEnum.team1) {
+      return 'Vælg points for hold 1';
     } else {
-      setState(() {
-        errorText = null;
-      });
+      return 'Vælg points for hold 2';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultDialog(
+      title: _getTitle(),
       children: [
-        if (widget.team == RegisterPointsDialogTeamEnum.team1) Text('Points for hold 1'),
-        if (widget.team == RegisterPointsDialogTeamEnum.team2) Text('Points for hold 2'),
         if (widget.player1Name != null && widget.player2Name != null) ...[
-          Gap(8),
-          Text('${widget.player1Name} / ${widget.player2Name}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CustomText(data: '${widget.player1Name}', size: CustomTextSize.ms)],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CustomText(data: '${widget.player2Name}', size: CustomTextSize.ms)],
+          ),
         ],
-        Text('Indtast point (max ${widget.maxPoints})'),
-        Gap(16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 60,
-              child: CustomTextFormField(
-                controller: controller,
-                behavior: CustomTextFormFieldBehavior.number,
-                onFieldSubmitted: (_) {
-                  if (errorText == null) {
-                    context.pop<int>(int.tryParse(controller.text) ?? 0);
-                  }
-                },
-                onChanged: (value) {
-                  _validateInput(controller.text);
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(errorText ?? '', style: TextStyle(color: Colors.red))],
-        ),
-        Gap(16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                context.pop();
+        const Gap(AppSizes.s),
+        GridView.builder(
+          itemCount: widget.maxPoints + 1,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+          ),
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            int number = index;
+            bool isSelectedInitial = widget.initialValue == number;
+            return InkWell(
+              customBorder: CircleBorder(),
+              radius: 23,
+              splashColor: AppColors.dialogBackgroundColor,
+              onTap: () {
+                vibrateShort();
+
+                if (context.mounted) {
+                  Navigator.of(context).pop(number);
+                }
               },
-              child: Text('Fortryd'),
-            ),
-            ElevatedButton(
-              onPressed: errorText == null
-                  ? () {
-                      if (errorText == null) {
-                        context.pop<int>(int.tryParse(controller.text) ?? 0);
-                      }
-                    }
-                  : null,
-              child: Text('Gem'),
-            ),
-          ],
+
+              child: Ink(
+                decoration: BoxDecoration(
+                  color: isSelectedInitial && widget.isValueSelected
+                      ? widget.backgroundColor.withValues(red: 50)
+                      : widget.backgroundColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(child: CustomText(data: number.toString())),
+              ),
+            );
+          },
         ),
       ],
     );

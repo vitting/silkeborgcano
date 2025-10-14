@@ -25,7 +25,6 @@ class ScreenScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       floatingActionButton: floatingActionButton,

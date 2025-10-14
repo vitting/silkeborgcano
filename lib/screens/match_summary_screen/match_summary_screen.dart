@@ -6,9 +6,9 @@ import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_match_points.dart';
+import 'package:silkeborgcano/screens/match_summary_screen/match_summary_info_card.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/summary_list_tile.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
-import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
@@ -55,36 +55,10 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
       leading: SizedBox.shrink(),
       body: ListView(
         children: [
-          Card(
-            color: AppColors.deepSea1,
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: const EdgeInsets.all(AppSizes.xs),
-              child: Column(
-                children: [
-                  Text(
-                    'Tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)}m:${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)}s',
-                    style: TextStyle(fontSize: 20, color: AppColors.textColor, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.sunburstYellow),
-                      ),
-                      Gap(8),
-                      if (_sittingOverPlayerIds.isNotEmpty)
-                        Text(
-                          'Sad over denne runde',
-                          style: TextStyle(fontSize: 20, color: AppColors.textColor, fontWeight: FontWeight.bold),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          MatchSummaryInfoCard(
+            matchTime:
+                'Tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)}m:${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)}s',
+            showSittingOverIndicator: _sittingOverPlayerIds.isNotEmpty,
           ),
           const Gap(AppSizes.xs),
           ListView.separated(

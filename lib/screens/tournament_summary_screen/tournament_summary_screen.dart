@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
@@ -10,7 +10,7 @@ import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/summary_list_tile.dart';
-import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
@@ -45,25 +45,20 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
       onHomeTap: () {
         context.goNamed(HomeScreen.routerPath);
       },
+      floatingActionButton: CustomFloatingActionButton(
+        icon: Symbols.play_circle,
+        tooltip: 'Næste runde',
+        onPressed: () {
+          context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
+        },
+      ),
       body: ListView(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              context.goNamed(HomeScreen.routerPath);
-            },
-            child: Text('Go to Home'),
-          ),
           ElevatedButton(
             onPressed: () {
               context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
             },
             child: Text('Match Summary'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
-            },
-            child: Text('Ny runde'),
           ),
           ListView.separated(
             separatorBuilder: (context, index) => ListViewSeparator(),
