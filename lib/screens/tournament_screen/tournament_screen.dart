@@ -14,6 +14,8 @@ import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_list_tile.dart';
@@ -122,38 +124,42 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         },
         title: ScreenScaffoldTitle('Turnering'),
         floatingActionButton: _isValid
-            ? CustomFloatingActionButton(
-                tooltip: 'Start turnering',
-                onPressed: () {
-                  context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
-                },
-                icon: Symbols.play_arrow,
+            ? CustomFloatingActionButtonWithMenu(
+                menuItems: [
+                  CustomFloatingActionButtonWithMenuModel(
+                    text: 'Start turnering',
+                    icon: Symbols.play_arrow,
+                    onPressed: () {
+                      if (_tournament != null) {
+                        context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
+                      }
+                    },
+                  ),
+                  CustomFloatingActionButtonWithMenuModel(
+                    text: 'Slet turnering',
+                    icon: Symbols.delete_forever_rounded,
+                    onPressed: () async {
+                      final result = await YesNoDialog.show(
+                        context,
+                        title: 'Slet turnering',
+                        body: 'Vil du slette turneringen?',
+                        noButtonText: 'Fortryd',
+                        yesButtonText: 'Slet',
+                      );
+
+                      if (result == true && _tournament != null) {
+                        _tournament?.delete();
+
+                        if (mounted) {
+                          context.goNamed(HomeScreen.routerPath);
+                        }
+                      }
+                    },
+                  ),
+                ],
               )
             : null,
-        actions: [
-          CustomIconButton(
-            tooltip: 'Slet turnering',
-            size: CustomIconSize.m,
-            onPressed: () async {
-              final result = await YesNoDialog.show(
-                context,
-                title: 'Slet turnering',
-                body: 'Vil du slette turneringen?',
-                noButtonText: 'Fortryd',
-                yesButtonText: 'Slet',
-              );
 
-              if (result == true && _tournament != null) {
-                _tournament?.delete();
-
-                if (mounted) {
-                  context.goNamed(HomeScreen.routerPath);
-                }
-              }
-            },
-            icon: Symbols.delete_forever_rounded,
-          ),
-        ],
         body: ListView(
           children: [
             SectionHeader(title: 'Navn på turnering'),

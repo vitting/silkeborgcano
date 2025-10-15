@@ -6,8 +6,8 @@ import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.da
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
-import 'package:silkeborgcano/widgets/custom_icon.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_list_tile.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
@@ -23,32 +23,27 @@ class HomeScreen extends StatelessWidget {
     return ScreenScaffold(
       title: ScreenScaffoldTitle('Forside'),
       leading: SizedBox.shrink(),
-      actions: [
-        IconButton(
-          tooltip: 'Administrer spillere',
-          icon: CustomIcon(Symbols.groups),
-          onPressed: () {
-            AdministratePlayersDialog.show(context);
-          },
-        ),
-      ],
-      floatingActionButton: CustomFloatingActionButton(
-        icon: Symbols.add,
-        tooltip: 'Opret ny turnering',
-        onPressed: () {
-          context.goNamed(TournamentScreen.routerPath);
-        },
+
+      floatingActionButton: CustomFloatingActionButtonWithMenu(
+        menuItems: [
+          CustomFloatingActionButtonWithMenuModel(
+            text: 'Opret ny turnering',
+            icon: Symbols.add,
+            onPressed: () {
+              context.goNamed(TournamentScreen.routerPath);
+            },
+          ),
+          CustomFloatingActionButtonWithMenuModel(
+            text: 'Administrer spillere 1234 and some other long text that might not fit',
+            icon: Symbols.groups,
+            onPressed: () {
+              AdministratePlayersDialog.show(context);
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
-          // if (kDebugMode)
-          //   ElevatedButton(
-          //     onPressed: () {
-          //       objectbox.store.box<Tournament>().removeAll();
-          //       objectbox.store.box<Player>().removeAll();
-          //     },
-          //     child: Text('Delete all data'),
-          //   ),
           StreamBuilder(
             stream: Tournament.listOfAllTournamentsAsStream,
             builder: (context, asyncSnapshot) {

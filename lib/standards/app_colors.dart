@@ -7,7 +7,8 @@ class AppColors {
   static const Color textColorInverse = black;
   static const Color tileBackground = volleyballOrange;
   static const Color tileSelectedBackground = Color.fromARGB(255, 237, 143, 1);
-  static const Color floatingActionButton = clearSky;
+  static const Color floatingActionButton = Color.fromARGB(255, 66, 162, 206);
+  // static const Color floatingActionButton = Color.fromARGB(255, 196, 118, 2);
   static const Color scaffoldBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 42, 42, 42);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 28, 28, 28);
@@ -24,7 +25,7 @@ class AppColors {
   static const Color summaryListTileBackgroundColor = tileBackground;
   static const Color summaryListTileSittingOverBackgroundColor = sunburstYellow;
   static const Color dialogBackgroundColor = Color.fromARGB(255, 196, 118, 2);
-  static const Color buttonBackgroundColor = deepSea;
+  static const Color buttonBackgroundColor = floatingActionButton;
   static const Color white = Colors.white;
   static const Color black = Colors.black;
 
