@@ -3,6 +3,7 @@ import 'package:silkeborgcano/dialogs/player_dialog.dart';
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/objectbox.g.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/widgets/custom_checkbox_list_tile.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
@@ -43,6 +44,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
     return Dialog.fullscreen(
       child: ScreenScaffold(
         title: Text('Vælg spillere (${_selectedPlayers.length})'),
+        backgroundColor: AppColors.dialogBackgroundColor,
         actions: [
           CustomIconButton(
             size: CustomIconSize.m,

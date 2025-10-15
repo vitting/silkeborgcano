@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class MatchListTileTitle extends StatelessWidget {
   final int court;
@@ -8,13 +9,7 @@ class MatchListTileTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Bane $court',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-      ],
+      children: [CustomText(data: 'Bane $court', textAlign: TextAlign.center)],
     );
   }
 }

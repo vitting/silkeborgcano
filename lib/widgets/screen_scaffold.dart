@@ -13,6 +13,7 @@ class ScreenScaffold extends StatelessWidget {
   final Widget body;
   final Widget? floatingActionButton;
   final VoidCallback? onHomeTap;
+  final Color? backgroundColor;
   const ScreenScaffold({
     super.key,
     this.title,
@@ -21,12 +22,13 @@ class ScreenScaffold extends StatelessWidget {
     required this.body,
     this.floatingActionButton,
     this.onHomeTap,
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackgroundColor,
+      backgroundColor: backgroundColor ?? AppColors.scaffoldBackgroundColor,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
@@ -44,7 +46,7 @@ class ScreenScaffold extends StatelessWidget {
         leading: leading ?? CustomIconButton(icon: Symbols.home, onPressed: onHomeTap, size: CustomIconSize.m),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 0, left: AppSizes.s, right: AppSizes.s, bottom: AppSizes.s),
+        padding: const EdgeInsets.only(top: 0, left: AppSizes.xs, right: AppSizes.xs, bottom: AppSizes.xs),
         child: body,
       ),
     );

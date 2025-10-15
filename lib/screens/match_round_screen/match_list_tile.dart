@@ -59,6 +59,8 @@ class MatchListTile extends StatelessWidget {
                   team2Name2: team2[1].name,
                   onTapTeam1: onTapTeam1,
                   onTapTeam2: onTapTeam2,
+                  isTeam1Selected: pointsTeam1 > pointsTeam2 && pointsTeam1 > 0,
+                  isTeam2Selected: pointsTeam2 > pointsTeam1 && pointsTeam2 > 0,
                 ),
               ],
             ),

@@ -8,7 +8,10 @@ class AppColors {
   static const Color tileBackground = volleyballOrange;
   static const Color tileSelectedBackground = Color.fromARGB(255, 237, 143, 1);
   static const Color floatingActionButton = clearSky;
-  static const Color scaffoldBackgroundColor = tangerineOrange;
+  // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 169, 102, 2);
+  // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 42, 42, 42);
+  // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 28, 28, 28);
+  static const Color scaffoldBackgroundColor = Color.fromARGB(255, 66, 66, 66);
   static const Color checkboxSelectedBackground = deepSea;
   static const Color radioSelectedBackground = deepSea;
   static const Color iconDisabled = Color.fromARGB(176, 255, 255, 255);
@@ -16,10 +19,11 @@ class AppColors {
   static const Color benchedPlayerCardBackground = coralPink;
   static const Color matchTileArea1Background = oceanWave;
   static const Color matchTileArea2Background = deepSea;
+  static const Color matchTilePointsBackgroundColor = Color.fromARGB(255, 66, 66, 66);
   static const Color matchSummaryInfoCardBackgorundColor = coralPink;
   static const Color summaryListTileBackgroundColor = tileBackground;
   static const Color summaryListTileSittingOverBackgroundColor = sunburstYellow;
-  static const Color dialogBackgroundColor = volleyballOrange;
+  static const Color dialogBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   static const Color buttonBackgroundColor = deepSea;
   static const Color white = Colors.white;
   static const Color black = Colors.black;
