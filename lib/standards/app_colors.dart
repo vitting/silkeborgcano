@@ -8,10 +8,10 @@ class AppColors {
   static const Color tileBackground = volleyballOrange;
   static const Color tileSelectedBackground = Color.fromARGB(255, 237, 143, 1);
   static const Color floatingActionButton = clearSky;
-  // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 169, 102, 2);
+  static const Color scaffoldBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 42, 42, 42);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 28, 28, 28);
-  static const Color scaffoldBackgroundColor = Color.fromARGB(255, 66, 66, 66);
+  // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 66, 66, 66);
   static const Color checkboxSelectedBackground = deepSea;
   static const Color radioSelectedBackground = deepSea;
   static const Color iconDisabled = Color.fromARGB(176, 255, 255, 255);

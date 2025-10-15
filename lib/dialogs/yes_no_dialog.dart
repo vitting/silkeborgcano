@@ -29,7 +29,7 @@ class YesNoDialog extends StatelessWidget {
       backgroundColor: AppColors.dialogBackgroundColor,
       title: CustomText(data: title, fontFamily: GoogleFonts.jersey25().fontFamily, letterSpacing: 0.5, size: CustomTextSize.xl),
       content: CustomText(data: body, size: CustomTextSize.ms),
-
+      actionsAlignment: noButtonText != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
       actions: [
         if (noButtonText != null)
           TextButton(

@@ -57,7 +57,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
         children: [
           MatchSummaryInfoCard(
             matchTime:
-                'Tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)}m:${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)}s',
+                'Tid: ${_matchRound!.roundTotalTimeUtc.inMinutes.remainder(60)}m ${_matchRound!.roundTotalTimeUtc.inSeconds.remainder(60)}s',
             showSittingOverIndicator: _sittingOverPlayerIds.isNotEmpty,
           ),
           const Gap(AppSizes.xs),
