@@ -31,6 +31,8 @@ class ScreenScaffold extends StatelessWidget {
       backgroundColor: backgroundColor ?? AppColors.scaffoldBackgroundColor,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      extendBodyBehindAppBar: true,
+
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: title,
@@ -45,9 +47,20 @@ class ScreenScaffold extends StatelessWidget {
         actions: actions,
         leading: leading ?? CustomIconButton(icon: Symbols.home, onPressed: onHomeTap, size: CustomIconSize.m),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 0, left: AppSizes.xs, right: AppSizes.xs, bottom: AppSizes.xs),
-        child: body,
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(AppColors.scaffoldBackgroundColor.withAlpha(100), BlendMode.dstATop),
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 0, left: AppSizes.xs, right: AppSizes.xs, bottom: AppSizes.xs),
+            child: body,
+          ),
+        ),
       ),
     );
   }

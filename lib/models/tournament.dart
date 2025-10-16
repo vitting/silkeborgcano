@@ -122,6 +122,7 @@ class Tournament {
 
   bool delete() {
     PlayerTournamentPoints.deleteAllByTournamentId(id);
+    MatchRound.deleteAllByTournamentId(id);
     return objectbox.store.box<Tournament>().remove(oid);
   }
 
@@ -190,6 +191,16 @@ class Tournament {
 
   void updateCurrentRoundId(String matchRoundId) {
     currentRoundId = matchRoundId;
+    objectbox.store.box<Tournament>().put(this);
+  }
+
+  void startTournament() {
+    tournamentStart = DateTime.now().millisecondsSinceEpoch;
+    objectbox.store.box<Tournament>().put(this);
+  }
+
+  void endTournament() {
+    tournamentEnd = DateTime.now().millisecondsSinceEpoch;
     objectbox.store.box<Tournament>().put(this);
   }
 }

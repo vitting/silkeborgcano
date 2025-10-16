@@ -8,27 +8,6 @@ import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_mo
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 
-// void tst() {
-//   final style = TextStyle(
-//     fontSize: 22,
-//     fontStyle: FontStyle.italic,
-//     fontWeight: FontWeight.bold,
-//     fontFeatures: const [FontFeature.tabularFigures()],
-//     height: 1.2,
-//   );
-//   const maxLine = 4;
-//   const maxWidth = 100.0;
-
-//   final span = TextSpan(text: text, style: style);
-
-//   final textPainter = TextPainter(text: span, maxLines: maxLines, textDirection: TextDirection.ltr);
-
-//   textPainter.layout(maxWidth: maxWidth);
-//   final size = textPainter.size;
-
-//   Text(text, style: style, maxLines: maxLines);
-// }
-
 class CustomFloatingActionButtonWithMenu extends StatefulWidget {
   final Iterable<CustomFloatingActionButtonWithMenuModel> menuItems;
   const CustomFloatingActionButtonWithMenu({super.key, required this.menuItems});
@@ -46,6 +25,7 @@ class _CustomFloatingActionButtonWithMenuState extends State<CustomFloatingActio
     if (widthOfScreen > 350) {
       widthOfScreen = 350;
     }
+
     double widthOfSizedBox = widthOfScreen - AppSizes.l;
     const double widthOfFloatingActionButton = 56;
     double widthOfMenuItemButton = (widthOfSizedBox / 2) - (widthOfFloatingActionButton / 2) + 8;

@@ -25,7 +25,7 @@ class PlayerMatchPoints {
         .findFirst()!;
   }
 
-  static void deleteByMatchRoundId(String matchRoundId) {
+  static void deleteAllByMatchRoundId(String matchRoundId) {
     objectbox.store.box<PlayerMatchPoints>().query(PlayerMatchPoints_.matchRoundId.equals(matchRoundId)).build().remove();
   }
 

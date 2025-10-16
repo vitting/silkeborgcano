@@ -41,6 +41,12 @@ class MatchRound {
     return m;
   }
 
+  static void deleteAllByTournamentId(String tournamentId) {
+    PlayerMatchPoints.deleteAllByMatchRoundId(tournamentId);
+    Match.deleteAllByMatchRoundId(tournamentId);
+    objectbox.store.box<MatchRound>().query(MatchRound_.tournamentId.equals(tournamentId)).build().remove();
+  }
+
   static MatchRound? getById(String id) {
     return objectbox.store.box<MatchRound>().query(MatchRound_.id.equals(id)).build().findFirst();
   }
@@ -74,14 +80,14 @@ class MatchRound {
   }
 
   void delete() {
-    PlayerMatchPoints.deleteByMatchRoundId(id);
+    PlayerMatchPoints.deleteAllByMatchRoundId(id);
     objectbox.store.box<MatchRound>().remove(oid);
   }
 
   void setPlayers(List<Player> newPlayers) {
     players.clear();
     playerMatchPoints.clear();
-    PlayerMatchPoints.deleteByMatchRoundId(id);
+    PlayerMatchPoints.deleteAllByMatchRoundId(id);
 
     for (var player in newPlayers) {
       players.add(player);

@@ -12,6 +12,8 @@ import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
@@ -107,15 +109,32 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      floatingActionButton: CustomFloatingActionButton(
-        icon: Symbols.sports_volleyball,
-        tooltip: 'Start runde',
-        onPressed: () {
-          if (_matchRound != null) {
-            _matchRound!.startRound();
-            context.goNamed(MatchesScreen.routerPath, extra: _matchRound!.id);
-          }
-        },
+      floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
+        menuItems: [
+          CustomFloatingActionButtonWithMenuModel(
+            text: 'Start runde ${_matchRound?.roundIndex ?? ''}',
+            icon: Symbols.sports_volleyball,
+            onPressed: () {
+              if (_matchRound != null) {
+                if (_matchRound!.roundIndex == 1) {
+                  _tournament!.startTournament();
+                }
+
+                _matchRound!.startRound();
+                context.goNamed(MatchesScreen.routerPath, extra: _matchRound!.id);
+              }
+            },
+          ),
+          CustomFloatingActionButtonWithMenuModel(
+            text: 'Administrer spillere',
+            icon: Icons.groups,
+            onPressed: () {
+              if (_matchRound != null) {
+                AdministrateMatchRoundPlayersDialog.show(context);
+              }
+            },
+          ),
+        ],
       ),
       title: ScreenScaffoldTitle('Runde ${_matchRound?.roundIndex ?? ''}'),
       leading: CustomIconButton(
@@ -124,14 +143,6 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
           context.goNamed(TournamentScreen.routerPath, extra: _tournament!.id);
         },
       ),
-      actions: [
-        CustomIconButton(
-          icon: Icons.groups,
-          onPressed: () {
-            AdministrateMatchRoundPlayersDialog.show(context);
-          },
-        ),
-      ],
       body: Column(
         children: [
           Expanded(

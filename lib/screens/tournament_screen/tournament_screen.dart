@@ -14,6 +14,7 @@ import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
@@ -124,7 +125,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         },
         title: ScreenScaffoldTitle('Turnering'),
         floatingActionButton: _isValid
-            ? CustomFloatingActionButtonWithMenu(
+            ? CustomFloatingActionButtonWithBottomSheetMenu(
                 menuItems: [
                   CustomFloatingActionButtonWithMenuModel(
                     text: 'Start turnering',
