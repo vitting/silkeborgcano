@@ -95,7 +95,7 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
             context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
           }
         },
-        icon: Symbols.check,
+        icon: Symbols.sports,
         tooltip: 'Afslut runde',
       ),
       body: ListView.separated(

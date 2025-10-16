@@ -30,7 +30,7 @@ class CustomListTile extends StatelessWidget {
       margin: EdgeInsets.zero,
       // elevation: 3,
       child: ListTile(
-        contentPadding: EdgeInsets.only(left: 16, right: 8, top: 4, bottom: 4),
+        contentPadding: EdgeInsets.symmetric(horizontal: AppSizes.s, vertical: AppSizes.xxs),
         dense: dense,
         visualDensity: VisualDensity.compact,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),

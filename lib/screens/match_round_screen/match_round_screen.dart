@@ -5,13 +5,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/tournament.dart';
+import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/administrate_match_round_players_dialog.dart';
 import 'package:silkeborgcano/screens/match_round_screen/benched_players_tile.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_calculation.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
@@ -113,7 +114,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
         menuItems: [
           CustomFloatingActionButtonWithMenuModel(
             text: 'Start runde ${_matchRound?.roundIndex ?? ''}',
-            icon: Symbols.sports_volleyball,
+            icon: Symbols.sports,
             onPressed: () {
               if (_matchRound != null) {
                 if (_matchRound!.roundIndex == 1) {
@@ -137,12 +138,9 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
         ],
       ),
       title: ScreenScaffoldTitle('Runde ${_matchRound?.roundIndex ?? ''}'),
-      leading: CustomIconButton(
-        icon: Symbols.home,
-        onPressed: () {
-          context.goNamed(TournamentScreen.routerPath, extra: _tournament!.id);
-        },
-      ),
+      onHomeTap: () {
+        context.goNamed(HomeScreen.routerPath);
+      },
       body: Column(
         children: [
           Expanded(
@@ -152,7 +150,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
               children: [
                 if (_matchRound != null && _matchRound!.sittingOver.isNotEmpty) ...[
                   BenchedPlayersTile(players: _matchRound!.sittingOver),
-                  Gap(8),
+                  Gap(AppSizes.s),
                 ],
                 _matches(),
               ],

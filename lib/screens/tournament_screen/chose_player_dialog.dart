@@ -43,6 +43,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
   Widget build(BuildContext context) {
     return Dialog.fullscreen(
       child: ScreenScaffold(
+        showBackgroundImage: false,
         title: Text('Vælg spillere (${_selectedPlayers.length})'),
         backgroundColor: AppColors.dialogBackgroundColor,
         actions: [

@@ -11,6 +11,7 @@ class CustomText extends StatelessWidget {
   final FontWeight? fontWeight;
   final String? fontFamily;
   final double? letterSpacing;
+  final double? height;
 
   const CustomText({
     super.key,
@@ -21,6 +22,7 @@ class CustomText extends StatelessWidget {
     this.letterSpacing,
     this.fontFamily,
     this.fontWeight = FontWeight.bold,
+    this.height,
   });
 
   double _getFontSize() {
@@ -48,6 +50,7 @@ class CustomText extends StatelessWidget {
         fontWeight: fontWeight,
         fontFamily: fontFamily,
         letterSpacing: letterSpacing,
+        height: height,
       ),
       textAlign: textAlign,
     );

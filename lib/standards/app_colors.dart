@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const selectedColor = Color.fromARGB(255, 193, 190, 0);
   static const Color borderColor = white;
   static const Color iconColor = white;
   static const Color textColor = white;
   static const Color textColorInverse = black;
-  static const Color tileBackground = volleyballOrange;
-  static const Color tileSelectedBackground = Color.fromARGB(255, 237, 143, 1);
+  static const Color tileBackground = Color.fromARGB(255, 219, 134, 8);
+  static const Color tileSelectedBackground = selectedColor;
   static const Color floatingActionButton = Color.fromARGB(255, 66, 162, 206);
   // static const Color floatingActionButton = Color.fromARGB(255, 196, 118, 2);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 196, 118, 2);
@@ -23,7 +24,7 @@ class AppColors {
   static const Color matchTilePointsBackgroundColor = Color.fromARGB(255, 66, 66, 66);
   static const Color matchSummaryInfoCardBackgorundColor = coralPink;
   static const Color summaryListTileBackgroundColor = tileBackground;
-  static const Color summaryListTileSittingOverBackgroundColor = sunburstYellow;
+  static const Color summaryListTileSittingOverBackgroundColor = selectedColor;
   static const Color dialogBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   static const Color buttonBackgroundColor = floatingActionButton;
   static const Color white = Colors.white;

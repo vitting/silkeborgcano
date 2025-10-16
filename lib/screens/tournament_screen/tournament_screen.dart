@@ -13,9 +13,7 @@ import 'package:silkeborgcano/screens/tournament_screen/match_points_selector.da
 import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
@@ -129,7 +127,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                 menuItems: [
                   CustomFloatingActionButtonWithMenuModel(
                     text: 'Start turnering',
-                    icon: Symbols.play_arrow,
+                    icon: Symbols.sports_volleyball,
                     onPressed: () {
                       if (_tournament != null) {
                         context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
@@ -212,7 +210,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                             _isValid = isTournamentValid;
                           });
                         },
-                        icon: Symbols.add,
+                        icon: Symbols.person_add,
                       ),
                       const Gap(AppSizes.s),
                       SectionHeader(title: 'Spillere (${_tournament?.players.length ?? 0})'),
@@ -233,7 +231,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                             });
                           }
                         },
-                        icon: Symbols.group_add,
+                        icon: Symbols.groups,
                       ),
                     ],
                   ),

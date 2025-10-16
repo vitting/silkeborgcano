@@ -7,7 +7,13 @@ import 'package:silkeborgcano/widgets/custom_text.dart';
 class MatchSummaryInfoCard extends StatelessWidget {
   final String matchTime;
   final bool showSittingOverIndicator;
-  const MatchSummaryInfoCard({super.key, required this.matchTime, this.showSittingOverIndicator = false});
+  final int roundIndex;
+  const MatchSummaryInfoCard({
+    super.key,
+    required this.matchTime,
+    this.showSittingOverIndicator = false,
+    required this.roundIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +24,7 @@ class MatchSummaryInfoCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppSizes.xs),
         child: Column(
           children: [
+            CustomText(data: 'Runde $roundIndex'),
             CustomText(data: matchTime),
             if (showSittingOverIndicator)
               Row(

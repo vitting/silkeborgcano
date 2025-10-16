@@ -78,17 +78,6 @@ class _RegisterPointsDialogState extends State<RegisterPointsDialog> with Vibrat
     return DefaultDialog(
       title: _getTitle(),
       children: [
-        if (widget.player1Name != null && widget.player2Name != null) ...[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [CustomText(data: '${widget.player1Name}', size: CustomTextSize.ms)],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [CustomText(data: '${widget.player2Name}', size: CustomTextSize.ms)],
-          ),
-        ],
-        const Gap(AppSizes.s),
         GridView.builder(
           itemCount: widget.maxPoints + 1,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

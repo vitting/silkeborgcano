@@ -32,10 +32,12 @@ class DefaultDialog extends StatelessWidget {
                     letterSpacing: 0.5,
                     size: CustomTextSize.xl,
                     textAlign: TextAlign.center,
+                    height: 0.9,
                   ),
                 ),
               ],
             ),
+            const Gap(AppSizes.xs),
             if (subTitle != null)
               CustomText(
                 data: subTitle!,

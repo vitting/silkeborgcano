@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
+import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_list_tile.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
@@ -22,7 +24,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      title: ScreenScaffoldTitle('Forside'),
+      title: ScreenScaffoldTitle('Turneringer'),
       leading: SizedBox.shrink(),
 
       floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
@@ -57,6 +59,29 @@ class HomeScreen extends StatelessWidget {
               }
 
               final data = asyncSnapshot.data!;
+
+              if (data.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomText(data: 'Opret din første turnering', textAlign: TextAlign.center),
+                        const Gap(8),
+                        CustomIconButton(
+                          showBackground: true,
+                          icon: Symbols.add,
+                          onPressed: () {
+                            context.goNamed(TournamentScreen.routerPath);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
               return Expanded(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => ListViewSeparator(),
@@ -69,6 +94,18 @@ class HomeScreen extends StatelessWidget {
                           ? Icon(Icons.play_arrow)
                           : null,
                       child: CustomText(data: tournament.name),
+                      onLongPress: () async {
+                        final result = await YesNoDialog.show(
+                          context,
+                          title: 'Slet turnering',
+                          yesButtonText: 'Slet',
+                          noButtonText: 'Fortryd',
+                          body: 'Er du sikker på at du vil slette turneringen "${tournament.name}"? Dette kan ikke fortrydes.',
+                        );
+                        if (result != null && result) {
+                          tournament.delete();
+                        }
+                      },
                       onTap: () {
                         if (currentMatchRound != null) {
                           if (currentMatchRound.active) {

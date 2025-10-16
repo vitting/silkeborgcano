@@ -8,6 +8,7 @@ class CustomIconButton extends StatelessWidget {
   final String? tooltip;
   final CustomIconSize size;
   final Widget? stackedIcon;
+  final bool showBackground;
   const CustomIconButton({
     super.key,
     this.onPressed,
@@ -15,16 +16,25 @@ class CustomIconButton extends StatelessWidget {
     this.tooltip,
     this.size = CustomIconSize.l,
     this.stackedIcon,
+    this.showBackground = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      tooltip: tooltip,
-      onPressed: onPressed,
-      icon: onPressed != null
-          ? CustomIcon(icon, size: size, stackedIcon: stackedIcon)
-          : CustomIcon(icon, color: AppColors.iconDisabled, size: size, stackedIcon: stackedIcon),
+    return Container(
+      decoration: showBackground
+          ? BoxDecoration(
+              color: onPressed != null ? AppColors.buttonBackgroundColor : AppColors.buttonBackgroundColor.withValues(alpha: 0.5),
+              shape: BoxShape.circle,
+            )
+          : null,
+      child: IconButton(
+        tooltip: tooltip,
+        onPressed: onPressed,
+        icon: onPressed != null
+            ? CustomIcon(icon, size: size, stackedIcon: stackedIcon)
+            : CustomIcon(icon, color: AppColors.iconDisabled, size: size, stackedIcon: stackedIcon),
+      ),
     );
   }
 }
