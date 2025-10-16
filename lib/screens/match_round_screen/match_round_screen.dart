@@ -11,11 +11,9 @@ import 'package:silkeborgcano/screens/match_round_screen/benched_players_tile.da
 import 'package:silkeborgcano/screens/match_round_screen/match_calculation.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
-import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
-import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 

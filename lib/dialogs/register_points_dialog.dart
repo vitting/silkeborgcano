@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:silkeborgcano/dialogs/default_dialog.dart';
 import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
-import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 
 enum RegisterPointsDialogTeamEnum { team1, team2 }
