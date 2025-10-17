@@ -10,44 +10,47 @@ import 'package:silkeborgcano/widgets/list_view_separator.dart';
 
 class CustomFloatingActionButtonWithBottomSheetMenu extends StatelessWidget {
   final Iterable<CustomFloatingActionButtonWithMenuModel> menuItems;
-  const CustomFloatingActionButtonWithBottomSheetMenu({super.key, required this.menuItems});
+  final String? tooltip;
+  const CustomFloatingActionButtonWithBottomSheetMenu({super.key, required this.menuItems, this.tooltip});
 
   @override
   Widget build(BuildContext context) {
     return CustomFloatingActionButton(
       icon: Symbols.menu,
-      tooltip: 'Opret ny turnering',
+      tooltip: tooltip ?? 'Menu',
       onPressed: () {
         showModalBottomSheet(
           backgroundColor: AppColors.dialogBackgroundColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.borderSize))),
           context: context,
           builder: (context) {
-            return ListView.separated(
-              padding: EdgeInsets.all(AppSizes.s),
-              shrinkWrap: true,
-              separatorBuilder: (context, index) => ListViewSeparator(),
-              itemCount: menuItems.length,
-              itemBuilder: (context, index) {
-                final item = menuItems.elementAt(index);
-                return Card(
-                  margin: EdgeInsets.zero,
-                  child: MenuItemButton(
-                    leadingIcon: CustomIcon(item.icon),
-                    style: ButtonStyle(
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
+            return SafeArea(
+              child: ListView.separated(
+                padding: EdgeInsets.only(top: AppSizes.s, left: AppSizes.s, right: AppSizes.s, bottom: AppSizes.s),
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => ListViewSeparator(),
+                itemCount: menuItems.length,
+                itemBuilder: (context, index) {
+                  final item = menuItems.elementAt(index);
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: MenuItemButton(
+                      leadingIcon: CustomIcon(item.icon),
+                      style: ButtonStyle(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
+                        ),
+                        alignment: Alignment.center,
+                        backgroundColor: WidgetStateColor.resolveWith((states) {
+                          return AppColors.floatingActionButton;
+                        }),
                       ),
-                      alignment: Alignment.center,
-                      backgroundColor: WidgetStateColor.resolveWith((states) {
-                        return AppColors.floatingActionButton;
-                      }),
+                      onPressed: item.onPressed,
+                      child: CustomText(data: item.text, size: CustomTextSize.ms),
                     ),
-                    onPressed: item.onPressed,
-                    child: CustomText(data: item.text, size: CustomTextSize.ms),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             );
           },
         );

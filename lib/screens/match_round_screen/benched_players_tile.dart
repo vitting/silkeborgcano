@@ -38,7 +38,7 @@ class BenchedPlayersTile extends StatelessWidget {
               itemCount: players.length,
               itemBuilder: (context, index) {
                 final player = players[index];
-                return CustomText(data: player.name);
+                return CustomText(data: player.name, size: CustomTextSize.ms);
               },
             ),
           ),

@@ -12,7 +12,8 @@ class AppColors {
   // static const Color floatingActionButton = Color.fromARGB(255, 196, 118, 2);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 42, 42, 42);
-  static const Color scaffoldBackgroundColor = Color.fromARGB(255, 28, 28, 28);
+  // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 28, 28, 28);
+  static const Color scaffoldBackgroundColor = Color.fromARGB(255, 17, 103, 126);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 66, 66, 66);
   static const Color checkboxSelectedBackground = deepSea;
   static const Color radioSelectedBackground = deepSea;
@@ -25,7 +26,8 @@ class AppColors {
   static const Color matchSummaryInfoCardBackgorundColor = coralPink;
   static const Color summaryListTileBackgroundColor = tileBackground;
   static const Color summaryListTileSittingOverBackgroundColor = selectedColor;
-  static const Color dialogBackgroundColor = Color.fromARGB(255, 196, 118, 2);
+  static const Color dialogBackgroundColor = scaffoldBackgroundColor;
+  // static const Color dialogBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   static const Color buttonBackgroundColor = floatingActionButton;
   static const Color white = Colors.white;
   static const Color black = Colors.black;

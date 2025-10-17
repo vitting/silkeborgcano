@@ -74,6 +74,7 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
+      showBackgroundImage: false,
       title: Text('Runde ${_matchRound?.roundIndex}'),
       onHomeTap: () {
         context.goNamed(HomeScreen.routerPath);
