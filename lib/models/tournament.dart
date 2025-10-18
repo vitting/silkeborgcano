@@ -19,6 +19,7 @@ class Tournament {
   final rounds = ToMany<MatchRound>();
   int? tournamentEnd;
   int? tournamentStart;
+  int? createdAt;
 
   Tournament({
     this.oid = 0,
@@ -28,15 +29,21 @@ class Tournament {
     this.tournamentStart,
     this.tournamentEnd,
     this.currentRoundId = '',
+    this.createdAt,
   });
 
   @override
   String toString() {
-    return 'Tournament(oid: $oid, id: $id, name: $name, currentRoundId: $currentRoundId, pointPerMatch: $pointPerMatch, tournamentEnd: $tournamentEnd, tournamentStart: $tournamentStart)';
+    return 'Tournament(oid: $oid, id: $id, name: $name, currentRoundId: $currentRoundId, pointPerMatch: $pointPerMatch, tournamentEnd: $tournamentEnd, tournamentStart: $tournamentStart, createdAt: $createdAt)';
   }
 
   factory Tournament.newTournament({String name = '', int pointPerMatch = 21}) {
-    return Tournament(id: Uuid().v4(), name: name, pointPerMatch: pointPerMatch);
+    return Tournament(
+      id: Uuid().v4(),
+      name: name,
+      pointPerMatch: pointPerMatch,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+    );
   }
 
   static Tournament? getById(String id) {
@@ -44,7 +51,12 @@ class Tournament {
   }
 
   static Stream<List<Tournament>> get listOfAllTournamentsAsStream {
-    return objectbox.store.box<Tournament>().query().watch(triggerImmediately: true).map((query) => query.find());
+    return objectbox.store
+        .box<Tournament>()
+        .query()
+        .order(Tournament_.createdAt, flags: Order.descending)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
   }
 
   static int getPointsPerMatch(String tournamentId) {
@@ -79,6 +91,14 @@ class Tournament {
     }
 
     return null;
+  }
+
+  bool get isTournamentActive {
+    return tournamentStart != null && tournamentEnd == null;
+  }
+
+  bool get isTournamentEnded {
+    return tournamentEnd != null;
   }
 
   int save({String? name, int? pointPerMatch}) {

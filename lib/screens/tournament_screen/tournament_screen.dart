@@ -118,7 +118,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         await _validateAndReturnToHome();
       },
       child: ScreenScaffold(
-        // showBackgroundImage: false,
+        showBackgroundImage: false,
         onHomeTap: () async {
           await _validateAndReturnToHome();
         },

@@ -48,6 +48,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
+      showBackgroundImage: false,
       title: ScreenScaffoldTitle('Rounde placering'),
       floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
         menuItems: [
@@ -77,7 +78,11 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
             text: 'Gå til rangliste',
             icon: Symbols.crown,
             onPressed: () {
-              context.goNamed(TournamentSummaryScreen.routerPath, extra: _matchRound!.id);
+              final params = TournamentSummaryScreenRouteParams(
+                tournamentId: _matchRound!.tournamentId,
+                matchRoundId: _matchRound!.id,
+              );
+              context.goNamed(TournamentSummaryScreen.routerPath, extra: params);
             },
           ),
           CustomFloatingActionButtonWithMenuModel(

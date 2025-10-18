@@ -4,8 +4,7 @@ import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
-import 'package:silkeborgcano/widgets/custom_icon.dart';
-import 'package:silkeborgcano/widgets/custom_text.dart';
+import 'package:silkeborgcano/widgets/custom_menu_item_button.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 
 class CustomFloatingActionButtonWithBottomSheetMenu extends StatelessWidget {
@@ -32,23 +31,7 @@ class CustomFloatingActionButtonWithBottomSheetMenu extends StatelessWidget {
                 itemCount: menuItems.length,
                 itemBuilder: (context, index) {
                   final item = menuItems.elementAt(index);
-                  return Card(
-                    margin: EdgeInsets.zero,
-                    child: MenuItemButton(
-                      leadingIcon: CustomIcon(item.icon),
-                      style: ButtonStyle(
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
-                        ),
-                        alignment: Alignment.center,
-                        backgroundColor: WidgetStateColor.resolveWith((states) {
-                          return AppColors.floatingActionButton;
-                        }),
-                      ),
-                      onPressed: item.onPressed,
-                      child: CustomText(data: item.text, size: CustomTextSize.ms),
-                    ),
-                  );
+                  return CustomMenuItemButton(icon: item.icon, text: item.text, onPressed: item.onPressed);
                 },
               ),
             );

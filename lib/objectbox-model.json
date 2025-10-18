@@ -227,7 +227,7 @@
     },
     {
       "id": "7:6277881020080036374",
-      "lastPropertyId": "7:8619085609536280639",
+      "lastPropertyId": "8:1583383554093559937",
       "name": "Tournament",
       "properties": [
         {
@@ -264,6 +264,11 @@
         {
           "id": "7:8619085609536280639",
           "name": "tournamentStart",
+          "type": 6
+        },
+        {
+          "id": "8:1583383554093559937",
+          "name": "createdAt",
           "type": 6
         }
       ],

@@ -16,6 +16,13 @@ import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_mo
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
+class TournamentSummaryScreenRouteParams {
+  final String tournamentId;
+  final String? matchRoundId;
+
+  TournamentSummaryScreenRouteParams({required this.tournamentId, this.matchRoundId});
+}
+
 class TournamentSummaryScreen extends StatefulWidget {
   static const String routerPath = "/tournamentSummary";
   const TournamentSummaryScreen({super.key});
@@ -34,8 +41,13 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
     super.didChangeDependencies();
 
     if (_tournament == null) {
-      _matchRound = getMatchRoundById(context, throwErrorOnNull: true);
-      _tournament = _matchRound!.getTournament();
+      final params = getTournamentSummaryScreenRouteParams(context, throwErrorOnNull: true);
+      _tournament = Tournament.getById(params!.tournamentId);
+
+      if (params.matchRoundId != null) {
+        _matchRound = MatchRound.getById(params.matchRoundId!);
+      }
+
       _players = _tournament!.getPlayersSortedByTournamentPoints();
     }
   }
@@ -43,50 +55,55 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
+      showBackgroundImage: false,
       title: Text('Turnerings rangliste'),
       onHomeTap: () {
         context.goNamed(HomeScreen.routerPath);
       },
-      floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
-        menuItems: [
-          CustomFloatingActionButtonWithMenuModel(
-            text: 'Afslut turnering',
-            icon: Symbols.sports_volleyball,
-            onPressed: () async {
-              final result = await YesNoDialog.show(
-                context,
-                title: 'Afslut turnering',
-                body: 'Er du sikker på at du vil afslutte turneringen?',
-                yesButtonText: 'Ja',
-                noButtonText: 'Nej',
-              );
+      floatingActionButton: _tournament != null && _tournament!.isTournamentActive
+          ? CustomFloatingActionButtonWithBottomSheetMenu(
+              menuItems: [
+                CustomFloatingActionButtonWithMenuModel(
+                  text: 'Afslut turnering',
+                  icon: Symbols.sports_volleyball,
+                  onPressed: () async {
+                    final result = await YesNoDialog.show(
+                      context,
+                      title: 'Afslut turnering',
+                      body: 'Er du sikker på at du vil afslutte turneringen?',
+                      yesButtonText: 'Ja',
+                      noButtonText: 'Nej',
+                    );
 
-              if (result != null && result) {
-                final tournament = _matchRound!.getTournament();
-                tournament.endTournament();
+                    if (result != null && result) {
+                      final tournament = _matchRound!.getTournament();
+                      tournament.endTournament();
 
-                if (context.mounted) {
-                  context.goNamed(HomeScreen.routerPath);
-                }
-              }
-            },
-          ),
-          CustomFloatingActionButtonWithMenuModel(
-            text: 'Tilbage til runde rangliste',
-            icon: Symbols.social_leaderboard,
-            onPressed: () {
-              context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
-            },
-          ),
-          CustomFloatingActionButtonWithMenuModel(
-            text: 'Opret runde ${_matchRound!.roundIndex + 1}',
-            icon: Symbols.play_arrow,
-            onPressed: () {
-              context.goNamed(MatchRoundScreen.routerPath, extra: _matchRound!.tournamentId);
-            },
-          ),
-        ],
-      ),
+                      if (context.mounted) {
+                        context.goNamed(HomeScreen.routerPath);
+                      }
+                    }
+                  },
+                ),
+                if (_matchRound != null)
+                  CustomFloatingActionButtonWithMenuModel(
+                    text: 'Tilbage til runde rangliste',
+                    icon: Symbols.social_leaderboard,
+                    onPressed: () {
+                      context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
+                    },
+                  ),
+                if (_matchRound != null)
+                  CustomFloatingActionButtonWithMenuModel(
+                    text: 'Opret runde ${_matchRound!.roundIndex + 1}',
+                    icon: Symbols.play_arrow,
+                    onPressed: () {
+                      context.goNamed(MatchRoundScreen.routerPath, extra: _matchRound!.tournamentId);
+                    },
+                  ),
+              ],
+            )
+          : null,
 
       body: ListView(
         children: [

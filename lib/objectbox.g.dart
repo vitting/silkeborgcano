@@ -283,7 +283,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(7, 6277881020080036374),
     name: 'Tournament',
-    lastPropertyId: const obx_int.IdUid(7, 8619085609536280639),
+    lastPropertyId: const obx_int.IdUid(8, 1583383554093559937),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -325,6 +325,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(7, 8619085609536280639),
         name: 'tournamentStart',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 1583383554093559937),
+        name: 'createdAt',
         type: 6,
         flags: 0,
       ),
@@ -781,7 +787,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final idOffset = fbb.writeString(object.id);
         final nameOffset = fbb.writeString(object.name);
         final currentRoundIdOffset = fbb.writeString(object.currentRoundId);
-        fbb.startTable(8);
+        fbb.startTable(9);
         fbb.addInt64(0, object.oid);
         fbb.addOffset(1, idOffset);
         fbb.addOffset(2, nameOffset);
@@ -789,6 +795,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(4, object.pointPerMatch);
         fbb.addInt64(5, object.tournamentEnd);
         fbb.addInt64(6, object.tournamentStart);
+        fbb.addInt64(7, object.createdAt);
         fbb.finish(fbb.endTable());
         return object.oid;
       },
@@ -826,6 +833,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final currentRoundIdParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 10, '');
+        final createdAtParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          18,
+        );
         final object = Tournament(
           oid: oidParam,
           id: idParam,
@@ -834,6 +846,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           tournamentStart: tournamentStartParam,
           tournamentEnd: tournamentEndParam,
           currentRoundId: currentRoundIdParam,
+          createdAt: createdAtParam,
         );
         obx_int.InternalToManyAccess.setRelInfo<Tournament>(
           object.playerTournamentPoints,
@@ -1080,6 +1093,11 @@ class Tournament_ {
   /// See [Tournament.tournamentStart].
   static final tournamentStart = obx.QueryIntegerProperty<Tournament>(
     _entities[5].properties[6],
+  );
+
+  /// See [Tournament.createdAt].
+  static final createdAt = obx.QueryIntegerProperty<Tournament>(
+    _entities[5].properties[7],
   );
 
   /// see [Tournament.playerTournamentPoints]

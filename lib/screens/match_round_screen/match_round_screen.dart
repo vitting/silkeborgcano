@@ -108,6 +108,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
+      showBackgroundImage: false,
       floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
         menuItems: [
           CustomFloatingActionButtonWithMenuModel(
