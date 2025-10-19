@@ -29,6 +29,7 @@ class AppColors {
   static const Color dialogBackgroundColor = scaffoldBackgroundColor;
   // static const Color dialogBackgroundColor = Color.fromARGB(255, 196, 118, 2);
   static const Color buttonBackgroundColor = floatingActionButton;
+  static const Color buttonSelectedBackgroundColor = Color.fromARGB(255, 59, 143, 182);
   static const Color white = Colors.white;
   static const Color black = Colors.black;
 

@@ -10,11 +10,9 @@ import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
-import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
-import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_list_tile.dart';
 import 'package:silkeborgcano/widgets/custom_menu_anchor.dart';
@@ -24,10 +22,18 @@ import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
-class HomeScreen extends StatelessWidget {
+enum TournamentFilter { all, notStarted, active, ended }
+
+class HomeScreen extends StatefulWidget {
   static const String routerPath = "/home";
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  TournamentFilter _filter = TournamentFilter.all;
   String getTournamentStatusText(Tournament tournament) {
     if (tournament.isTournamentEnded) {
       return 'Afsluttet (${DateFormat('dd-MM-yyyy').format(tournament.tournamentEndUtc!.toLocal())})';
@@ -38,6 +44,19 @@ class HomeScreen extends StatelessWidget {
     }
 
     return 'Ikke startet';
+  }
+
+  Stream<List<Tournament>> get _filteredTournamentStream {
+    switch (_filter) {
+      case TournamentFilter.all:
+        return Tournament.listOfAllTournamentsAsStream;
+      case TournamentFilter.notStarted:
+        return Tournament.listOfNotStartedTournamentsAsStream;
+      case TournamentFilter.active:
+        return Tournament.listOfActiveTournamentsAsStream;
+      case TournamentFilter.ended:
+        return Tournament.listOfEndedTournamentsAsStream;
+    }
   }
 
   @override
@@ -67,12 +86,53 @@ class HomeScreen extends StatelessWidget {
       actions: [
         CustomMenuAnchor(
           menuChildren: [
-            CustomMenuItemButton(text: 'Alle', onPressed: () {}),
-            CustomMenuItemButton(text: 'Ikke startet', onPressed: () {}),
-            CustomMenuItemButton(text: 'Aktiv', onPressed: () {}),
-            CustomMenuItemButton(text: 'Afsluttet', onPressed: () {}),
+            CustomText(data: 'Filter:', size: CustomTextSize.ms),
+            const Gap(AppSizes.xs),
+            CustomMenuItemButton(
+              text: 'Alle',
+              onPressed: () {
+                setState(() {
+                  _filter = TournamentFilter.all;
+                });
+              },
+              popMenuOnPressed: false,
+              selectedByCheckmark: _filter == TournamentFilter.all,
+            ),
+            const Gap(AppSizes.xs),
+            CustomMenuItemButton(
+              text: 'Ikke startet',
+              onPressed: () {
+                setState(() {
+                  _filter = TournamentFilter.notStarted;
+                });
+              },
+              popMenuOnPressed: false,
+              selectedByCheckmark: _filter == TournamentFilter.notStarted,
+            ),
+            const Gap(AppSizes.xs),
+            CustomMenuItemButton(
+              text: 'Aktiv',
+              onPressed: () {
+                setState(() {
+                  _filter = TournamentFilter.active;
+                });
+              },
+              popMenuOnPressed: false,
+              selectedByCheckmark: _filter == TournamentFilter.active,
+            ),
+            const Gap(AppSizes.xs),
+            CustomMenuItemButton(
+              text: 'Afsluttet',
+              onPressed: () {
+                setState(() {
+                  _filter = TournamentFilter.ended;
+                });
+              },
+              popMenuOnPressed: false,
+              selectedByCheckmark: _filter == TournamentFilter.ended,
+            ),
           ],
-          icon: Symbols.filter_alt,
+          icon: Symbols.filter_list,
         ),
       ],
       body: Column(
@@ -82,7 +142,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           StreamBuilder(
-            stream: Tournament.listOfAllTournamentsAsStream,
+            stream: _filteredTournamentStream,
             builder: (context, asyncSnapshot) {
               if (!asyncSnapshot.hasData) {
                 return CircularProgressIndicator();

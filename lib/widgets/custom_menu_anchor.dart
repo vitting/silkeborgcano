@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 
 class CustomMenuAnchor extends StatelessWidget {
@@ -12,6 +13,10 @@ class CustomMenuAnchor extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuAnchor(
       style: MenuStyle(
+        shape: WidgetStateOutlinedBorder.resolveWith((states) {
+          return RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize));
+        }),
+        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(AppSizes.s)),
         backgroundColor: WidgetStateColor.resolveWith((states) {
           return AppColors.dialogBackgroundColor;
         }),

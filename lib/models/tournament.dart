@@ -59,6 +59,33 @@ class Tournament {
         .map((query) => query.find());
   }
 
+  static Stream<List<Tournament>> get listOfNotStartedTournamentsAsStream {
+    return objectbox.store
+        .box<Tournament>()
+        .query(Tournament_.tournamentStart.isNull())
+        .order(Tournament_.createdAt, flags: Order.descending)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
+  static Stream<List<Tournament>> get listOfActiveTournamentsAsStream {
+    return objectbox.store
+        .box<Tournament>()
+        .query(Tournament_.tournamentStart.notNull().and(Tournament_.tournamentEnd.isNull()))
+        .order(Tournament_.createdAt, flags: Order.descending)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
+  static Stream<List<Tournament>> get listOfEndedTournamentsAsStream {
+    return objectbox.store
+        .box<Tournament>()
+        .query(Tournament_.tournamentEnd.notNull())
+        .order(Tournament_.createdAt, flags: Order.descending)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
   static int getPointsPerMatch(String tournamentId) {
     final tournament = objectbox.store.box<Tournament>().query(Tournament_.id.equals(tournamentId)).build().findFirst();
     if (tournament == null) {
