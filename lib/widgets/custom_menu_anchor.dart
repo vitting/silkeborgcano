@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 
 class CustomMenuAnchor extends StatelessWidget {
@@ -32,6 +33,7 @@ class CustomMenuAnchor extends StatelessWidget {
             }
           },
           icon: icon,
+          size: CustomIconSize.s,
         );
       },
     );

@@ -63,6 +63,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: AppColors.textColor,
       style: TextStyle(fontSize: 14, color: AppColors.textColor),
       textAlign: widget.behavior == CustomTextFormFieldBehavior.number ? TextAlign.center : TextAlign.start,
       inputFormatters: [if (widget.behavior == CustomTextFormFieldBehavior.number) FilteringTextInputFormatter.digitsOnly],

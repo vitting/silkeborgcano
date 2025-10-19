@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'models/app_settings.dart';
 import 'models/match.dart';
 import 'models/match_round.dart';
 import 'models/player.dart';
@@ -354,6 +355,28 @@ final _entities = <obx_int.ModelEntity>[
     ],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(8, 6675714044462456187),
+    name: 'AppSettings',
+    lastPropertyId: const obx_int.IdUid(2, 3174834027129479320),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 8339534405533689658),
+        name: 'oid',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3174834027129479320),
+        name: 'filter',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -394,7 +417,7 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(7, 6277881020080036374),
+    lastEntityId: const obx_int.IdUid(8, 6675714044462456187),
     lastIndexId: const obx_int.IdUid(2, 4137678572081549196),
     lastRelationId: const obx_int.IdUid(13, 7610332901214771098),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -866,6 +889,39 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    AppSettings: obx_int.EntityDefinition<AppSettings>(
+      model: _entities[6],
+      toOneRelations: (AppSettings object) => [],
+      toManyRelations: (AppSettings object) => {},
+      getId: (AppSettings object) => object.oid,
+      setId: (AppSettings object, int id) {
+        object.oid = id;
+      },
+      objectToFB: (AppSettings object, fb.Builder fbb) {
+        final filterOffset = fbb.writeString(object.filter);
+        fbb.startTable(3);
+        fbb.addInt64(0, object.oid);
+        fbb.addOffset(1, filterOffset);
+        fbb.finish(fbb.endTable());
+        return object.oid;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final oidParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final filterParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final object = AppSettings(oid: oidParam, filter: filterParam);
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -1114,5 +1170,18 @@ class Tournament_ {
   /// see [Tournament.rounds]
   static final rounds = obx.QueryRelationToMany<Tournament, MatchRound>(
     _entities[5].relations[2],
+  );
+}
+
+/// [AppSettings] entity fields to define ObjectBox queries.
+class AppSettings_ {
+  /// See [AppSettings.oid].
+  static final oid = obx.QueryIntegerProperty<AppSettings>(
+    _entities[6].properties[0],
+  );
+
+  /// See [AppSettings.filter].
+  static final filter = obx.QueryStringProperty<AppSettings>(
+    _entities[6].properties[1],
   );
 }

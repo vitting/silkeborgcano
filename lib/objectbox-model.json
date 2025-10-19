@@ -289,9 +289,28 @@
           "targetId": "2:510023494987061776"
         }
       ]
+    },
+    {
+      "id": "8:6675714044462456187",
+      "lastPropertyId": "2:3174834027129479320",
+      "name": "AppSettings",
+      "properties": [
+        {
+          "id": "1:8339534405533689658",
+          "name": "oid",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3174834027129479320",
+          "name": "filter",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:6277881020080036374",
+  "lastEntityId": "8:6675714044462456187",
   "lastIndexId": "2:4137678572081549196",
   "lastRelationId": "13:7610332901214771098",
   "lastSequenceId": "0:0",

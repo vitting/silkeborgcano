@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
@@ -118,6 +119,7 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
               return SummaryListTile(playerName: player.name, points: ptp.points);
             },
           ),
+          const Gap(80),
         ],
       ),
     );

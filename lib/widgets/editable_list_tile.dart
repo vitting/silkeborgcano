@@ -89,7 +89,7 @@ class _EditableListTileState extends State<EditableListTile> {
                     },
                   ),
                 if (widget.showDelete && !_isEditing)
-                  CustomIconButton(icon: Icons.delete_forever, onPressed: widget.onDelete, size: CustomIconSize.s),
+                  CustomIconButton(icon: Icons.remove_circle, onPressed: widget.onDelete, size: CustomIconSize.s),
               ],
             ),
             crossFadeState: _isEditing ? CrossFadeState.showFirst : CrossFadeState.showSecond,

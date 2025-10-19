@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_primary_button.dart';
+import 'package:silkeborgcano/widgets/custom_secondary_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class YesNoDialog extends StatelessWidget {
@@ -37,26 +39,23 @@ class YesNoDialog extends StatelessWidget {
         size: CustomTextSize.xl,
         height: 0.9,
       ),
-      content: CustomText(data: body, size: CustomTextSize.ms),
+      content: CustomText(data: body, size: CustomTextSize.ms, letterSpacing: 1),
       actionsAlignment: noButtonText != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
       actions: [
         if (noButtonText != null)
-          TextButton(
+          CustomSecondaryButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: CustomText(data: noButtonText!),
+            text: noButtonText!,
           ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.buttonBackgroundColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
-          ),
+
+        CustomPrimaryButton(
           onPressed: () {
             // Delete action
             Navigator.of(context).pop(true);
           },
-          child: CustomText(data: yesButtonText, color: AppColors.white),
+          text: yesButtonText,
         ),
       ],
     );

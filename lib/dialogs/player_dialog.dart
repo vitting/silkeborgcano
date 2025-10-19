@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/dialogs/default_dialog.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_primary_button.dart';
+import 'package:silkeborgcano/widgets/custom_radio_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_secondary_button.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
 
 class PlayerDialogResult {
@@ -45,42 +50,42 @@ class _PlayerDialogState extends State<PlayerDialog> {
     return DefaultDialog(
       title: 'Spiller',
       children: [
-        Text('Navn'),
-        Gap(16),
+        CustomText(data: 'Navn'),
+        Gap(AppSizes.xs),
         CustomTextFormField(controller: controller),
-        Gap(16),
-        Text('Køn'),
-        RadioGroup<String>(
-          groupValue: _sex,
-          onChanged: (value) {
-            if (value == null) return;
-            setState(() {
-              _sex = value;
-            });
-          },
-          child: Column(
-            children: [
-              RadioListTile(value: 'u', title: Text('Ikke opgivet'), dense: true),
-              RadioListTile(value: 'f', title: Text('Kvinde'), dense: true),
-              RadioListTile(value: 'm', title: Text('Mand'), dense: true),
-            ],
-          ),
-        ),
-        Gap(16),
+        Gap(AppSizes.s),
+        // CustomText(data: 'Køn'),
+        // RadioGroup<String>(
+        //   groupValue: _sex,
+        //   onChanged: (value) {
+        //     if (value == null) return;
+        //     setState(() {
+        //       _sex = value;
+        //     });
+        //   },
+        //   child: Column(
+        //     children: [
+        //       CustomRadioListTile(value: 'u', title: 'Ikke opgivet'),
+        //       CustomRadioListTile(value: 'f', title: 'Kvinde'),
+        //       CustomRadioListTile(value: 'm', title: 'Mand'),
+        //     ],
+        //   ),
+        // ),
+        // Gap(16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ElevatedButton(
+            CustomSecondaryButton(
               onPressed: () {
                 context.pop();
               },
-              child: Text('Fortryd'),
+              text: 'Fortryd',
             ),
-            ElevatedButton(
+            CustomPrimaryButton(
               onPressed: () {
                 context.pop<PlayerDialogResult>(PlayerDialogResult(name: controller.text.trim(), sex: _sex));
               },
-              child: Text('Gem'),
+              text: 'Gem',
             ),
           ],
         ),

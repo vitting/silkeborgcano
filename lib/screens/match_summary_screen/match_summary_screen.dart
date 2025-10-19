@@ -116,6 +116,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
               return SummaryListTile(playerName: player.name, isSittingOver: isSittingOver, points: pmp.points);
             },
           ),
+          const Gap(80),
         ],
       ),
     );

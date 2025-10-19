@@ -16,7 +16,7 @@ class AppColors {
   static const Color scaffoldBackgroundColor = Color.fromARGB(255, 17, 103, 126);
   // static const Color scaffoldBackgroundColor = Color.fromARGB(255, 66, 66, 66);
   static const Color checkboxSelectedBackground = deepSea;
-  static const Color radioSelectedBackground = deepSea;
+  static const Color radioSelectedBackground = white;
   static const Color iconDisabled = Color.fromARGB(176, 255, 255, 255);
   static const Color playerCardHeader = volleyballOrange;
   static const Color benchedPlayerCardBackground = coralPink;

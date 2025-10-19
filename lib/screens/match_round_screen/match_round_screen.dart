@@ -152,6 +152,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
                   Gap(AppSizes.s),
                 ],
                 _matches(),
+                const Gap(60),
               ],
             ),
           ),

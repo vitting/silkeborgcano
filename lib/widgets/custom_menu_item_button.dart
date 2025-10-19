@@ -12,6 +12,7 @@ class CustomMenuItemButton extends StatelessWidget {
   final bool popMenuOnPressed;
   final bool selectedByColor;
   final bool selectedByCheckmark;
+  final bool showTrailingIcon;
   const CustomMenuItemButton({
     super.key,
     this.icon,
@@ -20,6 +21,7 @@ class CustomMenuItemButton extends StatelessWidget {
     this.popMenuOnPressed = true,
     this.selectedByColor = false,
     this.selectedByCheckmark = false,
+    this.showTrailingIcon = false,
   });
 
   @override
@@ -28,11 +30,12 @@ class CustomMenuItemButton extends StatelessWidget {
       margin: EdgeInsets.zero,
 
       child: MenuItemButton(
-        leadingIcon: icon != null
-            ? CustomIcon(icon!)
-            : selectedByCheckmark
-            ? CustomIcon(Symbols.check)
+        trailingIcon: showTrailingIcon
+            ? selectedByCheckmark
+                  ? CustomIcon(Symbols.check_circle, color: AppColors.checkboxSelectedBackground)
+                  : CustomIcon(Symbols.circle, color: AppColors.checkboxSelectedBackground, fill: 0)
             : null,
+        leadingIcon: icon != null ? CustomIcon(icon!) : null,
         style: ButtonStyle(
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),

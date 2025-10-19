@@ -90,67 +90,84 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
             );
             return;
           }
-          _matchRound?.endRound();
 
-          if (mounted) {
-            context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
+          final result = await YesNoDialog.show(
+            context,
+            title: 'Afslut runde',
+            body: 'Er du sikker på at du vil afslutte runden?',
+            yesButtonText: 'Afslut',
+            noButtonText: 'Fortryd',
+          );
+          if (result != null && result) {
+            _matchRound?.endRound();
+
+            if (context.mounted) {
+              context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
+            }
           }
         },
         icon: Symbols.sports,
         tooltip: 'Afslut runde',
       ),
-      body: ListView.separated(
-        itemBuilder: (context, index) {
-          final m = _matches[index];
-          return MatchListTile(
-            court: m.courtNumber,
-            team1: m.team1,
-            team2: m.team2,
-            pointsTeam1: m.team1Score,
-            pointsTeam2: m.team2Score,
-            onTapTeam1: () async {
-              final result = await RegisterPointsDialog.show(
-                context,
-                team: RegisterPointsDialogTeamEnum.team1,
-                initialValue: m.team1Score,
-                maxPoints: _pointPerMatch,
-                player1Name: m.team1[0].name,
-                player2Name: m.team1[1].name,
-                backgroundColor: AppColors.matchTileArea1Background,
-                isValueSelected: !(m.team1Score == 0 && m.team2Score == 0),
-              );
+      body: ListView(
+        children: [
+          ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              final m = _matches[index];
+              return MatchListTile(
+                court: m.courtNumber,
+                team1: m.team1,
+                team2: m.team2,
+                pointsTeam1: m.team1Score,
+                pointsTeam2: m.team2Score,
+                onTapTeam1: () async {
+                  final result = await RegisterPointsDialog.show(
+                    context,
+                    team: RegisterPointsDialogTeamEnum.team1,
+                    initialValue: m.team1Score,
+                    maxPoints: _pointPerMatch,
+                    player1Name: m.team1[0].name,
+                    player2Name: m.team1[1].name,
+                    backgroundColor: AppColors.matchTileArea1Background,
+                    isValueSelected: !(m.team1Score == 0 && m.team2Score == 0),
+                  );
 
-              if (result != null) {
-                final score = _calculatePointsForMatch(result, -1);
-                setState(() {
-                  m.addScore(score.team1, score.team2);
-                });
-              }
-            },
-            onTapTeam2: () async {
-              final result = await RegisterPointsDialog.show(
-                context,
-                team: RegisterPointsDialogTeamEnum.team2,
-                initialValue: m.team2Score,
-                maxPoints: _pointPerMatch,
-                player1Name: m.team2[0].name,
-                player2Name: m.team2[1].name,
-                backgroundColor: AppColors.matchTileArea2Background,
-                isValueSelected: !(m.team1Score == 0 && m.team2Score == 0),
-              );
+                  if (result != null) {
+                    final score = _calculatePointsForMatch(result, -1);
+                    setState(() {
+                      m.addScore(score.team1, score.team2);
+                    });
+                  }
+                },
+                onTapTeam2: () async {
+                  final result = await RegisterPointsDialog.show(
+                    context,
+                    team: RegisterPointsDialogTeamEnum.team2,
+                    initialValue: m.team2Score,
+                    maxPoints: _pointPerMatch,
+                    player1Name: m.team2[0].name,
+                    player2Name: m.team2[1].name,
+                    backgroundColor: AppColors.matchTileArea2Background,
+                    isValueSelected: !(m.team1Score == 0 && m.team2Score == 0),
+                  );
 
-              if (result != null) {
-                final score = _calculatePointsForMatch(-1, result);
-                setState(() {
-                  m.addScore(score.team1, score.team2);
-                });
-              }
+                  if (result != null) {
+                    final score = _calculatePointsForMatch(-1, result);
+                    setState(() {
+                      m.addScore(score.team1, score.team2);
+                    });
+                  }
+                },
+                showPoints: true,
+              );
             },
-            showPoints: true,
-          );
-        },
-        separatorBuilder: (context, index) => Gap(8),
-        itemCount: _matches.length,
+            separatorBuilder: (context, index) => Gap(8),
+            itemCount: _matches.length,
+          ),
+          const Gap(80),
+        ],
       ),
     );
   }

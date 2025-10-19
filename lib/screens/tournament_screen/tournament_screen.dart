@@ -177,10 +177,10 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
             ),
             AnimatedOpacity(
               duration: Duration(milliseconds: 300),
-              opacity: _tournament?.name.isNotEmpty ?? false ? 1 : 0,
+              opacity: _tournament?.name.isNotEmpty ?? false ? 1 : 0.3,
               child: Column(
                 children: [
-                  const Gap(AppSizes.xs),
+                  const Gap(AppSizes.s),
                   SectionHeader(title: 'Point per kamp'),
                   const Gap(8),
                   CustomListTile(
@@ -198,27 +198,29 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                       },
                     ),
                   ),
+                  const Gap(AppSizes.xxs),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomIconButton(
-                        size: CustomIconSize.m,
-                        tooltip: 'Tilføj ny spiller',
-                        onPressed: () {
-                          setState(() {
-                            final newPlayer = Player.createNewPlayer();
-                            _tournament?.addNewPlayer(newPlayer);
-                            _isValid = isTournamentValid;
-                          });
-                        },
-                        icon: Symbols.person_add,
-                      ),
+                      SizedBox(width: 26),
+                      // CustomIconButton(
+                      //   size: CustomIconSize.m,
+                      //   tooltip: 'Tilføj ny spiller',
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       final newPlayer = Player.createNewPlayer();
+                      //       _tournament?.addNewPlayer(newPlayer);
+                      //       _isValid = isTournamentValid;
+                      //     });
+                      //   },
+                      //   icon: Symbols.person_add,
+                      // ),
                       const Gap(AppSizes.s),
                       SectionHeader(title: 'Spillere (${_tournament?.players.length ?? 0})'),
                       const Gap(AppSizes.xs),
                       CustomIconButton(
                         size: CustomIconSize.m,
-                        tooltip: 'Vælg eksisterende spillere',
+                        tooltip: 'Tilføj spiller(e)',
                         onPressed: () async {
                           final List<Player>? chosenPlayers = await ChosePlayerDialog.show(
                             context,
@@ -232,7 +234,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                             });
                           }
                         },
-                        icon: Symbols.groups,
+                        icon: Symbols.group_add,
                       ),
                     ],
                   ),
