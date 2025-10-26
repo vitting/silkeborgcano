@@ -13,10 +13,13 @@ class CustomPrimaryButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.buttonBackgroundColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSizes.borderSize),
+          side: BorderSide(color: AppColors.buttonBorderColor.withAlpha(100), width: AppSizes.borderWidth),
+        ),
       ),
       onPressed: onPressed,
-      child: CustomText(data: text, color: AppColors.white, letterSpacing: 1),
+      child: CustomText(text, color: AppColors.white, letterSpacing: 1),
     );
   }
 }

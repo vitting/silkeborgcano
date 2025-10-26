@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
-import 'package:silkeborgcano/widgets/custom_text.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 
 class DefaultDialog extends StatelessWidget {
   final String title;
@@ -16,6 +15,10 @@ class DefaultDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: AppColors.dialogBackgroundColor,
       insetPadding: EdgeInsets.all(AppSizes.s),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSizes.borderSize),
+        side: BorderSide(color: AppColors.dialogBorderColor, width: AppSizes.borderWidth),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppSizes.s),
         child: Column(
@@ -24,27 +27,10 @@ class DefaultDialog extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CustomText(
-                    data: title,
-                    fontFamily: GoogleFonts.jersey25().fontFamily,
-                    letterSpacing: 0.5,
-                    size: CustomTextSize.xl,
-                    textAlign: TextAlign.center,
-                    height: 0.9,
-                  ),
-                ),
-              ],
+              children: [Expanded(child: CustomTextTitle(title))],
             ),
             const Gap(AppSizes.xs),
-            if (subTitle != null)
-              CustomText(
-                data: subTitle!,
-                fontFamily: GoogleFonts.jersey25().fontFamily,
-                letterSpacing: 0.5,
-                size: CustomTextSize.l,
-              ),
+            if (subTitle != null) CustomTextTitle(subTitle!),
             const Gap(AppSizes.xs),
             ...children,
           ],

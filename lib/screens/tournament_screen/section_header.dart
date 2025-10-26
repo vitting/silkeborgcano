@@ -7,6 +7,6 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomText(data: title, size: CustomTextSize.m, textAlign: TextAlign.center);
+    return CustomText(title, size: CustomTextSize.m, textAlign: TextAlign.center);
   }
 }

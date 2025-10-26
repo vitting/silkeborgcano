@@ -13,9 +13,10 @@ class CustomText extends StatelessWidget {
   final double? letterSpacing;
   final double? height;
 
-  const CustomText({
+  const CustomText(
+    this.data, {
     super.key,
-    required this.data,
+
     this.size = CustomTextSize.m,
     this.color = AppColors.textColor,
     this.textAlign,

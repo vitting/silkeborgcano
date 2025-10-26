@@ -16,7 +16,8 @@ class AppEntry extends StatelessWidget {
 
     return MaterialApp.router(
       routerConfig: router,
-      theme: ThemeData(textTheme: GoogleFonts.orbitronTextTheme(textTheme)),
+      theme: ThemeData(textTheme: GoogleFonts.interTextTheme(textTheme)),
+      // theme: ThemeData(textTheme: GoogleFonts.orbitronTextTheme(textTheme)),
       // theme: ThemeData(textTheme: GoogleFonts.latoTextTheme(textTheme)),
       localizationsDelegates: const [
         AppLocalizations.delegate,

@@ -13,6 +13,7 @@ import 'package:silkeborgcano/screens/match_round_screen/match_list_tile.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
 class MatchesScreen extends StatefulWidget {
@@ -74,8 +75,8 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      showBackgroundImage: false,
-      title: Text('Runde ${_matchRound?.roundIndex}'),
+      addTopPadding: true,
+      title: CustomTextTitle('Runde ${_matchRound?.roundIndex}'),
       onHomeTap: () {
         context.goNamed(HomeScreen.routerPath);
       },

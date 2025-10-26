@@ -32,8 +32,8 @@ class CustomMenuItemButton extends StatelessWidget {
       child: MenuItemButton(
         trailingIcon: showTrailingIcon
             ? selectedByCheckmark
-                  ? CustomIcon(Symbols.check_circle, color: AppColors.checkboxSelectedBackground)
-                  : CustomIcon(Symbols.circle, color: AppColors.checkboxSelectedBackground, fill: 0)
+                  ? CustomIcon(Symbols.check_circle, color: AppColors.white, fill: 1)
+                  : CustomIcon(Symbols.circle, color: AppColors.white, fill: 0)
             : null,
         leadingIcon: icon != null ? CustomIcon(icon!) : null,
         style: ButtonStyle(
@@ -54,7 +54,7 @@ class CustomMenuItemButton extends StatelessWidget {
             onPressed!();
           }
         },
-        child: CustomText(data: text, size: CustomTextSize.ms),
+        child: CustomText(text, size: CustomTextSize.ms),
       ),
     );
   }

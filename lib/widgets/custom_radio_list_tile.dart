@@ -11,7 +11,7 @@ class CustomRadioListTile<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return RadioListTile<T>(
       value: value,
-      title: CustomText(data: title, size: CustomTextSize.s),
+      title: CustomText(title, size: CustomTextSize.s),
       dense: true,
       visualDensity: VisualDensity.compact,
       contentPadding: EdgeInsets.zero,

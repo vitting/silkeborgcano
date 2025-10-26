@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class BenchedPlayersTile extends StatelessWidget {
@@ -17,18 +18,18 @@ class BenchedPlayersTile extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(AppSizes.xs),
                   decoration: BoxDecoration(
                     color: AppColors.playerCardHeader,
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                   ),
-                  child: CustomText(data: 'Sidder over', textAlign: TextAlign.center),
+                  child: CustomText('Sidder over', textAlign: TextAlign.center),
                 ),
               ),
             ],
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(AppSizes.xs),
             decoration: BoxDecoration(
               color: AppColors.benchedPlayerCardBackground,
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
@@ -38,7 +39,7 @@ class BenchedPlayersTile extends StatelessWidget {
               itemCount: players.length,
               itemBuilder: (context, index) {
                 final player = players[index];
-                return CustomText(data: player.name, size: CustomTextSize.ms);
+                return CustomText(player.name, size: CustomTextSize.ms);
               },
             ),
           ),

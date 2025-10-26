@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:silkeborgcano/dialogs/player_dialog.dart';
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/objectbox.g.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_checkbox_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_count_circle.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
@@ -44,7 +48,15 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
     return Dialog.fullscreen(
       child: ScreenScaffold(
         showBackgroundImage: false,
-        title: Text('Vælg spillere (${_selectedPlayers.length})'),
+        addTopPadding: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomTextTitle('Vælg spillere'),
+            const Gap(AppSizes.xs),
+            CustomCountCircle(count: _selectedPlayers.length),
+          ],
+        ),
         backgroundColor: AppColors.dialogBackgroundColor,
         actions: [
           CustomIconButton(
@@ -101,7 +113,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
                   child: CustomCheckboxListTile(
                     value: _selectedPlayers.keys.contains(item.id),
                     selected: _selectedPlayers.keys.contains(item.id),
-                    title: CustomText(data: item.name, size: CustomTextSize.s),
+                    title: CustomText(item.name),
                     onChanged: (value) {
                       setState(() {
                         if (value == true) {

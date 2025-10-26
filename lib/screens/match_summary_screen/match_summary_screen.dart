@@ -15,9 +15,9 @@ import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summa
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
-import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
 class MatchSummaryScreen extends StatefulWidget {
   static const String routerPath = "/matchSummary";
@@ -48,8 +48,8 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      showBackgroundImage: false,
-      title: ScreenScaffoldTitle('Rounde placering'),
+      addTopPadding: true,
+      title: CustomTextTitle('Rounde placering'),
       floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
         menuItems: [
           CustomFloatingActionButtonWithMenuModel(

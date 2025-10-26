@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:silkeborgcano/dialogs/default_dialog.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_primary_button.dart';
-import 'package:silkeborgcano/widgets/custom_radio_list_tile.dart';
 import 'package:silkeborgcano/widgets/custom_secondary_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/custom_text_form_field.dart';
@@ -50,7 +49,7 @@ class _PlayerDialogState extends State<PlayerDialog> {
     return DefaultDialog(
       title: 'Spiller',
       children: [
-        CustomText(data: 'Navn'),
+        CustomText('Navn'),
         Gap(AppSizes.xs),
         CustomTextFormField(controller: controller),
         Gap(AppSizes.s),
@@ -71,7 +70,7 @@ class _PlayerDialogState extends State<PlayerDialog> {
         //     ],
         //   ),
         // ),
-        // Gap(16),
+        const Gap(AppSizes.s),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

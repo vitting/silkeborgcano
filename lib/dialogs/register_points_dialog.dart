@@ -107,7 +107,7 @@ class _RegisterPointsDialogState extends State<RegisterPointsDialog> with Vibrat
                       : widget.backgroundColor,
                   shape: BoxShape.circle,
                 ),
-                child: Center(child: CustomText(data: number.toString())),
+                child: Center(child: CustomText(number.toString())),
               ),
             );
           },

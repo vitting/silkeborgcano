@@ -13,14 +13,15 @@ import 'package:silkeborgcano/screens/tournament_screen/match_points_selector.da
 import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_count_circle.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
-import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 import 'package:vibration/vibration.dart';
 
 class TournamentScreen extends StatefulWidget {
@@ -122,7 +123,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         onHomeTap: () async {
           await _validateAndReturnToHome();
         },
-        title: ScreenScaffoldTitle('Turnering'),
+        title: CustomTextTitle('Turnering'),
         floatingActionButton: _isValid
             ? CustomFloatingActionButtonWithBottomSheetMenu(
                 menuItems: [
@@ -159,7 +160,6 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                 ],
               )
             : null,
-
         body: ListView(
           children: [
             SectionHeader(title: 'Navn på turnering'),
@@ -216,7 +216,13 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                       //   icon: Symbols.person_add,
                       // ),
                       const Gap(AppSizes.s),
-                      SectionHeader(title: 'Spillere (${_tournament?.players.length ?? 0})'),
+                      Row(
+                        children: [
+                          SectionHeader(title: 'Spillere'),
+                          const Gap(AppSizes.xs),
+                          CustomCountCircle(count: _tournament?.players.length ?? 0),
+                        ],
+                      ),
                       const Gap(AppSizes.xs),
                       CustomIconButton(
                         size: CustomIconSize.m,

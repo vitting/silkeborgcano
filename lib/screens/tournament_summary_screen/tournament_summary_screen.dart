@@ -12,8 +12,10 @@ import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/match_summary_screen.dart';
 import 'package:silkeborgcano/screens/match_summary_screen/summary_list_tile.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
@@ -53,11 +55,25 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
     }
   }
 
+  Color? _getIndicatorColorForPlayerAtIndex(int index) {
+    switch (index) {
+      case 0:
+        return AppColors.gold;
+      case 1:
+        return AppColors.silver;
+      case 2:
+        return AppColors.bronze;
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      showBackgroundImage: false,
-      title: Text('Turnerings rangliste'),
+      addTopPadding: true,
+      showBackgroundImage: true,
+      title: CustomTextTitle('Turnerings rangliste'),
       onHomeTap: () {
         context.goNamed(HomeScreen.routerPath);
       },
@@ -105,7 +121,6 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
               ],
             )
           : null,
-
       body: ListView(
         children: [
           ListView.separated(
@@ -116,7 +131,11 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
             itemBuilder: (context, index) {
               final player = _players[index];
               final ptp = PlayerTournamentPoints.getByPlayerIdAndTournamentId(player.id, _tournament!.id);
-              return SummaryListTile(playerName: player.name, points: ptp.points);
+              return SummaryListTile(
+                playerName: player.name,
+                points: ptp.points,
+                leadingIndicatorColor: _getIndicatorColorForPlayerAtIndex(index),
+              );
             },
           ),
           const Gap(80),

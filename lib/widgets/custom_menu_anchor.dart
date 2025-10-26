@@ -15,7 +15,10 @@ class CustomMenuAnchor extends StatelessWidget {
     return MenuAnchor(
       style: MenuStyle(
         shape: WidgetStateOutlinedBorder.resolveWith((states) {
-          return RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize));
+          return RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.borderSize),
+            side: BorderSide(color: AppColors.dialogBorderColor, width: 1),
+          );
         }),
         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(AppSizes.s)),
         backgroundColor: WidgetStateColor.resolveWith((states) {

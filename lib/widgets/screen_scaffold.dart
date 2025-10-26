@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
@@ -15,6 +14,7 @@ class ScreenScaffold extends StatelessWidget {
   final VoidCallback? onHomeTap;
   final Color? backgroundColor;
   final bool showBackgroundImage;
+  final bool addTopPadding;
   const ScreenScaffold({
     super.key,
     this.title,
@@ -25,11 +25,12 @@ class ScreenScaffold extends StatelessWidget {
     this.onHomeTap,
     this.backgroundColor,
     this.showBackgroundImage = true,
+    this.addTopPadding = false,
   });
 
   Widget _getBody() {
     return Padding(
-      padding: const EdgeInsets.only(top: 0, left: AppSizes.xs, right: AppSizes.xs, bottom: AppSizes.xs),
+      padding: EdgeInsets.only(top: addTopPadding ? AppSizes.s : 0, left: AppSizes.xs, right: AppSizes.xs, bottom: AppSizes.xs),
       child: body,
     );
   }
@@ -44,13 +45,7 @@ class ScreenScaffold extends StatelessWidget {
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: title,
-        titleTextStyle: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textColor,
-          fontFamily: GoogleFonts.jersey25().fontFamily,
-          letterSpacing: 0.5,
-        ),
+        titleTextStyle: TextStyle(color: AppColors.textColor),
         centerTitle: true,
         actions: actions,
         leading: leading ?? CustomIconButton(icon: Symbols.home, onPressed: onHomeTap, size: CustomIconSize.m),

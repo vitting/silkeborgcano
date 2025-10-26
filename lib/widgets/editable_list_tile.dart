@@ -102,7 +102,7 @@ class _EditableListTileState extends State<EditableListTile> {
       onLongPress: widget.onLongPress,
       child: _isEditing
           ? CustomTextFormField(controller: _controller, onEditingComplete: _save, onTapOutside: widget.onTapOutside)
-          : CustomText(data: _controller.text, size: CustomTextSize.s),
+          : CustomText(_controller.text, size: CustomTextSize.ms),
     );
   }
 }

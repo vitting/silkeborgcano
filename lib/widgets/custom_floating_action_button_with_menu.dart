@@ -57,7 +57,7 @@ class _CustomFloatingActionButtonWithMenuState extends State<CustomFloatingActio
                     }),
                   ),
                   onPressed: item.onPressed,
-                  child: CustomText(data: item.text, size: CustomTextSize.ms),
+                  child: CustomText(item.text, size: CustomTextSize.ms),
                 ),
               ),
               if (index < widget.menuItems.length - 1) const Gap(AppSizes.xs),

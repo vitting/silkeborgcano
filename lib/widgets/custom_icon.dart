@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 
-enum CustomIconSize { l, m, s }
+enum CustomIconSize { l, m, s, xs }
 
 class CustomIcon extends StatelessWidget {
   final IconData icon;
@@ -29,6 +29,8 @@ class CustomIcon extends StatelessWidget {
         return 26;
       case CustomIconSize.s:
         return 22;
+      case CustomIconSize.xs:
+        return 18;
     }
   }
 

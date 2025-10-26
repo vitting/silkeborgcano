@@ -9,7 +9,7 @@ class MatchListTileTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [CustomText(data: 'Bane $court', textAlign: TextAlign.center)],
+      children: [CustomText('Bane $court', textAlign: TextAlign.center)],
     );
   }
 }

@@ -11,13 +11,14 @@ import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
+import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
-import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routerPath = "/home";
@@ -40,9 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _filter = TournamentFilter.fromString(_appSettings.filter);
 
     Tournament.listOfAllTournamentsAsStream.listen((onData) {
-      setState(() {
-        _noTournaments = onData.isEmpty;
-      });
+      if (mounted) {
+        setState(() {
+          _noTournaments = onData.isEmpty;
+        });
+      }
     });
   }
 
@@ -62,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      title: ScreenScaffoldTitle('Turneringer'),
+      title: CustomTextTitle('Turneringer'),
       leading: SizedBox.shrink(),
       floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
         menuItems: [
@@ -70,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
             text: 'Opret ny turnering',
             icon: Symbols.add,
             onPressed: () {
-              context.goNamed(TournamentScreen.routerPath);
+              // context.goNamed(TournamentScreen.routerPath);
+              context.pushReplacementNamed(TournamentScreen.routerPath);
             },
           ),
           CustomFloatingActionButtonWithMenuModel(
@@ -107,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
 
               if (asyncSnapshot.hasError) {
-                return CustomText(data: 'Error: ${asyncSnapshot.error}');
+                return CustomText('Error: ${asyncSnapshot.error}');
               }
 
               final data = asyncSnapshot.data!;
@@ -119,8 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        CustomText(data: 'Opret din første turnering', textAlign: TextAlign.center),
-                        const Gap(8),
+                        CustomText('Opret din første turnering', textAlign: TextAlign.center),
+                        const Gap(AppSizes.xs),
                         CustomIconButton(
                           showBackground: true,
                           icon: Symbols.add,

@@ -14,8 +14,8 @@ import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
-import 'package:silkeborgcano/widgets/screen_scaffold_title.dart';
 
 class MatchRoundScreen extends StatefulWidget {
   static const String routerPath = "/matchRound";
@@ -108,7 +108,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      showBackgroundImage: false,
+      // showBackgroundImage: false,
       floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
         menuItems: [
           CustomFloatingActionButtonWithMenuModel(
@@ -136,7 +136,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
           ),
         ],
       ),
-      title: ScreenScaffoldTitle('Runde ${_matchRound?.roundIndex ?? ''}'),
+      title: CustomTextTitle('Runde ${_matchRound?.roundIndex ?? ''}'),
       onHomeTap: () {
         context.goNamed(HomeScreen.routerPath);
       },

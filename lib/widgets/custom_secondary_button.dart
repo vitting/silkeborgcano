@@ -8,9 +8,6 @@ class CustomSecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      child: CustomText(data: text, letterSpacing: 1),
-    );
+    return TextButton(onPressed: onPressed, child: CustomText(text, letterSpacing: 1));
   }
 }

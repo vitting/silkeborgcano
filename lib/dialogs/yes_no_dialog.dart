@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_primary_button.dart';
 import 'package:silkeborgcano/widgets/custom_secondary_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
 
 class YesNoDialog extends StatelessWidget {
   final String title;
@@ -29,17 +29,15 @@ class YesNoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.borderSize)),
+      elevation: AppSizes.elevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSizes.borderSize),
+        side: BorderSide(color: AppColors.dialogBorderColor, width: AppSizes.borderWidth),
+      ),
       insetPadding: EdgeInsets.all(AppSizes.s),
       backgroundColor: AppColors.dialogBackgroundColor,
-      title: CustomText(
-        data: title,
-        fontFamily: GoogleFonts.jersey25().fontFamily,
-        letterSpacing: 0.5,
-        size: CustomTextSize.xl,
-        height: 0.9,
-      ),
-      content: CustomText(data: body, size: CustomTextSize.ms, letterSpacing: 1),
+      title: CustomTextTitle(title),
+      content: CustomText(body, size: CustomTextSize.m),
       actionsAlignment: noButtonText != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
       actions: [
         if (noButtonText != null)

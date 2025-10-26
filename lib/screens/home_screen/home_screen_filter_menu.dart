@@ -29,7 +29,7 @@ class HomeScreenFilterMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomMenuAnchor(
       menuChildren: [
-        CustomText(data: 'Filter:', size: CustomTextSize.ms),
+        CustomText('Filter:', size: CustomTextSize.ms),
         const Gap(AppSizes.xs),
         CustomMenuItemButton(
           text: 'Alle',

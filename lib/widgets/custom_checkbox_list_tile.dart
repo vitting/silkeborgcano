@@ -19,19 +19,27 @@ class CustomCheckboxListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      dense: dense,
-      visualDensity: VisualDensity.compact,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      tileColor: AppColors.tileBackground,
-      value: value,
-      selected: selected,
-      selectedTileColor: AppColors.tileSelectedBackground,
-      title: title,
-      onChanged: onChanged,
-      side: const BorderSide(color: AppColors.borderColor, width: 2),
-      activeColor: AppColors.checkboxSelectedBackground,
-      checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.xxs)),
+    return Card(
+      margin: EdgeInsets.zero,
+      elevation: AppSizes.elevation,
+      child: CheckboxListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSizes.borderSize),
+          side: BorderSide(color: AppColors.tileBorderColor, width: AppSizes.borderWidth),
+        ),
+        dense: dense,
+        visualDensity: VisualDensity.compact,
+        tileColor: AppColors.tileBackground,
+        value: value,
+        selected: selected,
+        selectedTileColor: AppColors.tileSelectedBackground,
+        title: title,
+        onChanged: onChanged,
+        side: const BorderSide(color: AppColors.borderColor, width: 2),
+        activeColor: AppColors.checkboxCheckActiveColor,
+        checkColor: AppColors.checkboxCheckColor,
+        checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.xxs)),
+      ),
     );
   }
 }

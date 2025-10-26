@@ -19,13 +19,21 @@ class MatchSummaryInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: AppColors.matchSummaryInfoCardBackgorundColor,
+      shadowColor: AppColors.matchSummaryInfoCardBorderColor,
       margin: EdgeInsets.zero,
+      elevation: AppSizes.elevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSizes.borderSize),
+        side: BorderSide(color: AppColors.matchSummaryInfoCardBorderColor, width: AppSizes.borderWidth),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(AppSizes.xs),
         child: Column(
           children: [
-            CustomText(data: 'Runde $roundIndex'),
-            CustomText(data: matchTime),
+            CustomText('Runde $roundIndex'),
+            const Gap(AppSizes.xxs),
+            CustomText(matchTime),
+            const Gap(AppSizes.xxs),
             if (showSittingOverIndicator)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -38,8 +46,8 @@ class MatchSummaryInfoCard extends StatelessWidget {
                       color: AppColors.summaryListTileSittingOverBackgroundColor,
                     ),
                   ),
-                  Gap(8),
-                  CustomText(data: 'Sad over denne runde'),
+                  Gap(AppSizes.xs),
+                  CustomText('Sad over denne runde'),
                 ],
               ),
           ],

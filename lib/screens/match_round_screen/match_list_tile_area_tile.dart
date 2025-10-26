@@ -33,15 +33,15 @@ class MatchListTileAreaTile extends StatelessWidget {
           curve: Curves.easeInOut,
           padding: EdgeInsets.all(AppSizes.xs - 2),
           decoration: BoxDecoration(
-            border: Border.all(color: isWinner ? AppColors.white.withValues(alpha: 0.5) : Colors.transparent, width: 2),
+            border: Border.all(color: isWinner ? AppColors.white.withValues(alpha: 0.5) : Colors.transparent, width: 1),
             borderRadius: borderRadius,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(data: teamName1, size: CustomTextSize.ms),
-              const Gap(8),
-              CustomText(data: teamName2, size: CustomTextSize.ms),
+              CustomText(teamName1, size: CustomTextSize.ms),
+              const Gap(AppSizes.xs),
+              CustomText(teamName2, size: CustomTextSize.ms),
             ],
           ),
         ),
