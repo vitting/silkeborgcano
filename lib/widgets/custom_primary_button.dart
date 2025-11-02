@@ -15,7 +15,7 @@ class CustomPrimaryButton extends StatelessWidget {
         backgroundColor: AppColors.buttonBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.borderSize),
-          side: BorderSide(color: AppColors.buttonBorderColor.withAlpha(100), width: AppSizes.borderWidth),
+          side: BorderSide(color: AppColors.buttonBorderColor, width: AppSizes.borderWidth),
         ),
       ),
       onPressed: onPressed,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/dialogs/player_dialog.dart';
 import 'package:silkeborgcano/models/player.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
+import 'package:silkeborgcano/widgets/custom_icon_button.dart';
+import 'package:silkeborgcano/widgets/custom_list_tile.dart';
+import 'package:silkeborgcano/widgets/custom_text.dart';
 
 class PlayerEditList extends StatefulWidget {
   final Player item;
@@ -11,64 +15,34 @@ class PlayerEditList extends StatefulWidget {
 }
 
 class _PlayerEditListState extends State<PlayerEditList> {
-  bool _showDetails = false;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListTile(
-          title: Text(widget.item.name),
-          onTap: () {
-            setState(() {
-              _showDetails = !_showDetails;
-            });
-          },
+        CustomListTile(
           trailing: widget.item.isDeleted
-              ? IconButton(
-                  icon: Icon(Icons.restore),
+              ? CustomIconButton(
+                  icon: Icons.restore,
+                  size: CustomIconSize.m,
                   onPressed: () {
                     widget.item.save(isDeleted: false);
                   },
                 )
-              : IconButton(
-                  icon: Icon(Icons.delete),
+              : CustomIconButton(
+                  icon: Icons.delete,
+                  size: CustomIconSize.m,
                   onPressed: () {
                     widget.item.save(isDeleted: true);
                   },
                 ),
           onLongPress: () async {
-            final result = await PlayerDialog.show(
-              context,
-              initialValue: widget.item.name,
-            );
+            final result = await PlayerDialog.show(context, initialValue: widget.item.name);
             if (result != null && result.name.trim().isNotEmpty) {
               widget.item.save(name: result.name, sex: result.sex);
             }
           },
+          child: CustomText(widget.item.name),
         ),
-        if (_showDetails)
-          Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text('Køn:'),
-                    DropdownMenu(
-                      initialSelection: widget.item.sex,
-                      onSelected: (value) {},
-                      dropdownMenuEntries: [
-                        DropdownMenuEntry(label: 'Mand', value: 'm'),
-                        DropdownMenuEntry(label: 'Kvinde', value: 'k'),
-                        DropdownMenuEntry(label: 'Ukendt', value: 'u'),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(children: [Text('Point:'), Text('${widget.item.points}')]),
-              ],
-            ),
-          ),
       ],
     );
   }

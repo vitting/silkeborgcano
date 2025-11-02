@@ -13,6 +13,7 @@ class AppColors {
   static const Color greenAccent = Color.fromARGB(255, 4, 115, 118);
   static const Color pinkAccent = Color.fromARGB(255, 173, 66, 102);
   static const Color darkPinkAccent = Color.fromARGB(255, 141, 32, 68);
+  static const Color purpleAccent = Color.fromARGB(255, 130, 109, 247);
 
   static const Color buttonBackground = Color.fromARGB(255, 82, 20, 147);
   static const Color selectedColor = Color.fromARGB(255, 60, 88, 181);
@@ -43,7 +44,7 @@ class AppColors {
   static const Color summaryListTileBackgroundColor = tileBackground;
   static const Color summaryListTileSittingOverBackgroundColor = orangeAccent;
   static const Color dialogBackgroundColor = spaceCadet;
-  static const Color dialogBorderColor = yInMnBlue;
+  static const Color dialogBorderColor = purpleAccent;
   static const Color buttonBackgroundColor = buttonBackground;
   static const Color buttonBorderColor = white;
   static const Color buttonSelectedBackgroundColor = Color.fromARGB(255, 59, 143, 182);

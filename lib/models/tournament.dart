@@ -202,6 +202,14 @@ class Tournament {
     }
   }
 
+  void removeMatchRound(MatchRound matchRound) {
+    rounds.removeWhere((r) => r.id == matchRound.id);
+    if (currentRoundId == matchRound.id) {
+      currentRoundId = '';
+    }
+    objectbox.store.box<Tournament>().put(this);
+  }
+
   MatchRound? getCurrentMatchRound() {
     try {
       return rounds.firstWhere((r) => r.id == currentRoundId);

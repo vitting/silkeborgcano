@@ -3,7 +3,14 @@ import 'package:silkeborgcano/dialogs/player_dialog.dart';
 import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/objectbox.g.dart';
+import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog_filter_menu.dart';
 import 'package:silkeborgcano/screens/home_screen/player_edit_list.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
+import 'package:silkeborgcano/widgets/custom_icon_button.dart';
+import 'package:silkeborgcano/widgets/custom_text_title.dart';
+import 'package:silkeborgcano/widgets/list_view_separator.dart';
+import 'package:silkeborgcano/widgets/screen_scaffold.dart';
 
 class AdministratePlayersDialog extends StatefulWidget {
   const AdministratePlayersDialog({super.key});
@@ -17,97 +24,59 @@ class AdministratePlayersDialog extends StatefulWidget {
 }
 
 class _AdministratePlayersDialogState extends State<AdministratePlayersDialog> {
-  String _activeFilter = 'active';
+  AdministratePlayersFilter _filter = AdministratePlayersFilter.active;
 
   Stream<List<Player>> _getPlayerStream() {
-    if (_activeFilter == 'active') {
-      return objectbox.store
-          .box<Player>()
-          .query(Player_.isDeleted.equals(false))
-          .order(Player_.name)
-          .watch(triggerImmediately: true)
-          .map((query) => query.find());
-    } else if (_activeFilter == 'deleted') {
-      return objectbox.store
-          .box<Player>()
-          .query(Player_.isDeleted.equals(true))
-          .order(Player_.name)
-          .watch(triggerImmediately: true)
-          .map((query) => query.find());
-    } else {
-      return objectbox.store
-          .box<Player>()
-          .query()
-          .order(Player_.name)
-          .watch(triggerImmediately: true)
-          .map((query) => query.find());
-    }
+    return switch (_filter) {
+      AdministratePlayersFilter.active => Player.getAllActivePlayersStream(),
+      AdministratePlayersFilter.deleted => Player.getAllDeletedPlayersStream(),
+      AdministratePlayersFilter.all => Player.getAllPlayersStream(),
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog.fullscreen(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Vælg spillere'),
-          centerTitle: true,
-          forceMaterialTransparency: true,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async {
-                final PlayerDialogResult? result = await PlayerDialog.show(context);
+      child: ScreenScaffold(
+        showBackgroundImage: false,
+        addTopPadding: true,
+        title: CustomTextTitle('Spillere'),
+        backgroundColor: AppColors.dialogBackgroundColor,
+        actions: [
+          CustomIconButton(
+            icon: Icons.add,
+            size: CustomIconSize.l,
+            onPressed: () async {
+              final PlayerDialogResult? result = await PlayerDialog.show(context);
 
-                if (result != null && result.name.trim().isNotEmpty) {
-                  final newPlayer = Player.createNewPlayer(name: result.name, sex: result.sex);
-                  newPlayer.save();
-                }
-              },
-              iconSize: 28,
-              color: Colors.blue,
-            ),
-          ],
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
-            onPressed: () {
-              Navigator.of(context).pop();
+              if (result != null && result.name.trim().isNotEmpty) {
+                final newPlayer = Player.createNewPlayer(name: result.name, sex: result.sex);
+                newPlayer.save();
+              }
             },
           ),
+        ],
+        leading: CustomIconButton(
+          size: CustomIconSize.m,
+          icon: Icons.arrow_back_ios_new,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         body: ListView(
-          padding: EdgeInsets.all(8),
           children: [
             Column(
               children: [
-                Wrap(
-                  spacing: 8,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    FilterChip(
-                      label: Text('Aktive'),
-                      onSelected: (value) {
+                    AdministratePlayersDialogFilterMenu(
+                      selectedFilter: _filter,
+                      onFilterSelected: (selectedFilter) {
                         setState(() {
-                          _activeFilter = 'active';
+                          _filter = selectedFilter;
                         });
                       },
-                      selected: _activeFilter.contains('active'),
-                    ),
-                    FilterChip(
-                      label: Text('Slettede'),
-                      onSelected: (value) {
-                        setState(() {
-                          _activeFilter = 'deleted';
-                        });
-                      },
-                      selected: _activeFilter.contains('deleted'),
-                    ),
-                    FilterChip(
-                      label: Text('Alle'),
-                      onSelected: (value) {
-                        setState(() {
-                          _activeFilter = 'all';
-                        });
-                      },
-                      selected: _activeFilter.contains('all'),
                     ),
                   ],
                 ),
@@ -123,7 +92,8 @@ class _AdministratePlayersDialogState extends State<AdministratePlayersDialog> {
                   return Text('Error: ${asyncSnapshot.error}');
                 }
                 final allPlayers = asyncSnapshot.data!;
-                return ListView.builder(
+                return ListView.separated(
+                  separatorBuilder: (context, index) => ListViewSeparator(),
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: allPlayers.length,

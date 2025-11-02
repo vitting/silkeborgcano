@@ -40,7 +40,7 @@ class SummaryListTile extends StatelessWidget {
               children: [
                 CustomText('$points', size: CustomTextSize.m),
                 const Gap(AppSizes.xs),
-                CustomIcon(Symbols.trophy, size: CustomIconSize.xs),
+                CustomIcon(Symbols.trophy, size: CustomIconSize.xs, color: leadingIndicatorColor ?? AppColors.iconColor),
               ],
             ),
           ),

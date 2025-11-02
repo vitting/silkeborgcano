@@ -12,6 +12,7 @@ import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/match_points_selector.dart';
 import 'package:silkeborgcano/screens/tournament_screen/section_header.dart';
 import 'package:silkeborgcano/screens/tournament_screen/selected_players.dart';
+import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_count_circle.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
@@ -120,6 +121,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
       },
       child: ScreenScaffold(
         showBackgroundImage: false,
+        backgroundColor: AppColors.dialogBackgroundColor,
         onHomeTap: () async {
           await _validateAndReturnToHome();
         },
@@ -203,18 +205,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(width: 26),
-                      // CustomIconButton(
-                      //   size: CustomIconSize.m,
-                      //   tooltip: 'Tilføj ny spiller',
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       final newPlayer = Player.createNewPlayer();
-                      //       _tournament?.addNewPlayer(newPlayer);
-                      //       _isValid = isTournamentValid;
-                      //     });
-                      //   },
-                      //   icon: Symbols.person_add,
-                      // ),
+
                       const Gap(AppSizes.s),
                       Row(
                         children: [

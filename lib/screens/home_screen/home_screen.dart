@@ -12,9 +12,13 @@ import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
+import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
+import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
+import 'package:silkeborgcano/widgets/custom_menu_anchor.dart';
+import 'package:silkeborgcano/widgets/custom_menu_item_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/list_view_separator.dart';
@@ -67,25 +71,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return ScreenScaffold(
       title: CustomTextTitle('Turneringer'),
       leading: SizedBox.shrink(),
-      floatingActionButton: CustomFloatingActionButtonWithBottomSheetMenu(
-        menuItems: [
-          CustomFloatingActionButtonWithMenuModel(
-            text: 'Opret ny turnering',
-            icon: Symbols.add,
-            onPressed: () {
-              // context.goNamed(TournamentScreen.routerPath);
-              context.pushReplacementNamed(TournamentScreen.routerPath);
-            },
-          ),
-          CustomFloatingActionButtonWithMenuModel(
-            text: 'Administrer spillere',
-            icon: Symbols.groups,
-            onPressed: () {
-              AdministratePlayersDialog.show(context);
-            },
-          ),
-        ],
+      actions: [
+        CustomMenuAnchor(
+          icon: Symbols.menu,
+          menuChildren: [
+            CustomMenuItemButton(
+              popMenuOnPressed: false,
+              text: 'Administrer spillere',
+              onPressed: () async {
+                await AdministratePlayersDialog.show(context);
+              },
+            ),
+          ],
+        ),
+      ],
+      floatingActionButton: CustomFloatingActionButton(
+        icon: Symbols.add,
+        tooltip: 'Opret ny turnering',
+        onPressed: () {
+          context.goNamed(TournamentScreen.routerPath);
+        },
       ),
+
       body: Column(
         children: [
           if (!_noTournaments)

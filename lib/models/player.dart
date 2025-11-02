@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart';
+import 'package:silkeborgcano/objectbox.g.dart' show Player_;
 import 'package:uuid/uuid.dart';
 
 import 'package:silkeborgcano/main.dart';
@@ -17,6 +18,28 @@ class Player {
 
   factory Player.createNewPlayer({String? name, String? sex}) {
     return Player(id: Uuid().v4(), name: name ?? '', points: 0, sex: sex ?? 'u');
+  }
+
+  static Stream<List<Player>> getAllActivePlayersStream() {
+    return objectbox.store
+        .box<Player>()
+        .query(Player_.isDeleted.equals(false))
+        .order(Player_.name)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
+  static Stream<List<Player>> getAllPlayersStream() {
+    return objectbox.store.box<Player>().query().order(Player_.name).watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+  static Stream<List<Player>> getAllDeletedPlayersStream() {
+    return objectbox.store
+        .box<Player>()
+        .query(Player_.isDeleted.equals(true))
+        .order(Player_.name)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
   }
 
   void markAsDeleted() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/tournament.dart';
@@ -122,6 +123,29 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
 
                 _matchRound!.startRound();
                 context.goNamed(MatchesScreen.routerPath, extra: _matchRound!.id);
+              }
+            },
+          ),
+          CustomFloatingActionButtonWithMenuModel(
+            text: 'Afslut turnering',
+            icon: Symbols.sports_volleyball,
+            onPressed: () async {
+              final result = await YesNoDialog.show(
+                context,
+                title: 'Afslut turnering',
+                body: 'Er du sikker på at du vil afslutte turneringen?',
+                yesButtonText: 'Ja',
+                noButtonText: 'Nej',
+              );
+
+              if (result != null && result && _tournament != null && _matchRound != null) {
+                _tournament!.removeMatchRound(_matchRound!);
+                _tournament!.endTournament();
+                _matchRound!.delete();
+
+                if (context.mounted) {
+                  context.goNamed(HomeScreen.routerPath);
+                }
               }
             },
           ),
