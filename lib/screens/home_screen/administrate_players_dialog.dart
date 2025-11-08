@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/dialogs/player_dialog.dart';
-import 'package:silkeborgcano/main.dart';
 import 'package:silkeborgcano/models/player.dart';
-import 'package:silkeborgcano/objectbox.g.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog_filter_menu.dart';
 import 'package:silkeborgcano/screens/home_screen/player_edit_list.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';

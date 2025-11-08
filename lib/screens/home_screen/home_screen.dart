@@ -9,14 +9,11 @@ import 'package:silkeborgcano/screens/home_screen/home_screen_filter_menu.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen_list_tile.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
-import 'package:silkeborgcano/screens/settings_screen/settings_screen.dart';
+import 'package:silkeborgcano/screens/home_screen/settings_dialog.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_floating_action_button.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button_with_bottom_sheet_menu.dart';
-import 'package:silkeborgcano/widgets/custom_floating_action_button_with_menu_model.dart';
-import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 import 'package:silkeborgcano/widgets/custom_menu_anchor.dart';
 import 'package:silkeborgcano/widgets/custom_menu_item_button.dart';
@@ -90,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
               popMenuOnPressed: false,
               text: 'Indstillinger',
               onPressed: () async {
-                context.goNamed(SettingsScreen.routerPath);
+                await SettingsDialog.show(context);
               },
             ),
           ],
