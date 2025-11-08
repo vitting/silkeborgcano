@@ -73,13 +73,10 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
             },
           ),
         ],
-        leading: CustomIconButton(
-          size: CustomIconSize.m,
-          icon: Icons.arrow_back_ios_new,
-          onPressed: () {
-            Navigator.of(context).pop(_selectedPlayers.values.toList());
-          },
-        ),
+        showBackButton: true,
+        onBackButtonTap: () {
+          Navigator.of(context).pop(_selectedPlayers.values.toList());
+        },
         body: StreamBuilder(
           stream: objectbox.store
               .box<Player>()

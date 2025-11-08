@@ -12,9 +12,11 @@ class ScreenScaffold extends StatelessWidget {
   final Widget body;
   final Widget? floatingActionButton;
   final VoidCallback? onHomeTap;
+  final VoidCallback? onBackButtonTap;
   final Color? backgroundColor;
   final bool showBackgroundImage;
   final bool addTopPadding;
+  final bool showBackButton;
   const ScreenScaffold({
     super.key,
     this.title,
@@ -26,6 +28,8 @@ class ScreenScaffold extends StatelessWidget {
     this.backgroundColor,
     this.showBackgroundImage = true,
     this.addTopPadding = false,
+    this.showBackButton = false,
+    this.onBackButtonTap,
   });
 
   Widget _getBody() {
@@ -33,6 +37,16 @@ class ScreenScaffold extends StatelessWidget {
       padding: EdgeInsets.only(top: addTopPadding ? AppSizes.s : 0, left: AppSizes.xs, right: AppSizes.xs, bottom: AppSizes.xs),
       child: body,
     );
+  }
+
+  Widget get _getLeadingWidget {
+    if (leading != null) {
+      return leading!;
+    } else if (showBackButton) {
+      return CustomIconButton(size: CustomIconSize.m, icon: Icons.arrow_back_ios_new, onPressed: onBackButtonTap);
+    } else {
+      return CustomIconButton(icon: Symbols.home, onPressed: onHomeTap, size: CustomIconSize.m);
+    }
   }
 
   @override
@@ -48,7 +62,7 @@ class ScreenScaffold extends StatelessWidget {
         titleTextStyle: TextStyle(color: AppColors.textColor),
         centerTitle: true,
         actions: actions,
-        leading: leading ?? CustomIconButton(icon: Symbols.home, onPressed: onHomeTap, size: CustomIconSize.m),
+        leading: _getLeadingWidget,
       ),
       body: showBackgroundImage
           ? DecoratedBox(

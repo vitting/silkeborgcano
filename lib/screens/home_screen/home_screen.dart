@@ -9,6 +9,7 @@ import 'package:silkeborgcano/screens/home_screen/home_screen_filter_menu.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen_list_tile.dart';
 import 'package:silkeborgcano/screens/match_round_screen/match_round_screen.dart';
 import 'package:silkeborgcano/screens/matchs_screen/matches_screen.dart';
+import 'package:silkeborgcano/screens/settings_screen/settings_screen.dart';
 import 'package:silkeborgcano/screens/tournament_screen/tournament_screen.dart';
 import 'package:silkeborgcano/screens/tournament_summary_screen/tournament_summary_screen.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
@@ -76,10 +77,20 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Symbols.menu,
           menuChildren: [
             CustomMenuItemButton(
+              icon: Symbols.person,
               popMenuOnPressed: false,
               text: 'Administrer spillere',
               onPressed: () async {
                 await AdministratePlayersDialog.show(context);
+              },
+            ),
+            const Gap(AppSizes.xs),
+            CustomMenuItemButton(
+              icon: Symbols.settings,
+              popMenuOnPressed: false,
+              text: 'Indstillinger',
+              onPressed: () async {
+                context.goNamed(SettingsScreen.routerPath);
               },
             ),
           ],
