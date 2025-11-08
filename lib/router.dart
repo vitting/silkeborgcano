@@ -44,7 +44,11 @@ final router = GoRouter(
       name: MatchRoundScreen.routerPath,
       pageBuilder: (context, state) => customTransitionPage(context, state, MatchRoundScreen()),
     ),
-    GoRoute(path: MatchesScreen.routerPath, name: MatchesScreen.routerPath, builder: (context, state) => MatchesScreen()),
+    GoRoute(
+      path: MatchesScreen.routerPath,
+      name: MatchesScreen.routerPath,
+      pageBuilder: (context, state) => customTransitionPage(context, state, MatchesScreen()),
+    ),
     GoRoute(
       path: MatchSummaryScreen.routerPath,
       name: MatchSummaryScreen.routerPath,
