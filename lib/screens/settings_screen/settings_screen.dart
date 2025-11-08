@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
       onBackButtonTap: () {
         context.pushNamed(HomeScreen.routerPath);
       },
-      title: CustomTextTitle('Turnering'),
+      title: CustomTextTitle('Indstillinger'),
       body: Container(),
     );
   }
