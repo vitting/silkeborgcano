@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_primary_button.dart';
@@ -6,7 +7,7 @@ import 'package:silkeborgcano/widgets/custom_secondary_button.dart';
 import 'package:silkeborgcano/widgets/custom_text.dart';
 import 'package:silkeborgcano/widgets/custom_text_title.dart';
 
-class YesNoDialog extends StatelessWidget {
+class YesNoDialog extends StatelessWidget with VibrateMixin {
   final String title;
   final String body;
   final String? noButtonText;
@@ -43,6 +44,7 @@ class YesNoDialog extends StatelessWidget {
         if (noButtonText != null)
           CustomSecondaryButton(
             onPressed: () {
+              vibrateShort();
               Navigator.of(context).pop();
             },
             text: noButtonText!,
@@ -50,6 +52,7 @@ class YesNoDialog extends StatelessWidget {
 
         CustomPrimaryButton(
           onPressed: () {
+            vibrateShort();
             // Delete action
             Navigator.of(context).pop(true);
           },

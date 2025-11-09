@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_tournament_points.dart';
@@ -34,7 +35,7 @@ class TournamentSummaryScreen extends StatefulWidget {
   State<TournamentSummaryScreen> createState() => _TournamentSummaryScreenState();
 }
 
-class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with StorageMixin {
+class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with StorageMixin, VibrateMixin {
   Tournament? _tournament;
   MatchRound? _matchRound;
   List<Player> _players = [];
@@ -75,6 +76,7 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
       showBackgroundImage: true,
       title: CustomTextTitle('Turnerings rangliste'),
       onHomeTap: () {
+        vibrateShort();
         context.goNamed(HomeScreen.routerPath);
       },
       floatingActionButton: _tournament != null && _tournament!.isTournamentActive
@@ -84,6 +86,7 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
                   text: 'Afslut turnering',
                   icon: Symbols.sports_volleyball,
                   onPressed: () async {
+                    vibrateShort();
                     final result = await YesNoDialog.show(
                       context,
                       title: 'Afslut turnering',
@@ -107,6 +110,7 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
                     text: 'Tilbage til runde rangliste',
                     icon: Symbols.social_leaderboard,
                     onPressed: () {
+                      vibrateShort();
                       context.goNamed(MatchSummaryScreen.routerPath, extra: _matchRound!.id);
                     },
                   ),
@@ -115,6 +119,7 @@ class _TournamentSummaryScreenState extends State<TournamentSummaryScreen> with 
                     text: 'Opret runde ${_matchRound!.roundIndex + 1}',
                     icon: Symbols.play_arrow,
                     onPressed: () {
+                      vibrateShort();
                       context.goNamed(MatchRoundScreen.routerPath, extra: _matchRound!.tournamentId);
                     },
                   ),

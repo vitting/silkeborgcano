@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/app_settings.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/administrate_players_dialog.dart';
@@ -30,7 +31,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with VibrateMixin {
   late TournamentFilter _filter;
   late AppSettings _appSettings;
   bool _noTournaments = true;
@@ -78,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               popMenuOnPressed: false,
               text: 'Administrer spillere',
               onPressed: () async {
+                vibrateShort();
                 await AdministratePlayersDialog.show(context);
               },
             ),
@@ -87,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               popMenuOnPressed: false,
               text: 'Indstillinger',
               onPressed: () async {
+                vibrateShort();
                 await SettingsDialog.show(context);
               },
             ),
@@ -97,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: Symbols.add,
         tooltip: 'Opret ny turnering',
         onPressed: () {
+          vibrateShort();
           context.goNamed(TournamentScreen.routerPath);
         },
       ),
@@ -110,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 HomeScreenFilterMenu(
                   selectedFilter: _filter,
                   onFilterSelected: (selectedFilter) {
+                    vibrateShort();
                     setState(() {
                       _filter = selectedFilter;
                       _appSettings.updateFilter(_filter.value);
@@ -144,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           showBackground: true,
                           icon: Symbols.add,
                           onPressed: () {
+                            vibrateShort();
                             context.goNamed(TournamentScreen.routerPath);
                           },
                         ),
@@ -164,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     final isTournamentEnded = tournament.isTournamentEnded;
                     return HomeScreenListTile(
                       onTap: () {
+                        vibrateShort();
                         // Navigate to the appropriate screen based on tournament state
                         // If there's an active match round, go to MatchesScreen
                         // If the tournament is active but no active round, go to MatchRoundScreen

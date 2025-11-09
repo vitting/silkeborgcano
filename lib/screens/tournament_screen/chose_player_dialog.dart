@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:silkeborgcano/dialogs/player_dialog.dart';
 import 'package:silkeborgcano/main.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/objectbox.g.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
@@ -31,7 +32,7 @@ class ChosePlayerDialog extends StatefulWidget {
   State<ChosePlayerDialog> createState() => _ChosePlayerDialogState();
 }
 
-class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
+class _ChosePlayerDialogState extends State<ChosePlayerDialog> with VibrateMixin {
   final Map<String, Player> _selectedPlayers = {};
 
   @override
@@ -63,6 +64,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
             size: CustomIconSize.m,
             icon: Icons.add,
             onPressed: () async {
+              vibrateShort();
               final result = await PlayerDialog.show(context);
 
               if (result != null && result.name.trim().isNotEmpty) {
@@ -75,6 +77,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
         ],
         showBackButton: true,
         onBackButtonTap: () {
+          vibrateShort();
           Navigator.of(context).pop(_selectedPlayers.values.toList());
         },
         body: StreamBuilder(
@@ -99,6 +102,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
                 final item = allPlayers[index];
                 return GestureDetector(
                   onLongPress: () async {
+                    vibrateShort();
                     final result = await PlayerDialog.show(context, initialValue: item.name);
                     if (result != null && result.name.trim().isNotEmpty) {
                       item.save(name: result.name, sex: result.sex);
@@ -112,6 +116,7 @@ class _ChosePlayerDialogState extends State<ChosePlayerDialog> {
                     selected: _selectedPlayers.keys.contains(item.id),
                     title: CustomText(item.name),
                     onChanged: (value) {
+                      vibrateShort();
                       setState(() {
                         if (value == true) {
                           _selectedPlayers[item.id] = item;

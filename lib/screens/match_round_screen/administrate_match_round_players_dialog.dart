@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/player.dart';
 
 class AdministrateMatchRoundPlayersDialog extends StatefulWidget {
   final List<Player> allMatchPlayers;
   final List<Player> selectedPlayers;
-  const AdministrateMatchRoundPlayersDialog({
-    super.key,
-    required this.allMatchPlayers,
-    required this.selectedPlayers,
-  });
+  const AdministrateMatchRoundPlayersDialog({super.key, required this.allMatchPlayers, required this.selectedPlayers});
 
   static Future<List<Player>?> show(
     BuildContext context, {
@@ -17,20 +14,16 @@ class AdministrateMatchRoundPlayersDialog extends StatefulWidget {
   }) {
     return showDialog<List<Player>?>(
       context: context,
-      builder: (context) => AdministrateMatchRoundPlayersDialog(
-        allMatchPlayers: allMatchPlayers,
-        selectedPlayers: selectedPlayers,
-      ),
+      builder: (context) =>
+          AdministrateMatchRoundPlayersDialog(allMatchPlayers: allMatchPlayers, selectedPlayers: selectedPlayers),
     );
   }
 
   @override
-  State<AdministrateMatchRoundPlayersDialog> createState() =>
-      _AdministrateMatchRoundPlayersDialogState();
+  State<AdministrateMatchRoundPlayersDialog> createState() => _AdministrateMatchRoundPlayersDialogState();
 }
 
-class _AdministrateMatchRoundPlayersDialogState
-    extends State<AdministrateMatchRoundPlayersDialog> {
+class _AdministrateMatchRoundPlayersDialogState extends State<AdministrateMatchRoundPlayersDialog> with VibrateMixin {
   final Map<String, Player> _selectedPlayers = {};
 
   @override
@@ -54,6 +47,7 @@ class _AdministrateMatchRoundPlayersDialogState
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios_new),
             onPressed: () {
+              vibrateShort();
               Navigator.of(context).pop();
             },
           ),

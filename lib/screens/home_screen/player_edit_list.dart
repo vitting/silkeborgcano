@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silkeborgcano/dialogs/player_dialog.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
@@ -14,7 +15,7 @@ class PlayerEditList extends StatefulWidget {
   State<PlayerEditList> createState() => _PlayerEditListState();
 }
 
-class _PlayerEditListState extends State<PlayerEditList> {
+class _PlayerEditListState extends State<PlayerEditList> with VibrateMixin {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,6 +26,7 @@ class _PlayerEditListState extends State<PlayerEditList> {
                   icon: Icons.restore,
                   size: CustomIconSize.m,
                   onPressed: () {
+                    vibrateShort();
                     widget.item.save(isDeleted: false);
                   },
                 )
@@ -32,10 +34,12 @@ class _PlayerEditListState extends State<PlayerEditList> {
                   icon: Icons.delete,
                   size: CustomIconSize.m,
                   onPressed: () {
+                    vibrateShort();
                     widget.item.save(isDeleted: true);
                   },
                 ),
           onLongPress: () async {
+            vibrateShort();
             final result = await PlayerDialog.show(context, initialValue: widget.item.name);
             if (result != null && result.name.trim().isNotEmpty) {
               widget.item.save(name: result.name, sex: result.sex);

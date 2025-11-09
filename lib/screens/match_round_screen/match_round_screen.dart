@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
@@ -27,7 +28,7 @@ class MatchRoundScreen extends StatefulWidget {
   State<MatchRoundScreen> createState() => _MatchRoundScreenState();
 }
 
-class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
+class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin, VibrateMixin {
   MatchRound? _matchRound;
   Tournament? _tournament;
 
@@ -116,6 +117,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
             text: 'Start runde ${_matchRound?.roundIndex ?? ''}',
             icon: Symbols.sports,
             onPressed: () {
+              vibrateShort();
               if (_matchRound != null) {
                 if (_matchRound!.roundIndex == 1) {
                   _tournament!.startTournament();
@@ -130,6 +132,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
             text: 'Afslut turnering',
             icon: Symbols.sports_volleyball,
             onPressed: () async {
+              vibrateShort();
               final result = await YesNoDialog.show(
                 context,
                 title: 'Afslut turnering',
@@ -153,6 +156,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
             text: 'Administrer spillere',
             icon: Icons.groups,
             onPressed: () {
+              vibrateShort();
               if (_matchRound != null) {
                 AdministrateMatchRoundPlayersDialog.show(context);
               }
@@ -162,6 +166,7 @@ class _MatchRoundScreenState extends State<MatchRoundScreen> with StorageMixin {
       ),
       title: CustomTextTitle('Runde ${_matchRound?.roundIndex ?? ''}'),
       onHomeTap: () {
+        vibrateShort();
         context.goNamed(HomeScreen.routerPath);
       },
       body: Column(

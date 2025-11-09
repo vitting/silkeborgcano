@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/standards/app_colors.dart';
 import 'package:silkeborgcano/standards/app_sizes.dart';
 import 'package:silkeborgcano/widgets/custom_icon.dart';
 import 'package:silkeborgcano/widgets/custom_icon_button.dart';
 
-class CustomMenuAnchor extends StatelessWidget {
+class CustomMenuAnchor extends StatelessWidget with VibrateMixin {
   final List<Widget> menuChildren;
   final IconData icon;
   const CustomMenuAnchor({super.key, required this.menuChildren, this.icon = Symbols.menu});
@@ -29,6 +30,7 @@ class CustomMenuAnchor extends StatelessWidget {
       builder: (context, controller, child) {
         return CustomIconButton(
           onPressed: () {
+            vibrateShort();
             if (controller.isOpen) {
               controller.close();
             } else {

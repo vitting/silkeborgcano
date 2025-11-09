@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/player_match_points.dart';
@@ -27,7 +28,7 @@ class MatchSummaryScreen extends StatefulWidget {
   State<MatchSummaryScreen> createState() => _MatchSummaryScreenState();
 }
 
-class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMixin {
+class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMixin, VibrateMixin {
   MatchRound? _matchRound;
   List<Player> _players = [];
   Set<String> _sittingOverPlayerIds = {};
@@ -56,6 +57,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
             text: 'Afslut turnering',
             icon: Symbols.sports_volleyball,
             onPressed: () async {
+              vibrateShort();
               final result = await YesNoDialog.show(
                 context,
                 title: 'Afslut turnering',
@@ -78,6 +80,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
             text: 'Gå til rangliste',
             icon: Symbols.crown,
             onPressed: () {
+              vibrateShort();
               final params = TournamentSummaryScreenRouteParams(
                 tournamentId: _matchRound!.tournamentId,
                 matchRoundId: _matchRound!.id,
@@ -89,6 +92,7 @@ class _MatchSummaryScreenState extends State<MatchSummaryScreen> with StorageMix
             text: 'Opret runde ${_matchRound!.roundIndex + 1}',
             icon: Symbols.play_arrow,
             onPressed: () {
+              vibrateShort();
               context.goNamed(MatchRoundScreen.routerPath, extra: _matchRound!.tournamentId);
             },
           ),

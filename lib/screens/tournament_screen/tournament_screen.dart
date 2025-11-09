@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/player.dart';
 import 'package:silkeborgcano/models/tournament.dart';
 import 'package:silkeborgcano/screens/home_screen/home_screen.dart';
@@ -23,7 +24,6 @@ import 'package:silkeborgcano/widgets/custom_list_tile.dart';
 import 'package:silkeborgcano/widgets/custom_text_title.dart';
 import 'package:silkeborgcano/widgets/editable_list_tile.dart';
 import 'package:silkeborgcano/widgets/screen_scaffold.dart';
-import 'package:vibration/vibration.dart';
 
 class TournamentScreen extends StatefulWidget {
   static const String routerPath = "/tournament";
@@ -33,7 +33,7 @@ class TournamentScreen extends StatefulWidget {
   State<TournamentScreen> createState() => _TournamentScreenState();
 }
 
-class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
+class _TournamentScreenState extends State<TournamentScreen> with StorageMixin, VibrateMixin {
   Tournament? _tournament;
   bool _isValid = false;
 
@@ -123,6 +123,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
         showBackgroundImage: false,
         backgroundColor: AppColors.dialogBackgroundColor,
         onHomeTap: () async {
+          vibrateShort();
           await _validateAndReturnToHome();
         },
         title: CustomTextTitle('Turnering'),
@@ -134,6 +135,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                     icon: Symbols.sports_volleyball,
                     onPressed: () {
                       if (_tournament != null) {
+                        vibrateShort();
                         context.goNamed(MatchRoundScreen.routerPath, extra: _tournament!.id);
                       }
                     },
@@ -142,6 +144,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                     text: 'Slet turnering',
                     icon: Symbols.delete_forever_rounded,
                     onPressed: () async {
+                      vibrateShort();
                       final result = await YesNoDialog.show(
                         context,
                         title: 'Slet turnering',
@@ -171,6 +174,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
               isEditing: _tournament?.name.isEmpty ?? false,
               showDelete: false,
               onChanged: (value) {
+                vibrateShort();
                 setState(() {
                   _tournament?.save(name: value.trim());
                   _isValid = isTournamentValid;
@@ -190,9 +194,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                       initialPointPerMatch: _tournament?.pointPerMatch,
                       onChanged: (value) async {
                         if (value == null) return;
-                        if (await Vibration.hasVibrator()) {
-                          Vibration.vibrate(duration: 100);
-                        }
+                        vibrateShort();
 
                         setState(() {
                           _tournament?.save(pointPerMatch: value);
@@ -219,6 +221,7 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                         size: CustomIconSize.m,
                         tooltip: 'Tilføj spiller(e)',
                         onPressed: () async {
+                          vibrateShort();
                           final List<Player>? chosenPlayers = await ChosePlayerDialog.show(
                             context,
                             _tournament?.players.toList() ?? [],
@@ -238,17 +241,20 @@ class _TournamentScreenState extends State<TournamentScreen> with StorageMixin {
                   SelectedPlayers(
                     players: _tournament?.getPlayersSortedByName() ?? [],
                     onChanged: (player, name) {
+                      vibrateShort();
                       player.save(name: name.trim());
                       _tournament?.save();
                       _checkIfTournamentIsValidOnChanges();
                     },
                     onTapOutsideWithEmptyValue: (player) {
                       setState(() {
+                        vibrateShort();
                         _tournament?.deletePlayerWithEmptyName(player);
                         _isValid = isTournamentValid;
                       });
                     },
                     onDelete: (player) {
+                      vibrateShort();
                       setState(() {
                         if (player.name.isNotEmpty) {
                           _tournament?.removePlayer(player);

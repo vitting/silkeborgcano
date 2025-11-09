@@ -5,6 +5,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:silkeborgcano/dialogs/register_points_dialog.dart';
 import 'package:silkeborgcano/dialogs/yes_no_dialog.dart';
 import 'package:silkeborgcano/mixins/storage_mixin.dart';
+import 'package:silkeborgcano/mixins/vibrate_mixin.dart';
 import 'package:silkeborgcano/models/match_round.dart';
 import 'package:silkeborgcano/models/match.dart';
 import 'package:silkeborgcano/models/tournament.dart';
@@ -24,7 +25,7 @@ class MatchesScreen extends StatefulWidget {
   State<MatchesScreen> createState() => _MatchesScreenState();
 }
 
-class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
+class _MatchesScreenState extends State<MatchesScreen> with StorageMixin, VibrateMixin {
   MatchRound? _matchRound;
   List<Match> _matches = [];
   int _pointPerMatch = 21;
@@ -82,6 +83,7 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
       },
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () async {
+          vibrateShort();
           if (!_validateThatAllMatchesHaveScore()) {
             await YesNoDialog.show(
               context,
@@ -124,6 +126,7 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
                 pointsTeam1: m.team1Score,
                 pointsTeam2: m.team2Score,
                 onTapTeam1: () async {
+                  vibrateShort();
                   final result = await RegisterPointsDialog.show(
                     context,
                     team: RegisterPointsDialogTeamEnum.team1,
@@ -143,6 +146,7 @@ class _MatchesScreenState extends State<MatchesScreen> with StorageMixin {
                   }
                 },
                 onTapTeam2: () async {
+                  vibrateShort();
                   final result = await RegisterPointsDialog.show(
                     context,
                     team: RegisterPointsDialogTeamEnum.team2,
